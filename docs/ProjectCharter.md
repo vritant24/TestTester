@@ -16,38 +16,38 @@ Team 19 : Brandon Marx, Jonah Heeren, Jun Soo Kim, Shulin Ye, Vritant Bhardwaj
 
 
 ## Project Objectives:
-⋅⋅* Develop a system that allows users to auto run a suite tests on their codebase and push it to specified endpoints (for example Alpha, Beta and Production) from GitHub.
+* Develop a system that allows users to auto run a suite tests on their codebase and push it to specified endpoints (for example Alpha, Beta and Production) from GitHub.
 
 
-⋅⋅* Create a central server to connect the GitHub API, user, and three endpoints that act as benchmarks for the user created tests. 
+* Create a central server to connect the GitHub API, user, and three endpoints that act as benchmarks for the user created tests. 
 
 
-⋅⋅* Connect our central server to GitHub API in order to pull code from the master branch of the repository and run through its test suite whenever a new pull request is created.
+* Connect our central server to GitHub API in order to pull code from the master branch of the repository and run through its test suite whenever a new pull request is created.
 
 
-⋅⋅* Create a web interface that allows the user to add a repository and deployment servers as well as monitor the testing on the code being pushed to said servers.
+* Create a web interface that allows the user to add a repository and deployment servers as well as monitor the testing on the code being pushed to said servers.
 
 
-⋅⋅* Create an easy way to connect pre existing servers to our CD software in order to allow for smooth deployments of the clients code.
+* Create an easy way to connect pre existing servers to our CD software in order to allow for smooth deployments of the clients code.
 
 ## Stakeholders:
-⋅⋅* Project managers : Jonah Heeren, Vritant Bhardwaj
+* Project managers : Jonah Heeren, Vritant Bhardwaj
 
 
-⋅⋅* Project developers : Brandon Marx, Jonah Heeren, Jun Soo Kim, Shulin Ye, Vritant Bhardwaj
+* Project developers : Brandon Marx, Jonah Heeren, Jun Soo Kim, Shulin Ye, Vritant Bhardwaj
 
 
-⋅⋅* Project consultant : Eehita Parameswaran
+* Project consultant : Eehita Parameswaran
 
 
-⋅⋅* Product user group : Software Developers or Software Testers that work on continuously deployed code.
+* Product user group : Software Developers or Software Testers that work on continuously deployed code.
 
 ## Deliverables:
-⋅⋅* An intermediate server that interacts with GitHub API, runs user’s tests and generates test logs and pushes code to specified development endpoints.
+* An intermediate server that interacts with GitHub API, runs user’s tests and generates test logs and pushes code to specified development endpoints.
 
 
-⋅⋅* A RESTful API that sends the test logs from the intermediate server to the web client.
+* A RESTful API that sends the test logs from the intermediate server to the web client.
 
 
-⋅⋅* A web interface written with React.js to let user monitor the continuous deployment being done on the intermediate server.
+* A web interface written with React.js to let user monitor the continuous deployment being done on the intermediate server.
 
