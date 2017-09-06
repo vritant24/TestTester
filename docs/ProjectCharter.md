@@ -4,15 +4,15 @@ Team 19 : Brandon Marx, Jonah Heeren, Jun Soo Kim, Shulin Ye, Vritant Bhardwaj
 ---
 
 ## Problem Statement:
-⋅⋅* Deploying software can be a cumbersome task that often occurs without complete testing of new features being pushed into production. To combat this, continuous deployment(CD) provides an automatic way to push new code out to production while still validating that your changes integrate and don’t break existing features. 
+* Deploying software can be a cumbersome task that often occurs without complete testing of new features being pushed into production. To combat this, continuous deployment(CD) provides an automatic way to push new code out to production while still validating that your changes integrate and don’t break existing features. 
 
-⋅⋅* Most CD solutions are either proprietary or costly. We will develop a simplified version of continuous deployment that can be utilized easily and cheaply by anyone. 
+* Most CD solutions are either proprietary or costly. We will develop a simplified version of continuous deployment that can be utilized easily and cheaply by anyone. 
 
-⋅⋅* Our workflow for this is as follows: A user utilizes our client side application to enter the details of their GitHub repository to be monitored and their server credentials for automatic application deployment. This information is securely transferred to our server where we begin to monitor the github repository on a timed loop. When we detect new changes being pushed into the user specified branch, we pull the branch and compile the application source on our central server. Next, we begin to attempt to deploy their changes to alpha, beta, and prod. Each stage runs the user specified tests, and if the tests pass then the application is deployed to the correlative stage. 
+* Our workflow for this is as follows: A user utilizes our client side application to enter the details of their GitHub repository to be monitored and their server credentials for automatic application deployment. This information is securely transferred to our server where we begin to monitor the github repository on a timed loop. When we detect new changes being pushed into the user specified branch, we pull the branch and compile the application source on our central server. Next, we begin to attempt to deploy their changes to alpha, beta, and prod. Each stage runs the user specified tests, and if the tests pass then the application is deployed to the correlative stage. 
 
-⋅⋅* For example, in alpha deployment, all unit tests must pass. For beta deployment, all subsystem tests must pass and alpha deployment must succeed. Finally, for prod, full integration tests must pass and the 2 prior stages must succeed. 
+* For example, in alpha deployment, all unit tests must pass. For beta deployment, all subsystem tests must pass and alpha deployment must succeed. Finally, for prod, full integration tests must pass and the 2 prior stages must succeed. 
 
-⋅⋅* If any of these tests fail, deployment halts and logs are generated detailing the test failures. These logs are then used to propagate data into the front end web interface for monitoring your application’s deployment. The front end will give you details about which stages are already deployed, what’s currently being tested, and what tests failed.
+* If any of these tests fail, deployment halts and logs are generated detailing the test failures. These logs are then used to propagate data into the front end web interface for monitoring your application’s deployment. The front end will give you details about which stages are already deployed, what’s currently being tested, and what tests failed.
 
 
 ## Project Objectives:
