@@ -1,6 +1,6 @@
-## Project Charter
-### Test Driven Continuous Deployment
-Team 19 : Brandon Marx, Jonah Heeren, Jun Soo Kim, Shulin Ye, Vritant Bhardwaj
+# Project Charter
+## Test Driven Continuous Deployment
+### Team 19 : Brandon Marx, Jonah Heeren, Jun Soo Kim, Shulin Ye, Vritant Bhardwaj
 ---
 
 ## Problem Statement:
