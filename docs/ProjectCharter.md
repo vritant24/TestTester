@@ -1,5 +1,5 @@
 # Project Charter
-## Test Driven Continuous Deployment
+## SquareCI
 ### Team 19 : Brandon Marx, Jonah Heeren, Jun Soo Kim, Shulin Ye, Vritant Bhardwaj
 ---
 
