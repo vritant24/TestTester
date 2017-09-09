@@ -100,6 +100,8 @@
 * Instructions: Open the website on devices of different sizes.
 * Expected Result: The website should adapt to the dimensions of the device and maintain usable user experience throughout platforms.
 
+----
+
 ### TestID: BackendService1
 * Test Title: Github Branch Polling
 * Test Severity: Severity 2
