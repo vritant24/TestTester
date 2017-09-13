@@ -1,0 +1,23 @@
+{
+  "name": "middleman",
+  "version": "1.0.0",
+  "description": "The backend server for our CS408 project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vritant24/TestTester.git"
+  },
+  "author": "Purdue, CS408 Team 19",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vritant24/TestTester/issues"
+  },
+  "homepage": "https://github.com/vritant24/TestTester#readme",
+  "dependencies": {
+    "express": "4.15.4"
+  }
+}
