@@ -1,0 +1,22 @@
+{
+  "name": "squareci",
+  "version": "1.0.0",
+  "description": "cs 408 project",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vritant24/TestTester.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vritant24/TestTester/issues"
+  },
+  "homepage": "https://github.com/vritant24/TestTester#readme"
+}
