@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/vritant24/TestTester#readme",
   "dependencies": {
+    "body-parser": "^1.18.1",
     "express": "4.15.4"
   }
 }
