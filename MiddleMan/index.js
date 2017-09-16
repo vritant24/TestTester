@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var passport = require('passport')
 var githubStrategy = require('passport-github')
+var obj = {}
 
 app.use(require('serve-static')(__dirname + '/../../public'));
 app.use(require('cookie-parser')());
@@ -20,6 +21,9 @@ passport.use(new githubStrategy({
   callbackURL: "http://localhost:8080/auth/github/callback"
 },
 function(accessToken, refreshToken, profile, cb) {
+  obj.profile = profile;
+  obj.accessToken = accessToken;
+  obj.refreshToken = refreshToken;
   cb(null, profile.id)
 }
 ))
@@ -41,6 +45,7 @@ app.get('/auth/github', passport.authenticate('github'));
 app.get('/auth/github/callback', 
   passport.authenticate('github', {failureRedirect: '/'}), 
     function(req, res) {
+      console.log(obj)
       res.redirect('/success');
     }
   );
