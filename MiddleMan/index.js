@@ -22,6 +22,7 @@ app.use(require('express-session')({
 app.use(passport.initialize());
 app.use(passport.session());
 
+//For Github Login
 passport.use(new githubStrategy({
   clientID: "68bca50fa8ec6e0034e9",
   clientSecret: '527ab44c8bf49732ff5abff6999718283d12a52b',
@@ -34,30 +35,31 @@ function(accessToken, refreshToken, profile, cb) {
   obj.cb = cb;
   cb(null, profile.id)
 }
-))
+));
 
+//Since there is no database
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
-
 passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
-// app.get('/', function(req, res){
-//   res.send('hello world');
-// });
 
+//=========== Routes ============
+
+//Root route redirects to login with github
 app.get('/', passport.authenticate('github'));
 
+//Github login callback where we get the access token
 app.get('/auth/github/callback', 
   passport.authenticate('github', {failureRedirect: '/'}), 
   function(req, res) {
-    // console.log(obj)
     res.redirect('/dashboard');
   }
 );
 
+//Dashboard where the react app is shown
 app.get('/dashboard', function(req, res) {
   //access token from `obj` over here
   // eg - obj.accessToken
