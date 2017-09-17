@@ -52,16 +52,16 @@ app.get('/auth/github', passport.authenticate('github'));
 
 app.get('/auth/github/callback', 
   passport.authenticate('github', {failureRedirect: '/'}), 
-    function(req, res) {
-      // console.log(obj)
-      res.redirect('/dashboard');
-    }
-  );
-app.get('/dashboard', function(req, res) {
+  function(req, res) {
+    // console.log(obj)
+    res.redirect('/dashboard');
+  }
+);
 
-console.log(__dirname + '/../client/build');
+app.get('/dashboard', function(req, res) {
   //access token from `obj` over here
   // eg - obj.accessToken
+  console.log(obj)
   res.render("index.html");
 });
 app.listen(8080);
