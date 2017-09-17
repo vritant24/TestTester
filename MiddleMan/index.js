@@ -44,11 +44,11 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
-app.get('/', function(req, res){
-  res.send('hello world');
-});
+// app.get('/', function(req, res){
+//   res.send('hello world');
+// });
 
-app.get('/auth/github', passport.authenticate('github'));
+app.get('/', passport.authenticate('github'));
 
 app.get('/auth/github/callback', 
   passport.authenticate('github', {failureRedirect: '/'}), 
