@@ -3,8 +3,15 @@ var app = express();
 var passport = require('passport')
 var githubStrategy = require('passport-github')
 var obj = {}
+var engines = require('consolidate');
 
-app.use(require('serve-static')(__dirname + '/../../public'));
+//Serve react and static files
+app.use(express.static(__dirname + '/../client/build'));
+app.set('views', __dirname + '/../client/build');
+app.engine('html', engines.mustache);
+app.set('view engine', 'html');
+
+//stuff for auth
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({
@@ -24,6 +31,7 @@ function(accessToken, refreshToken, profile, cb) {
   obj.profile = profile;
   obj.accessToken = accessToken;
   obj.refreshToken = refreshToken;
+  obj.cb = cb;
   cb(null, profile.id)
 }
 ))
@@ -45,9 +53,15 @@ app.get('/auth/github', passport.authenticate('github'));
 app.get('/auth/github/callback', 
   passport.authenticate('github', {failureRedirect: '/'}), 
     function(req, res) {
-      console.log(obj)
-      res.redirect('/success');
+      // console.log(obj)
+      res.redirect('/dashboard');
     }
   );
+app.get('/dashboard', function(req, res) {
 
+console.log(__dirname + '/../client/build');
+  //access token from `obj` over here
+  // eg - obj.accessToken
+  res.render("index.html");
+});
 app.listen(8080);
