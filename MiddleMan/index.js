@@ -52,8 +52,8 @@ passport.deserializeUser(function(user, done) {
 app.get('/', passport.authenticate('github'));
 
 //Github login callback where we get the access token
-app.get('/auth/github/callback', 
-  passport.authenticate('github', {failureRedirect: '/'}), 
+app.get('/auth/github/callback',
+  passport.authenticate('github', {failureRedirect: '/'}),
   function(req, res) {
     res.redirect('/dashboard');
   }
