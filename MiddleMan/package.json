@@ -19,6 +19,11 @@
   "homepage": "https://github.com/vritant24/TestTester#readme",
   "dependencies": {
     "body-parser": "^1.18.1",
-    "express": "4.15.4"
+    "consolidate": "^0.14.5",
+    "cookie-parser": "^1.4.3",
+    "express": "4.15.4",
+    "express-session": "^1.15.5",
+    "passport": "^0.4.0",
+    "passport-github": "^1.1.0"
   }
 }
