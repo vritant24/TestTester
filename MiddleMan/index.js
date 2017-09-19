@@ -2,8 +2,9 @@ var express = require('express');
 var app = express();
 var passport = require('passport')
 var githubStrategy = require('passport-github')
-var obj = {}
 var engines = require('consolidate');
+var db = require('../db/db.js');
+var obj = {}
 
 //Serve react and static files
 app.use(express.static(__dirname + '/../client/build'));
@@ -63,7 +64,10 @@ app.get('/auth/github/callback',
 app.get('/dashboard', function(req, res) {
   //access token from `obj` over here
   // eg - obj.accessToken
-  console.log(obj)
+  console.log(obj);
+  db.getUsers().then(function(rows) {
+    console.log(rows);
+  });
   res.render("index.html");
 });
 app.listen(8080);
