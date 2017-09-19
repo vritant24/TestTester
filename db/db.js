@@ -24,7 +24,7 @@ exports.getUsers = () => {
 
 exports.addUser = (userData) => {
   return new Promise((resolve, reject) => {
-    connection.query('REPLACE INTO User SET gitHubId = ?, username = ?, displayName = ?, avatarURL = ?', userData ,function(error, results) {
+    connection.query('REPLACE INTO User SET gitHubId = ?, username = ?, displayName = ?, avatarURL = ?; REPLACE INTO UserAccess SET gitHubId = ?, accessToken = ?;', userData ,function(error, results) {
       if (error) {
         reject(error);
       } else {

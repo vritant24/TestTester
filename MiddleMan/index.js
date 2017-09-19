@@ -69,10 +69,6 @@ app.get('/dashboard', function(req, res) {
   db.addUser(userData).then(function(rows) {
     //Ensure no errors occur
   });
-  db.getUsers().then(function(rows) {
-    console.log('USER ROWS:')
-    console.log(rows);
-  });
   res.render("index.html");
 });
 app.listen(8080);
