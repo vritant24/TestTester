@@ -22,10 +22,11 @@ exports.getUsers = () => {
   });
 }
 
-exports.addUser = loginData => {
-  testData = [123456, 'testUserName', 'Test User', 'www.fakeurl.com/fake/avatar']
+exports.addUser = (userData) => {
+  console.log("TEST");
+  console.log(userData);
   return new Promise((resolve, reject) => {
-    connection.query('REPLACE INTO User SET gitHubId = ?, username = ?, displayName = ?, avatarURL = ?', testData ,function(error, results) {
+    connection.query('REPLACE INTO User SET gitHubId = ?, username = ?, displayName = ?, avatarURL = ?', userData ,function(error, results) {
       if (error) {
         reject(error);
       } else {

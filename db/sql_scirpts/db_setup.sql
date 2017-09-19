@@ -1,4 +1,4 @@
-CREATE TABLE User (gitHubId BIGINT NOT NULL, username VARCHAR(100) NOT NULL, displayName VARCHAR(150) NOT NULL,
+CREATE TABLE User (gitHubId BIGINT NOT NULL, username VARCHAR(100) NOT NULL, displayName VARCHAR(150),
                    avatarURL VARCHAR(400), PRIMARY KEY(gitHubId));
 
 CREATE TABLE UserAccess (gitHubId BIGINT, accessToken VARCHAR(1000), PRIMARY KEY(gitHubId));

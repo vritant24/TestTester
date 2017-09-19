@@ -4,6 +4,7 @@ var passport = require('passport')
 var githubStrategy = require('passport-github')
 var engines = require('consolidate');
 var db = require('../db/db.js');
+var utils = require('./utils.js')
 var obj = {}
 
 //Serve react and static files
@@ -64,11 +65,13 @@ app.get('/auth/github/callback',
 app.get('/dashboard', function(req, res) {
   //access token from `obj` over here
   // eg - obj.accessToken
-  console.log(obj);
-  db.addUser(obj).then(function(response) {
-    console.log(response);
+  var userData = utils.pullUserData(obj);
+  console.log(userData);
+  db.addUser(userData).then(function(rows) {
+    //Ensure no errors occur
   });
   db.getUsers().then(function(rows) {
+    console.log('USER ROWS:')
     console.log(rows);
   });
   res.render("index.html");
