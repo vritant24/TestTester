@@ -66,7 +66,6 @@ app.get('/dashboard', function(req, res) {
   //access token from `obj` over here
   // eg - obj.accessToken
   var userData = utils.pullUserData(obj);
-  console.log(userData);
   db.addUser(userData).then(function(rows) {
     //Ensure no errors occur
   });

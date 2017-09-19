@@ -23,8 +23,6 @@ exports.getUsers = () => {
 }
 
 exports.addUser = (userData) => {
-  console.log("TEST");
-  console.log(userData);
   return new Promise((resolve, reject) => {
     connection.query('REPLACE INTO User SET gitHubId = ?, username = ?, displayName = ?, avatarURL = ?', userData ,function(error, results) {
       if (error) {
