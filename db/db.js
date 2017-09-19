@@ -12,7 +12,19 @@ var connection = mysql.createConnection(nconf.get('mysql'));
 
 exports.getUsers = () => {
   return new Promise((resolve, reject) => {
-    connection.query('SELECT * FROM User', function(error, results, fields) {
+    connection.query('SELECT * FROM User', function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+exports.addUser = () => {
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT * FROM User', function(error, results) {
       if (error) {
         reject(error);
       } else {
