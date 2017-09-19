@@ -65,6 +65,9 @@ app.get('/dashboard', function(req, res) {
   //access token from `obj` over here
   // eg - obj.accessToken
   console.log(obj);
+  db.addUser(obj).then(function(response) {
+    console.log(response);
+  });
   db.getUsers().then(function(rows) {
     console.log(rows);
   });
