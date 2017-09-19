@@ -1,0 +1,8 @@
+{
+    "mysql": {
+        "host": "52.200.13.118",
+        "user": "username",
+        "password": "password",
+        "database": "SquareCI"
+    }
+}
