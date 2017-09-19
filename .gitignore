@@ -1,5 +1,4 @@
 
 .DS_Store
-MiddleMan/node_modules
+node_modules
 config/config.json
-db/node_modules

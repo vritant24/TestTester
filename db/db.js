@@ -2,7 +2,7 @@ var mysql = require('mysql');
 var nconf = require('nconf');
 
 nconf.file({
-  file: '../config/config.json'
+  file: 'config/config.json'
 });
 if (!Object.keys(nconf.get()).length) {
   throw new Error('Unable to load config file. Check to make sure config/config.json exists');
