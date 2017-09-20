@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var engines = require('consolidate');
-var db = require('../db/db.js');
+//var db = require('../db/db.js'); uncomment before push to master
 var utils = require('./utils.js')
 var obj = {}
 
