@@ -1,5 +1,7 @@
-import Dashboard from './dashboard'
+import Repos    from './repos'
+import User     from './user'
 
 export {
-    Dashboard
+    Repos,
+    User
 }

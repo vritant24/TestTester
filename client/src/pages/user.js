@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
-export default class Dashboard extends Component {
+export default class User extends Component {
     constructor(props) {
         super(props)
     }
     render() {
         return (
-            <h1>Dash Board</h1>
+            <h1>User</h1>
         )
     }
 }
