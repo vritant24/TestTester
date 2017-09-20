@@ -1,5 +1,7 @@
-import LocalLink from './localLink'
+import LocalLink    from './localLink'
+import Repository   from './repository'
 
 export {
-    LocalLink
+    LocalLink,
+    Repository
 }
