@@ -10,10 +10,9 @@ export default Router.extend({
     // the routes
     routes: {
         ''              : 'login',
-        'login'         : 'login',
         'logout'        : 'logout',
-        'repos'         : 'repos',
-        'user'          : 'user',
+        'repos?:query'  : 'repos',
+        'user?:query'   : 'user',
 
         'auth/callback?:query' : 'authCallback',
     },
@@ -33,11 +32,12 @@ export default Router.extend({
        
     },
     authCallback (query) {
+        //get code and state from query 
         query = qs.parse(query)
-        console.log(query)
+
         if(query.state === window.localStorage.state) {
-            window.localStorage.state = null;
-            //redirect to dashboard
+            //send code to server along with a session id to be redirected to dashboard with userid
+
         } else {
             console.log("uh oh")
         }
