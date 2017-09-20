@@ -40,17 +40,7 @@ export default Router.extend({
             //send code to server along with a session id to be redirected to dashboard with userid
             var state = uuid() // session id
             window.localStorage.sate = state;
-            // xhr(
-            //     {
-            //         //the request
-            //         url: 'http://localhost:8080/authenticate/' + query.code,
-            //         json: true,
-            //     }, 
-            //     (err, res, body) => {
-            //         //the callback
-            //         console.log(body)
-            //     }
-            // )
+            
             fetch('/authenticate/' + query.code + '/' + state)
             .then(res => res.json())
             .then(res => console.log(res));

@@ -5,6 +5,10 @@ var db = require('../db/db.js');
 var utils = require('./utils.js')
 var obj = {}
 
+//Dev values
+var CLIENT_ID     = '2a48dc27e13bf25eca10';
+var CLIENT_SECRET = 'a3340700567cad703e00952f4b740d065c1b297d';
+
 //Serve react and static files
 app.use(express.static(__dirname + '/../client/build'));
 app.set('views', __dirname + '/../client/build');
