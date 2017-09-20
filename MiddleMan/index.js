@@ -1,7 +1,5 @@
 var express = require('express');
 var app = express();
-var passport = require('passport')
-var githubStrategy = require('passport-github')
 var engines = require('consolidate');
 var db = require('../db/db.js');
 var utils = require('./utils.js')
@@ -13,62 +11,19 @@ app.set('views', __dirname + '/../client/build');
 app.engine('html', engines.mustache);
 app.set('view engine', 'html');
 
-//stuff for auth
-app.use(require('cookie-parser')());
+//for parsing JSON requests and responses
 app.use(require('body-parser').urlencoded({ extended: true }));
-app.use(require('express-session')({
-  secret: 'keyboard cat',
-  resave: true,
-  saveUninitialized: true
-}));
-app.use(passport.initialize());
-app.use(passport.session());
-
-//For Github Login
-passport.use(new githubStrategy({
-  clientID: "68bca50fa8ec6e0034e9",
-  clientSecret: '527ab44c8bf49732ff5abff6999718283d12a52b',
-  callbackURL: "http://localhost:8080/auth/github/callback"
-},
-function(accessToken, refreshToken, profile, cb) {
-  obj.profile = profile;
-  obj.accessToken = accessToken;
-  obj.refreshToken = refreshToken;
-  obj.cb = cb;
-  cb(null, profile.id)
-}
-));
-
-//Since there is no database
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-passport.deserializeUser(function(user, done) {
-  done(null, user);
-});
 
 
-//=========== Routes ============
 
-//Root route redirects to login with github
-app.get('/', passport.authenticate('github'));
+//=========== Routes for API ============
 
-//Github login callback where we get the access token
-app.get('/auth/github/callback',
-  passport.authenticate('github', {failureRedirect: '/'}),
-  function(req, res) {
-    res.redirect('/dashboard');
-  }
-);
+app.get('/authenticate/:access_code/:session_id', function(req, res) {
+  console.log(req.params.access_code) //access code for doing GitHub OAuth
+  console.log(req.params.session_id)  //session id to keep track of user
 
-//Dashboard where the react app is shown
-app.get('/dashboard', function(req, res) {
-  //access token from `obj` over here
-  // eg - obj.accessToken
-  var userData = utils.pullUserData(obj);
-  db.addUser(userData).then(function(rows) {
-    //Ensure no errors occur
-  });
-  res.render("index.html");
-});
+  res.send(JSON.stringify("Hola")) // temporary response
+}); 
+
 app.listen(8080);
+
