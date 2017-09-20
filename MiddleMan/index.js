@@ -1,9 +1,10 @@
-var express = require('express');
-var app = express();
-var engines = require('consolidate');
-var db = require('../db/db.js');
-var utils = require('./utils.js')
+var express     = require('express');
+var engines     = require('consolidate');
+var db          = require('../db/db.js');
+var utils       = require('./utils.js')
+
 var obj = {}
+var app         = express();
 
 //Serve react and static files
 app.use(express.static(__dirname + '/../client/build'));
