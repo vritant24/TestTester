@@ -1,0 +1,32 @@
+{
+  "name": "SquareCi",
+  "version": "1.0.0",
+  "description": "A simple continuous deployment platform",
+  "main": "MiddleMan/index.js",
+  "scripts": {
+    "start": "node MiddleMan/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vritant24/TestTester.git"
+  },
+  "author": "Purdue, CS408 Team 19",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vritant24/TestTester/issues"
+  },
+  "homepage": "https://github.com/vritant24/TestTester#readme",
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "consolidate": "^0.14.5",
+    "cookie-parser": "^1.4.3",
+    "express": "4.15.4",
+    "express-session": "^1.15.5",
+    "mustache": "^2.3.0",
+    "mysql": "^2.14.1",
+    "nconf": "^0.8.4",
+    "passport": "^0.4.0",
+    "passport-github": "^1.1.0"
+  }
+}
