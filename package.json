@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/vritant24/TestTester#readme",
   "dependencies": {
-    "ampersand-router": "^5.0.0",
     "body-parser": "^1.18.1",
     "consolidate": "^0.14.5",
     "cookie-parser": "^1.4.3",
@@ -26,8 +25,6 @@
     "express-session": "^1.15.5",
     "mustache": "^2.3.0",
     "mysql": "^2.14.1",
-    "nconf": "^0.8.4",
-    "passport": "^0.4.0",
-    "passport-github": "^1.1.0"
+    "nconf": "^0.8.4"
   }
 }
