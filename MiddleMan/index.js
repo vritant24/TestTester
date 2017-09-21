@@ -8,14 +8,14 @@ var obj = {
 }
 */
 
-var obj = [];
-var len = 10;
-for (var i = 0; i < len; i++) {
-    obj.push({
-        github: ' '
-    });
-}
-
+// var obj = [];
+// var len = 10;
+// for (var i = 0; i < len; i++) {
+//     obj.push({
+//         github: ' '
+//     });
+// }
+var obj = {}
 
 var app         = express();
 
@@ -42,6 +42,7 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 app.get('/authenticate/:access_code/:session_id', function(req, res) {
   console.log(req.params.access_code) //access code for doing GitHub OAuth
   console.log(req.params.session_id)  //session id to keep track of user
+  obj[req.params.session_id] = {}
   obj[req.params.session_id].github = req.params.access_code
   //obj.github = req.params.session_id;
   console.log(obj[req.params.session_id].github);
