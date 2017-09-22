@@ -4,22 +4,27 @@ import Router                   from 'ampersand-router' // internal navigation
 import qs                       from 'qs'               // create queries
 import uuid                     from 'uuid'             // generate random string
 import app                      from 'ampersand-app'
-
-import { Repos, User }          from './pages'      
+     
 import { session }              from './helpers'
+import { Repos, User, Landing } from './pages' 
 
 export default Router.extend({
     // the routes
     routes: {
-        ''       : 'login',
+        ''       : 'landing',
+        'login'  : 'login',
         'logout' : 'logout',
         'repos'  : 'repos',
         'user'   : 'user',
-
+         
         'auth/callback?:query' : 'authCallback',
     },
 
     // functions called for each route
+    landing() {
+        renderPage(<Landing/>)
+    },
+
     login () {
         const state = uuid();
         window.localStorage.state = state;
@@ -30,9 +35,16 @@ export default Router.extend({
             state           : state,  
         })
     }, 
+
     logout () {
-       
+       window.localStorage.clear()
+
+       // send something to server
+
+       // redirect to root route
+       window.location = '/'
     },
+
     authCallback (query) {
         //get code and state from query 
         query = qs.parse(query)
@@ -45,16 +57,21 @@ export default Router.extend({
 
             fetch('/authenticate/' + query.code + '/' + sessionID)  // '/authenticate/:access_code/:session_id'
             .then(res => res.json())                                //receive response and convert to JSON
-            .then(res => console.log(res));
+            .then(res => {
+                // redirect to repos
+                this.redirectTo('/repos')
+            });
 
         } else {
             window.localStorage.state = null; //remove state
             console.log("uh oh")
         }
     },
+
     repos () {
         renderPage(<Repos/>)
     },
+
     user () {
         renderPage(<User/>)
     },
