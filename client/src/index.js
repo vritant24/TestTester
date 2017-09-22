@@ -1,8 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import Router   from './router'
+import app      from 'ampersand-app'
+import Me       from './models/me'
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+//expose app to browser console
+window.app = app
+
+//global app between routes
+app.extend({
+    init() {
+        this.me = new Me()
+        this.router = new Router()
+        this.router.history.start()
+    }
+})
+
+app.init()
