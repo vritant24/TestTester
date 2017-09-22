@@ -3,7 +3,7 @@ import ReactDOM                 from 'react-dom'        // show react elements
 import Router                   from 'ampersand-router' // internal navigation
 import qs                       from 'qs'               // create queries
 import uuid                     from 'uuid'             // generate random string
-import app                   from 'ampersand-app'
+import app                      from 'ampersand-app'
 
 import { Repos, User }          from './pages'      
 import { session }              from './helpers'
