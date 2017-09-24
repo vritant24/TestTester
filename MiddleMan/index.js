@@ -1,7 +1,8 @@
 var express = require('express');
 var app = express();
 var engines = require('consolidate');
-var db = require('../db/db.js');
+var request = require('request');
+//var db = require('../db/db.js');
 var utils = require('./utils.js')
 var obj = {}
 
@@ -21,13 +22,33 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 
 
 //=========== Routes for API ============
-
+var accessCode;
 app.get('/authenticate/:access_code/:session_id', function(req, res) {
   console.log(req.params.access_code) //access code for doing GitHub OAuth
   console.log(req.params.session_id)  //session id to keep track of user
-
+  acessCode = req.params.access_code
   res.send(JSON.stringify("Hola")) // temporary response
 }); 
+
+
+var postUrl = 'https://github.com/login/oauth/access_token?client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET+ '&code=' + accessCode;
+
+request.post(
+  postUrl,
+  { json: { key: 'value' } },
+  function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+          console.log(body)
+      }
+      console.log(body)
+      //console.log(response) 
+  }
+);
+
+
+
+
+
 
 app.listen(8080);
 
