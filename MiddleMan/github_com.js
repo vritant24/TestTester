@@ -18,6 +18,21 @@ var getToken = (accessCode) => {
     );
 }
 
+var getUserData = (access_token) => {
+  var get_url = 'https://api.github.com/user?access_token=' + access_token;
+  request.get(
+    getUrl,
+    { json: { key: 'value' } },
+    function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            return body;
+        }
+        console.log(error)
+    }
+  );
+}
+
 module.exports = {
-    getToken
+    getToken,
+    getUserData
 }
