@@ -4,7 +4,9 @@
   "private": true,
   "dependencies": {
     "ampersand-app": "^2.0.0",
+    "ampersand-model": "^8.0.0",
     "ampersand-router": "^5.0.0",
+    "ampersand-state": "^5.0.2",
     "local-links": "^1.4.1",
     "qs": "^6.5.1",
     "react": "^15.6.1",
