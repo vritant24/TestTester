@@ -1,14 +1,7 @@
-<<<<<<< HEAD
-import React, { Component }         from 'react';
-import styled                       from 'styled-components'
-import { LocalLink, Repository }    from '../components'
-
-=======
 import React, { Component }     from 'react';
 import styled                   from 'styled-components'
 import { Repository }           from '../components'
 import { session }              from '../helpers'
->>>>>>> master
 
 var RepoContainer = styled.div`
     display             : flex;
@@ -18,22 +11,6 @@ var RepoContainer = styled.div`
 
 export default class Repos extends Component {
     constructor(props) {
-<<<<<<< HEAD
-        super(props);
-        this.repos = ["1", "2", "3", "4"];
-    }
-   
-    render() {
-        var repoList = this.repos.map( name => <Repository repoName={name} key={name}/>)
-        return (
-            <LocalLink>
-                <a href="user"> go to user page </a>
-                <h1>Repositories</h1>
-                <RepoContainer>
-                    {repoList}
-                </RepoContainer>
-            </LocalLink>
-=======
         super(props)
         this.state = {
             repos : null,
@@ -79,7 +56,6 @@ export default class Repos extends Component {
                     {repoList}
                 </RepoContainer>
             </div>
->>>>>>> master
         )
     }
 }
