@@ -4,7 +4,7 @@
   "description": "A simple continuous deployment platform",
   "main": "MiddleMan/index.js",
   "scripts": {
-    "start": "node MiddleMan/index.js",
+    "start": "node MiddleMan/index.js & (sleep 2s; npm start --prefix client/)",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -25,6 +25,7 @@
     "express-session": "^1.15.5",
     "mustache": "^2.3.0",
     "mysql": "^2.14.1",
-    "nconf": "^0.8.4"
+    "nconf": "^0.8.4",
+    "request": "^2.82.0"
   }
 }

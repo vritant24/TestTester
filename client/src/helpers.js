@@ -6,7 +6,7 @@ import app  from 'ampersand-app'
 
 //Setters and Getters for the session ID
 var session = {
-    setSessionID: () => (app.me.token = uuid()),
+    setSessionID: () => {if(!app.me.token) app.me.token = uuid(); return app.me.token},
     getSessionID: () => (app.me.token)
 }
 
