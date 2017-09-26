@@ -4,7 +4,7 @@ var engines     = require('consolidate');
 var utils       = require('./utils.js')
 
 var obj = {}
-
+var request = require('request');
 var app         = express();
 
 //dummy variables for now:
@@ -21,7 +21,10 @@ app.set('view engine', 'html');
 //for parsing JSON requests and responses
 app.use(require('body-parser').urlencoded({ extended: true }));
 
-
+//Dev values
+var CLIENT_ID     = '2a48dc27e13bf25eca10';
+var CLIENT_SECRET = 'a3340700567cad703e00952f4b740d065c1b297d';
+var accessCode;
 //=========== Routes for API ============
 
 app.get('/authenticate/:access_code/:session_id', function(req, res) {
@@ -29,8 +32,8 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
   console.log(req.params.session_id)  //session id to keep track of user
   obj[req.params.session_id] = {}
   obj[req.params.session_id].github = req.params.access_code
-  
-  
+  acessCode = req.params.access_code
+  getToken();
   res.send(JSON.stringify("Hola")) // temporary response
 }); 
 
@@ -111,4 +114,19 @@ app.get('/testlogs/:USessionId/:RepoName', function(req, res) {
 }); 
 
 app.listen(8080);
+
+function getToken(){
+    var postUrl = 'https://github.com/login/oauth/access_token?client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET+ '&code=' + accessCode;
+    request.post(
+      postUrl,
+      { json: { key: 'value' } },
+      function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+              console.log(body)
+          }
+          console.log(body)
+          //console.log(response) 
+      }
+    );
+}
 
