@@ -9,7 +9,7 @@ import { session }              from './helpers'
 import { Repos, User, Landing } from './pages' 
 
 export default Router.extend({
-    // the routes
+    // the routes with the functions they call ( route : function_name )
     routes: {
         ''       : 'landing',
         'login'  : 'login',
