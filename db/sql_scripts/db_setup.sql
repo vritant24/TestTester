@@ -8,3 +8,5 @@ CREATE TABLE Repo (repoId BIGINT, repoName VARCHAR(150), repoURL VARCHAR(150), i
                    PRIMARY KEY(repoId));
 
 CREATE TABLE UserSession (gitHubId BIGINT, sessionToken VARCHAR(1000), PRIMARY KEY(sessionToken));
+
+CREATE TABLE ServerEndpoints (repoId BIGINT, stage VARCHAR(6), port INT, PRIMARY KEY(repoId, stage))
