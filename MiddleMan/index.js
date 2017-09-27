@@ -19,28 +19,43 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 //=========== Routes for API ============
 
 app.get('/authenticate/:access_code/:session_id', function(req, res) {
-//   console.log(req.params.access_code) //access code for doing GitHub OAuth
-//   console.log(req.params.session_id)  //session id to keep track of user
-  obj[req.params.session_id] = {}
-  obj[req.params.session_id].github = req.params.access_code
 
-  console.log(req.params.session_id)
-  //get access_code
+  var user_db_data = [];
   github_com.getToken(req.params.access_code).then(function(response) {
-    console.log("access_token: " +   response.access_token);
+
     github_com.getUserData(response.access_token).then(function(user_data) {
-      var arr = [];
-      console.log("user_data: " + user_data);
-      arr.push(user_data.id);
-      arr.push(user_data.login);
-      db.addUser(arr);
+      parsed_user_data = JSON.parse(user_data);
+      user_db_data.push(parsed_user_data.id);
+      user_db_data.push(parsed_user_data.login);
+      db.addUser(user_db_data);
+
+      //Now that we have both the gitHubId(parsed_user_data.id) of the user
+      //and their access_token(response.access_token) we need to store that
+      //data in the UserAccess table.
+
+      /*
+      TODO:
+        Go to /db/db.js, create a function named addUserAccess
+        This should follow very closely to the addUser function.
+
+      TODO:
+        Call the addUserAccess function you just made here and pass
+        it the two peices of input it needs in order to insert into the
+        UserAccess table.
+
+
+      TODO:
+        If these last two tasks go smoothly, look at /db/db_setup.sql.
+        This file contains the sql statements that setup the tables in
+        the database. We also need to insert into the UserSession table.
+        Use what you learned in the last two TODOs to implement this.
+        */
+
     });
   });
 
-
-
-
-  res.send(JSON.stringify("Hola")) // temporary response
+  //Status Code for Redirection
+  res.send(307);
 });
 
 // /repository/:USessionId

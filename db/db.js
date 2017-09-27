@@ -22,6 +22,7 @@ exports.getUsers = () => {
   });
 }
 
+//Adds data to User table
 //userData is an array of the inputs
 exports.addUser = (userData) => {
   return new Promise((resolve, reject) => {

@@ -43,12 +43,8 @@ var getUserData = (access_token) => {
 
   return new Promise((resolve, reject) => {
     request(options, function (error, response, body) {
-        console.log("IN GET USER DATA");
-        console.log(error);
-        console.log(response);
-        console.log(body);
           if (!error && response.statusCode == 200) {
-              resolve(response);
+              resolve(body);
           }
           reject(error)
       }
