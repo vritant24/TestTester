@@ -26,10 +26,17 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
 
   console.log(req.params.session_id)
   //get access_code
-  access_token = github_com.getToken(req.params.access_code);
-  user_data = github_com.getUserData(access_token);
-  //TODO: Check if user exists first. If not add them.
-  db.addUser(user_data);
+  github_com.getToken(req.params.access_code).then(function(response) {
+    console.log("access_token: " +   response.access_token);
+    github_com.getUserData(response.access_token).then(function(user_data) {
+      var arr = [];
+      console.log("user_data: " + user_data);
+      arr.push(user_data.id);
+      arr.push(user_data.login);
+      db.addUser(arr);
+    });
+  });
+
 
 
 
