@@ -29,6 +29,14 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
       user_db_data.push(parsed_user_data.login);
       db.addUser(user_db_data);
 
+
+
+
+  var user_access_db_data = [];
+      user_access_db_data.push(parsed_user_data.id);
+      user_access_db_data.push(res.access_token);
+      db.addUserAccess(user_access_db_data);
+
       //Now that we have both the gitHubId(parsed_user_data.id) of the user
       //and their access_token(response.access_token) we need to store that
       //data in the UserAccess table.
@@ -42,7 +50,7 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
         Call the addUserAccess function you just made here and pass
         it the two peices of input it needs in order to insert into the
         UserAccess table.
-
+        
 
       TODO:
         If these last two tasks go smoothly, look at /db/db_setup.sql.

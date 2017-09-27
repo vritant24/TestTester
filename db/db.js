@@ -35,3 +35,15 @@ exports.addUser = (userData) => {
     });
   });
 }
+
+exports.addUserAccess = (userData) => {
+  return new Promise((resolve, reject) => {
+    connection.query('INSERT IGNORE INTO UserAccess SET gitHubId = ?, accessToken = ?', userData ,function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
