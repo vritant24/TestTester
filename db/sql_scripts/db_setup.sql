@@ -9,4 +9,4 @@ CREATE TABLE Repo (repoId BIGINT, repoName VARCHAR(150), repoURL VARCHAR(150), i
 
 CREATE TABLE UserSession (gitHubId BIGINT, sessionToken VARCHAR(1000), PRIMARY KEY(sessionToken));
 
-CREATE TABLE ServerEndpoints (repoId BIGINT, stage VARCHAR(6), port INT, PRIMARY KEY(repoId, stage))
+CREATE TABLE ServerEndpoints (port INT, repoId BIGINT, stage VARCHAR(6), PRIMARY KEY(port))
