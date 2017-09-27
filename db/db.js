@@ -47,3 +47,16 @@ exports.addUserAccess = (userData) => {
     });
   });
 }
+
+exports.addUserSession = (userData) => {
+  return new Promise((resolve, reject) => {
+    connection.query('INSERT IGNORE INTO UserSession SET gitHubId = ?, sessionToken = ?', userData ,function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
