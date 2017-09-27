@@ -53,7 +53,9 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
 
     });
   });
-  res.send(JSON.stringify("Hola"))
+
+  //Status Code for Redirection
+  res.send(307);
 });
 
 // /repository/:USessionId
