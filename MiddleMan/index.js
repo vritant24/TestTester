@@ -24,48 +24,24 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
   github_com.getToken(req.params.access_code).then(function(response) {
 
     github_com.getUserData(response.access_token).then(function(user_data) {
-      parsed_user_data = JSON.parse(user_data);
-      user_db_data.push(parsed_user_data.id);
-      user_db_data.push(parsed_user_data.login);
-      db.addUser(user_db_data);
+      
+        parsed_user_data = JSON.parse(user_data);
+        user_db_data.push(parsed_user_data.id);
+        user_db_data.push(parsed_user_data.login);
+        db.addUser(user_db_data);
 
+        var user_access_db_data = []; 
+        user_access_db_data.push(parsed_user_data.id);
+        user_access_db_data.push(response.access_token);
+        db.addUserAccess(user_access_db_data);
 
-
-
-  var user_access_db_data = [];
-      user_access_db_data.push(parsed_user_data.id);
-      user_access_db_data.push(response.access_token);
-      db.addUserAccess(user_access_db_data);
-
-  var user_session_db_data = [];
-      user_session_db_data.push(parsed_user_data.id);
-      user_session_db_data.push(req.params.session_id);
-      //console.log(session_id);
-      db.addUserSession(user_session_db_data);
-
-      //Now that we have both the gitHubId(parsed_user_data.id) of the user
-      //and their access_token(response.access_token) we need to store that
-      //data in the UserAccess table.
-
-      /*
-      TODO:
-        Go to /db/db.js, create a function named addUserAccess
-        This should follow very closely to the addUser function.
-
-      TODO:
-        Call the addUserAccess function you just made here and pass
-        it the two peices of input it needs in order to insert into the
-        UserAccess table.
+        var user_session_db_data = [];
+        user_session_db_data.push(parsed_user_data.id);
+        user_session_db_data.push(req.params.session_id);
+        db.addUserSession(user_session_db_data);
         
-
-      TODO:
-        If these last two tasks go smoothly, look at /db/db_setup.sql.
-        This file contains the sql statements that setup the tables in
-        the database. We also need to insert into the UserSession table.
-        Use what you learned in the last two TODOs to implement this.
-        */
-
     });
+
   });
 
   //Status Code for Redirection
