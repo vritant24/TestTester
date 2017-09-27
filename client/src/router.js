@@ -8,7 +8,7 @@ import { Repos, User }   from './pages'
 // import app              from 'ampersand-app'
 
 export default Router.extend({
-    // the routes
+    // the routes with the functions they call ( route : function_name )
     routes: {
         ''              : 'login',
         'logout'        : 'logout',
