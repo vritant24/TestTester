@@ -20,32 +20,38 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 
 app.get('/authenticate/:access_code/:session_id', function(req, res) {
 
-  var user_db_data = [];
-  github_com.getToken(req.params.access_code).then(function(response) {
+    //Using Access Code, get Access Token from GitHub  
+    github_com.getToken(req.params.access_code).then(function(response) {
 
-    github_com.getUserData(response.access_token).then(function(user_data) {
-      
-        parsed_user_data = JSON.parse(user_data);
-        user_db_data.push(parsed_user_data.id);
-        user_db_data.push(parsed_user_data.login);
-        db.addUser(user_db_data);
-
-        var user_access_db_data = []; 
-        user_access_db_data.push(parsed_user_data.id);
-        user_access_db_data.push(response.access_token);
-        db.addUserAccess(user_access_db_data);
-
-        var user_session_db_data = [];
-        user_session_db_data.push(parsed_user_data.id);
-        user_session_db_data.push(req.params.session_id);
-        db.addUserSession(user_session_db_data);
+        //Using Access Token, get User Data from GitHub
+        github_com.getUserData(response.access_token).then(function(user_data) {
         
-    });
+            parsed_user_data = JSON.parse(user_data);
+            
+            //Add User Information to database
+            var user_db_data = [];
+            user_db_data.push(parsed_user_data.id);
+            user_db_data.push(parsed_user_data.login);
+            db.addUser(user_db_data);
+
+            //Add User access code to database
+            var user_access_db_data = []; 
+            user_access_db_data.push(parsed_user_data.id);
+            user_access_db_data.push(response.access_token);
+            db.addUserAccess(user_access_db_data);
+
+            //Add User session ID to database
+            var user_session_db_data = [];
+            user_session_db_data.push(parsed_user_data.id);
+            user_session_db_data.push(req.params.session_id);
+            db.addUserSession(user_session_db_data);
+            
+        });
 
   });
 
-  //Status Code for Redirection
-  res.send(JSON.stringify(307));
+  //Status Code to Client
+  res.send(JSON.stringify(200));
 });
 
 // /repository/:USessionId
@@ -61,6 +67,7 @@ app.get('/repository/:session_id', function(req, res) {
         res.send(JSON.stringify(repoList));
     }
     else {
+        console.log()
         res.send(JSON.stringify(emptyList));
     }
 });
