@@ -16,7 +16,6 @@ app.set('view engine', 'html');
 //for parsing JSON requests and responses
 app.use(require('body-parser').urlencoded({ extended: true }));
 
-
 //=========== Routes for API ============
 var accessCode;
 app.get('/authenticate/:access_code/:session_id', function(req, res) {
