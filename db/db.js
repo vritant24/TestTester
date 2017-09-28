@@ -22,8 +22,6 @@ exports.getUsers = () => {
   });
 }
 
-//Adds data to User table
-//userData is an array of the inputs
 exports.addUser = (userData) => {
   return new Promise((resolve, reject) => {
     connection.query('INSERT IGNORE INTO User SET gitHubId = ?, username = ?', userData ,function(error, results) {
@@ -38,7 +36,7 @@ exports.addUser = (userData) => {
 
 exports.addUserAccess = (userData) => {
   return new Promise((resolve, reject) => {
-    connection.query('INSERT IGNORE INTO UserAccess SET gitHubId = ?, accessToken = ?', userData ,function(error, results) {
+    connection.query('REPLACE INTO UserAccess SET gitHubId = ?, accessToken = ?', userData ,function(error, results) {
       if (error) {
         reject(error);
       } else {
@@ -50,7 +48,7 @@ exports.addUserAccess = (userData) => {
 
 exports.addUserSession = (userData) => {
   return new Promise((resolve, reject) => {
-    connection.query('INSERT IGNORE INTO UserSession SET gitHubId = ?, sessionToken = ?', userData ,function(error, results) {
+    connection.query('REPLACE INTO UserSession SET gitHubId = ?, sessionToken = ?', userData ,function(error, results) {
       if (error) {
         reject(error);
       } else {
