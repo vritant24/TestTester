@@ -25,3 +25,21 @@ exports.packageUserRepoData = (repo_data, gitHubId) => {
   });
   return db_repos_data;
 };
+
+exports.packageRepoData = (repo_data) => {
+  var parsed_repos_data = JSON.parse(repo_data);
+  var db_repos_data = [];
+
+  parsed_repos_data.forEach(function(repo) {
+    var db_repo_data = [];
+
+    db_repo_data.push(repo.id);
+    db_repo_data.push(repo.name);
+    db_repo_data.push(repo.html_url);
+    db_repo_data.push(repo.private);
+
+    db_repos_data.push(db_repo_data);
+
+  });
+  return db_repos_data;
+};
