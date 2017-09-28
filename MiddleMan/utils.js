@@ -8,3 +8,20 @@ exports.pullUserData = data => {
   userDataInputs.push(data.accessToken);
   return userDataInputs;
 }
+
+exports.packageUserRepoData = (repo_data, gitHubId) => {
+  var parsed_repos_data = JSON.parse(repo_data);
+  var db_repos_data = [];
+
+  parsed_repos_data.forEach(function(repo) {
+    var db_repo_data = [];
+
+    db_repo_data.push(repo.id);
+    db_repo_data.push(gitHubId);
+    db_repo_data.push(false);
+
+    db_repos_data.push(db_repo_data);
+
+  });
+  return db_repos_data;
+};
