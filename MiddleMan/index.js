@@ -51,11 +51,18 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
 
               parsed_user_repo_data = JSON.parse(user_repo_data);
 
-              repos = utils.packageUserRepoData(user_repo_data, gitHubId);
+              user_repos = utils.packageUserRepoData(user_repo_data, gitHubId);
+
+              user_repos.forEach(function(user_repo) {
+                db.addUserRepo(user_repo);
+              });
+
+              repos = utils.packageRepoData(user_repo_data);
 
               repos.forEach(function(repo) {
-                db.addUserRepo(repo);
+                db.addRepo(repo);
               });
+
 
             });
 
