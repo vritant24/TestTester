@@ -2,10 +2,18 @@ var express     = require('express');
 var engines     = require('consolidate');
 var db          = require('../db/db.js');
 var utils       = require('./utils.js')
+
 var github_com  = require('./github_com')
 
 var obj = {}
 var app         = express();
+
+var app         = express();
+
+//dummy variables for now:
+
+var repoList = ["x","y","z","a","b","c"];
+var testLogList = ["test1","test2","test3","test4"];
 
 //Serve react and static files
 app.use(express.static(__dirname + '/../client/build'));
@@ -143,7 +151,6 @@ app.get('/repository/new/:session_id/:name', function(req, res) {
   }
   else {
       res.send(JSON.stringify("Failure"));
-
   }
 
 });
