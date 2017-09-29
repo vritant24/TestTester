@@ -4,6 +4,8 @@ var db          = require('../db/db.js');
 var utils       = require('./utils.js')
 
 var github_com  = require('./github_com')
+var hook        = require('./webhook.js')
+var githubhook  = require('githubhook');
 
 var obj = {}
 var app         = express();
@@ -117,15 +119,16 @@ if (req.method == 'POST') {         ???????
 
 //creating the webhook
 //POST to https://api.github.com/repos/:username/:repo/hooks
-/*{
+
+/*app.post('https://api.github.com/repos/:username/:repo/hooks', function (req, res) {
   "name": "web",
   "active": true,
   "events": ["pull_request", "push"],
   "config": {
-    "url": "http://example.com/url/path"  //admin section of your repo
-    //"content_type": "json"
-  }
-}*/
+    "url": "http://xxxxxxxxx.com/webhook"  //admin section of your repo
+});*/
+
+
 //GET to https://api.github.com/repos/:username/:repo/hooks to chech proper webhook
 // to run a post request
 // /webhook/repository (MASTER) ??
@@ -173,5 +176,8 @@ app.get('/testlogs/:session_id/:repo_name', function(req, res) {
   }
 
 });
+
+//console.log(hookFunc)
+hook.listen();
 
 app.listen(8080);
