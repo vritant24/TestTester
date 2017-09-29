@@ -1,13 +1,13 @@
 var githubhook = require('githubhook');
 
-var CLIENT_SECRET = 'a3340700567cad703e00952f4b740d065c1b297d';
+var webhookSecret = "1234567890987654321"
 
 var listen = function() {
   var hook = githubhook ({
     host: "localhost", //  default is 0.0.0.0
     port: "8080", //8080 if changed back
-    path: "/repos", //   default is /github/callback
-    secret: CLIENT_SECRET
+    //path: "/repos", //   default is /github/callback
+    secret: webhookSecret;
   });
 
   hook.on('push', function (repo, ref, data) {
