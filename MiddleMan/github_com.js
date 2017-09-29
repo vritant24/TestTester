@@ -52,7 +52,31 @@ var getUserData = (access_token) => {
   });
 }
 
+var getUserRepoData = (access_token) => {
+
+  const options = {
+      url: 'https://api.github.com/user/repos?access_token=' + access_token,
+      method: 'GET',
+      headers: {
+          'Accept': 'application/json',
+          'Accept-Charset': 'utf-8',
+          'User-Agent': 'MiddleManServer'
+      }
+  };
+
+  return new Promise((resolve, reject) => {
+    request(options, function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+              resolve(body);
+          }
+          reject(error)
+      }
+    );
+  });
+}
+
 module.exports = {
     getToken,
-    getUserData
+    getUserData,
+    getUserRepoData
 }

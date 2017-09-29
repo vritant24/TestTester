@@ -58,3 +58,26 @@ exports.addUserSession = (userData) => {
   });
 }
 
+exports.addUserRepo = (userRepoData) => {
+  return new Promise((resolve, reject) => {
+    connection.query('INSERT IGNORE INTO UserRepo SET repoId = ?, gitHubId = ?, isMonitored = ?', userRepoData ,function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+exports.addRepo = (repoData) => {
+  return new Promise((resolve, reject) => {
+    connection.query('INSERT IGNORE INTO Repo SET RepoId = ?, RepoName = ?, RepoUrl = ?, IsPublic = ?', repoData ,function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
