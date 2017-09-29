@@ -76,7 +76,7 @@ export default Router.extend({
         renderPage(<User/>)
     },
  })
-
+ 
  //Render's the given page using the react dom
  var renderPage = (component) => {
     ReactDOM.render(component, document.getElementById('root')
