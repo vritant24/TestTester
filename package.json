@@ -24,6 +24,7 @@
     "express": "4.15.4",
     "express-session": "^1.15.5",
     "github-download": "^0.5.0",
+    "githubhook": "^1.9.1",
     "mustache": "^2.3.0",
     "mysql": "^2.14.1",
     "nconf": "^0.8.4",

@@ -7,7 +7,7 @@ var listen = function() {
     host: "localhost", //  default is 0.0.0.0
     port: "8080", //8080 if changed back
     //path: "/repos", //   default is /github/callback
-    secret: webhookSecret;
+    secret: webhookSecret
   });
 
   hook.on('push', function (repo, ref, data) {
