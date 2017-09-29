@@ -3,22 +3,28 @@ import ReactDOM                 from 'react-dom'        // show react elements
 import Router                   from 'ampersand-router' // internal navigation
 import qs                       from 'qs'               // create queries
 import uuid                     from 'uuid'             // generate random string
-import xhr                      from 'xhr'              // http request with server
-import { Repos, User }   from './pages'
-// import app              from 'ampersand-app'
+import app                      from 'ampersand-app'
+     
+import { session }              from './helpers'
+import { Repos, User, Landing } from './pages' 
 
 export default Router.extend({
     // the routes with the functions they call ( route : function_name )
     routes: {
-        ''              : 'login',
-        'logout'        : 'logout',
+        ''       : 'landing',
+        'login'  : 'login',
+        'logout' : 'logout',
         'repos'  : 'repos',
         'user'   : 'user',
-
+         
         'auth/callback?:query' : 'authCallback',
     },
 
     // functions called for each route
+    landing() {
+        renderPage(<Landing/>)
+    },
+
     login () {
         const state = uuid();
         window.localStorage.state = state;
@@ -29,29 +35,43 @@ export default Router.extend({
             state           : state,  
         })
     }, 
+
     logout () {
-       
+       window.localStorage.clear()
+
+       // send something to server
+
+       // redirect to root route
+       window.location = '/'
     },
+
     authCallback (query) {
         //get code and state from query 
         query = qs.parse(query)
 
         if(query.state === window.localStorage.state) {
+            window.localStorage.state = null; //remove state
+
             //send code to server along with a session id to be redirected to dashboard with userid
-            var state = uuid() // session id
-            window.localStorage.sate = state;
-            
-            fetch('/authenticate/' + query.code + '/' + state)
-            .then(res => res.json())
-            .then(res => console.log(res));
+            var sessionID = session.setSessionID()
+
+            fetch('/authenticate/' + query.code + '/' + sessionID)  // '/authenticate/:access_code/:session_id'
+            .then(res => res.json())                                //receive response and convert to JSON
+            .then(res => {
+                // redirect to repos
+                this.redirectTo('/repos')
+            });
 
         } else {
+            window.localStorage.state = null; //remove state
             console.log("uh oh")
         }
     },
+
     repos () {
         renderPage(<Repos/>)
     },
+
     user () {
         renderPage(<User/>)
     },
