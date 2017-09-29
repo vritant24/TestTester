@@ -1,6 +1,6 @@
 var express     = require('express');
 var engines     = require('consolidate');
-//var db          = require('../db/db.js');
+var db          = require('../db/db.js');
 var utils       = require('./utils.js')
 var github_com  = require('./github_com')
 
@@ -19,17 +19,60 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 //=========== Routes for API ============
 var accessCode;
 app.get('/authenticate/:access_code/:session_id', function(req, res) {
-//   console.log(req.params.access_code) //access code for doing GitHub OAuth
-//   console.log(req.params.session_id)  //session id to keep track of user
-  obj[req.params.session_id] = {}
-  obj[req.params.session_id].github = req.params.access_code
-  
-  console.log(req.params.session_id)
-  //get access_code
-  github_com.getToken(req.params.access_code);
 
-  res.send(JSON.stringify("Hola")) // temporary response
-}); 
+    //Using Access Code, get Access Token from GitHub
+    github_com.getToken(req.params.access_code).then(function(response) {
+
+        //Using Access Token, get User Data from GitHub
+        github_com.getUserData(response.access_token).then(function(user_data) {
+
+            var parsed_user_data = JSON.parse(user_data);
+            var gitHubId = parsed_user_data.id;
+
+            //Add User Information to database
+            var user_db_data = [];
+            user_db_data.push(gitHubId);
+            user_db_data.push(parsed_user_data.login);
+            db.addUser(user_db_data);
+
+            //Add User access code to database
+            var user_access_db_data = [];
+            user_access_db_data.push(gitHubId);
+            user_access_db_data.push(response.access_token);
+            db.addUserAccess(user_access_db_data);
+
+            //Add User session ID to database
+            var user_session_db_data = [];
+            user_session_db_data.push(gitHubId);
+            user_session_db_data.push(req.params.session_id);
+            db.addUserSession(user_session_db_data);
+
+            github_com.getUserRepoData(response.access_token).then(function(user_repo_data) {
+
+              parsed_user_repo_data = JSON.parse(user_repo_data);
+
+              user_repos = utils.packageUserRepoData(user_repo_data, gitHubId);
+
+              user_repos.forEach(function(user_repo) {
+                db.addUserRepo(user_repo);
+              });
+
+              repos = utils.packageRepoData(user_repo_data);
+
+              repos.forEach(function(repo) {
+                db.addRepo(repo);
+              });
+
+
+            });
+
+        });
+
+  });
+
+  //Status Code to Client
+  res.send(JSON.stringify(200));
+});
 
 // /repository/:USessionId
 // return list of repositories
@@ -37,8 +80,6 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
 app.get('/repository/:session_id', function(req, res) {
     var repoList = ["x","y","z","a","b","c"];
     var emptyList = [];
-    
-    console.log(req.params.session_id);
 
     if (obj[req.params.session_id]){
         res.send(JSON.stringify(repoList));
@@ -46,7 +87,7 @@ app.get('/repository/:session_id', function(req, res) {
     else {
         res.send(JSON.stringify(emptyList));
     }
-}); 
+});
 
 
 
@@ -81,10 +122,10 @@ if (req.method == 'POST') {         ???????
 // to run a post request
 // /webhook/repository (MASTER) ??
 app.post('/webhooks', function (req, res) {
-  //var id = req.body.id;
-  //res.redirect('/webhook/...')"
-  console.log(req.body);
-  res.send(JSON.stringify("POST request made"));
+    //var id = req.body.id;
+    //res.redirect('/webhook/...')"
+    console.log(req.body);
+    res.send(JSON.stringify("POST request made"));
 });
 
 
@@ -95,18 +136,17 @@ app.post('/webhooks', function (req, res) {
 app.get('/repository/new/:session_id/:name', function(req, res) {
 
   repoList.push(req.params.name);
-  console.log(repoList);
 
   if (repoList.includes(req.params.name)){
       res.send(JSON.stringify("Success"));
-      
+
   }
   else {
       res.send(JSON.stringify("Failure"));
 
   }
 
-}); 
+});
 
 // /testlogs/:USessionId/:RepoName
 // return list of test logs
@@ -124,9 +164,7 @@ app.get('/testlogs/:session_id/:repo_name', function(req, res) {
   else {
         res.send(JSON.stringify("User ID doesn't exist"));
   }
- 
-}); 
+
+});
 
 app.listen(8080);
-
-

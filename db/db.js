@@ -24,7 +24,55 @@ exports.getUsers = () => {
 
 exports.addUser = (userData) => {
   return new Promise((resolve, reject) => {
-    connection.query('REPLACE INTO User SET gitHubId = ?, username = ?, displayName = ?, avatarURL = ?; REPLACE INTO UserAccess SET gitHubId = ?, accessToken = ?;', userData ,function(error, results) {
+    connection.query('INSERT IGNORE INTO User SET gitHubId = ?, username = ?', userData ,function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+exports.addUserAccess = (userData) => {
+  return new Promise((resolve, reject) => {
+    connection.query('REPLACE INTO UserAccess SET gitHubId = ?, accessToken = ?', userData ,function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+exports.addUserSession = (userData) => {
+  return new Promise((resolve, reject) => {
+    connection.query('REPLACE INTO UserSession SET gitHubId = ?, sessionToken = ?', userData ,function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+exports.addUserRepo = (userRepoData) => {
+  return new Promise((resolve, reject) => {
+    connection.query('INSERT IGNORE INTO UserRepo SET repoId = ?, gitHubId = ?, isMonitored = ?', userRepoData ,function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+exports.addRepo = (repoData) => {
+  return new Promise((resolve, reject) => {
+    connection.query('INSERT IGNORE INTO Repo SET RepoId = ?, RepoName = ?, RepoUrl = ?, IsPublic = ?', repoData ,function(error, results) {
       if (error) {
         reject(error);
       } else {
