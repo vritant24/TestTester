@@ -49,9 +49,14 @@ app.get('/repository/:session_id', function(req, res) {
 }); 
 
 
-//all post requests are located in req.body
-//POST request asks the serve to accept/store data in the body of the request
-//Often used when submitting forms
+
+/*
+NEED TO CREATE A SERVER WHICH WILL ACCEPT A POST REQUEST FROM GITHUB
+
+if (req.method == 'POST') {         ???????
+  ...
+}
+*/
 
 //example
 //router.post('test/submit', function (req, res) {
@@ -59,25 +64,26 @@ app.get('/repository/:session_id', function(req, res) {
 //  res.redirect('/test/' + id);
 //});
 //thus if you submit the number 10 with the post request, it will redirect the id from the post, as
-//a paramter to the get request
+//a parameter to the get request
 
-
+//creating the webhook
 //POST to https://api.github.com/repos/:username/:repo/hooks
 /*{
   "name": "web",
   "active": true,
-  "events": ["pull_request"],
+  "events": ["pull_request", "push"],
   "config": {
     "url": "http://example.com/url/path"  //admin section of your repo
+    //"content_type": "json"
   }
 }*/
 //GET to https://api.github.com/repos/:username/:repo/hooks to chech proper webhook
 // to run a post request
 // /webhook/repository (MASTER) ??
-app.post('/webhook/repository', function (req, res) {
-  //var id = req.body.id;
-  //res.redirect('/webhook/...')
-  console.log(req.params);
+app.post('/webhooks', function (req, res) {
+  "//var id = req.body.id;
+    //res.redirect('/webhook/...')"
+  console.log(req.body);
   res.send(JSON.stringify("POST request made"));
 });
 
