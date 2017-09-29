@@ -134,12 +134,14 @@ if (req.method == 'POST') {         ???????
 // to run a post request
 // /webhook/repository (MASTER) ??
 app.post('/webhooks', function (req, res) {
-    //var id = req.body.id;
-    //res.redirect('/webhook/...')"
-    console.log(req.body);
+    //console.log('here'); //prints
+    console.log(req);
+    //create a new function that determines if the push was made by master call it here
+    //determineMaster(url for master)
     res.send(JSON.stringify("POST request made"));
 });
 
+//either add the funtcion here ot in another file
 
 
 // /repository/new/:USessionId/:name
