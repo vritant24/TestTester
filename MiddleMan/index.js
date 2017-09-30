@@ -2,7 +2,7 @@ var express     = require('express');
 var engines     = require('consolidate');
 var db          = require('../db/db.js');
 
-var github_com  = require('./github_com')
+var store_user  = require('./store_user')
 var hook        = require('./webhook.js')
 var githubhook  = require('githubhook');
 
@@ -26,7 +26,7 @@ var accessCode;
 app.get('/authenticate/:access_code/:session_id', function(req, res) {
 
     //Using Access Code, get Access Token from GitHub
-    github_com.getTokenAndUserData(req.params.access_code);
+    store_user.storeUserData(req.params.access_code, req.params.session_id);
 
     //Status Code to Client
     res.send(JSON.stringify(200));
