@@ -10,6 +10,7 @@ var options = {
   }
 };
 
+//Gets access token for user from github
 var getToken = (accessCode) => {
   return new Promise((resolve, reject) => {
     var postUrl = 'https://github.com/login/oauth/access_token?client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET+ '&code=' + accessCode;
@@ -17,60 +18,60 @@ var getToken = (accessCode) => {
       postUrl,
       { json: { key: 'value' } },
       function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-              resolve(body);
-          }
-          reject(error);
+        if (!error && response.statusCode == 200) {
+            resolve(body);
+        }
+        reject(error);
       }
     );
   });
 }
 
+//gets user data for user from github
 var getUserData = (access_token) => {
   const options = {
       url: 'https://api.github.com/user?access_token=' + access_token,
       method: 'GET',
       headers: {
-          'Accept': 'application/json',
-          'Accept-Charset': 'utf-8',
-          'User-Agent': 'MiddleManServer'
+        'Accept': 'application/json',
+        'Accept-Charset': 'utf-8',
+        'User-Agent': 'MiddleManServer'
       }
   };
 
   return new Promise((resolve, reject) => {
     request(options, function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-              resolve(body);
-          }
-          reject(error)
+        if (!error && response.statusCode == 200) {
+            resolve(body);
+        }
+        reject(error)
       }
     );
   });
 }
 
+//gets yser;s repo data from github
 var getUserRepoData = (access_token) => {
   const options = {
       url: 'https://api.github.com/user/repos?access_token=' + access_token,
       method: 'GET',
       headers: {
-          'Accept': 'application/json',
-          'Accept-Charset': 'utf-8',
-          'User-Agent': 'MiddleManServer'
+        'Accept': 'application/json',
+        'Accept-Charset': 'utf-8',
+        'User-Agent': 'MiddleManServer'
       }
   };
 
   return new Promise((resolve, reject) => {
     request(options, function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-              resolve(body);
-          }
-          reject(error)
+        if (!error && response.statusCode == 200) {
+          resolve(body);
+        }
+        reject(error)
       }
     );
   });
 }
-
-
 
 module.exports = {
     getUserRepoData,
