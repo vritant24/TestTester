@@ -101,41 +101,14 @@ app.get('/repository/:session_id', function(req, res) {
 
 
 
-/*
-NEED TO CREATE A SERVER WHICH WILL ACCEPT A POST REQUEST FROM GITHUB
-
-if (req.method == 'POST') {         ???????
-  ...
-}
-*/
-
-//example
-//router.post('test/submit', function (req, res) {
-//  var id = req.bddy.id; (from router.get);
-//  res.redirect('/test/' + id);
-//});
-//thus if you submit the number 10 with the post request, it will redirect the id from the post, as
-//a parameter to the get request
-
-//creating the webhook
-//POST to https://api.github.com/repos/:username/:repo/hooks
-
-/*app.post('https://api.github.com/repos/:username/:repo/hooks', function (req, res) {
-  "name": "web",
-  "active": true,
-  "events": ["pull_request", "push"],
-  "config": {
-    "url": "http://xxxxxxxxx.com/webhook"  //admin section of your repo
-  }
-});*/
-
-
 //GET to https://api.github.com/repos/:username/:repo/hooks to chech proper webhook
 // to run a post request
 // /webhook/repository (MASTER) ??
 app.post('/webhooks', function (req, res) {
     //console.log('here'); //prints
     console.log(req);
+    console.log('------------------');
+    console.log(res);
     //create a new function that determines if the push was made by master call it here
     //determineMaster(url for master)
     res.send(JSON.stringify("POST request made"));
