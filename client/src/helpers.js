@@ -1,27 +1,24 @@
 import uuid from 'uuid' // generate random string
-import app  from 'ampersand-app'
-
 
 //============= Helper Functions =============//
 
 //Setters and Getters for the session ID
 var session = {
-    setSessionID: () => {
-        app.me.session = uuid()
-        window.localStorage.session = app.me.session
-        return app.me.session
-    },
+    setSessionID : () => (window.localStorage.session = uuid()),
 
-    getSessionID: () => (app.me.session)
+    getSessionID : () => (window.localStorage.session)
 }
 
 var user = {
-    setUser: (user) => {
-        app.me.user = user;
-        window.localStorage.user = user;
+    setUser : (user) => {
+        window.localStorage.github_id = JSON.stringify(user.github_id)
+        window.localStorage.username = JSON.stringify(user.username)
     },
     
-    getUser: () => (app.me.user),
+    getUser : () => ({
+        github_id   : JSON.parse(window.localStorage.github_id),
+        username    : JSON.parse(window.localStorage.username)
+    }),
 }
 
 // Export

@@ -8,14 +8,13 @@ export default Model.extend({
         this.on('change:session', this.onChangeSession)
     },
 
-    props: {
-        id      : 'number',
-        login   : 'string',
-
+    user: {
+        github_id   : 'number',
+        username    : 'string',
     },
 
     session: {
-        session   : 'string'
+        session     : 'string'
     },
 
     onChangeSession () {

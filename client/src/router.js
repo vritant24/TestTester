@@ -68,10 +68,9 @@ export default Router.extend({
                 } else {
                     console.log("uhhh")
                 }
-
             })
             .catch(function(error) {
-                this.redirectTo('/notfound')
+                console.log(error)
             });
 
         } else {

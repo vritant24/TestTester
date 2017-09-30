@@ -21,11 +21,12 @@ export default class Repos extends Component {
     }
    
     componentWillMount() {
+        //check if user logged in
+
         //Will Change
         fetch('/repos/' + session.getSessionID())
         .then(res => res.json())
         .then(res => {
-            
             if(res.status === 200) {
                 //check if right user
                 if(user.getUser().github_id !== res.github_id) {
@@ -53,7 +54,6 @@ export default class Repos extends Component {
     }
 
     render() {
-        // Will Change 
         var repos = this.state.repos
         var repoList = (repos) 
             ?   repos.map( repo => {
@@ -61,6 +61,8 @@ export default class Repos extends Component {
                         return  <Repository repoName={repo.repo_name} onclick={this.onRepoClick.bind(this,repo.repo_id)} key={repo.repo_id} />
                 })
             :   null
+         
+        //There was an error    
         var showError = "THERE WAS AN ERROR"
 
         return (
