@@ -105,15 +105,13 @@ var getTokenAndUserData = (access_code) => {
 
       github_com.getUserRepoData(response.access_token).then(function(user_repo_data) {
 
-        var parsed_user_repo_data = JSON.parse(user_repo_data);
-
-        user_repos = utils.packageUserRepoData(parsed_user_repo_data, gitHubId);
+        user_repos = utils.packageUserRepoData(user_repo_data, gitHubId);
 
         user_repos.forEach(function(user_repo) {
           db.addUserRepo(user_repo);
         });
 
-        repos = utils.packageRepoData(parsed_user_repo_data);
+        repos = utils.packageRepoData(user_repo_data);
 
         repos.forEach(function(repo) {
           db.addRepo(repo);
