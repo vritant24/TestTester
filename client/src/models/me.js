@@ -15,7 +15,7 @@ export default Model.extend({
     },
 
     session: {
-        token   : 'string'
+        session   : 'string'
     },
 
     onChangeSession () {

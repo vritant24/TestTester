@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 
 export default class Repository extends Component {
-    componentWillMount() {
-
-    }
     render() {
-        return {
-            
-        }
+        console.log("repo")
+        return (
+            <h1>{this.props.repoID}</h1>
+        )
     } 
 } 

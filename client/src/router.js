@@ -4,8 +4,8 @@ import Router                   from 'ampersand-router' // internal navigation
 import qs                       from 'qs'               // create queries
 import uuid                     from 'uuid'             // generate random string
      
-import { session, user }                          from './helpers'
-import { Repos, User, Landing, NotFound }   from './pages' 
+import { session, user }        from './helpers'
+import { Repos, User, Landing, Repository, NotFound }   from './pages' 
 
 export default Router.extend({
     // the routes with the functions they call ( route : function_name )
@@ -17,7 +17,8 @@ export default Router.extend({
         'user'      : 'user',
         'notfound'  : 'notFound',
 
-        'auth/callback?:query' : 'authCallback',
+        'repo/:repo_id'         : 'repoPage',
+        'auth/callback?:query'   : 'authCallback',
     },
 
     // functions called for each route
@@ -85,6 +86,10 @@ export default Router.extend({
 
     user () {
         renderPage(<User/>)
+    },
+
+    repoPage (repo_id) {
+        renderPage(<Repository repoID={repo_id}/>)
     },
 
     notFound () {

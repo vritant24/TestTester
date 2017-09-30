@@ -3,7 +3,7 @@ import localLinks           from 'local-links'
 import app                  from 'ampersand-app'
 
 export default class LocalLink extends Component {
-    goToUser (event) {
+    gotToLocalLink (event) {
         //see if it is a local link or external
         const pathName = localLinks.getLocalPathname(event)
 
@@ -14,7 +14,7 @@ export default class LocalLink extends Component {
     }
     render() {
         return (
-            <div onClick={this.goToUser}>
+            <div onClick={this.gotToLocalLink.bind(this)}>
                 {this.props.children}
             </div>
         )
