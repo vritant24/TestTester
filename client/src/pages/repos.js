@@ -20,7 +20,6 @@ export default class Repos extends Component {
    
     componentWillMount() {
         //Will Change
-        console.log(session.getSessionID())
         fetch('/repository/' + session.getSessionID())
         .then(res => res.json())
         .then(res => {
