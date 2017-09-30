@@ -6,12 +6,26 @@ import app  from 'ampersand-app'
 
 //Setters and Getters for the session ID
 var session = {
-    setSessionID: () => {if(!app.me.token) app.me.token = uuid(); return app.me.token},
-    getSessionID: () => (app.me.token)
+    setSessionID: () => {
+        app.me.session = uuid()
+        window.localStorage.session = app.me.session
+        return app.me.session
+    },
+
+    getSessionID: () => (app.me.session)
 }
 
+var user = {
+    setUser: (user) => {
+        app.me.user = user;
+        window.localStorage.user = user;
+    },
+    
+    getUser: () => (app.me.user),
+}
 
 // Export
 export {
-    session
+    session,
+    user
 }

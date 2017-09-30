@@ -27,7 +27,7 @@ app.use(require('body-parser').urlencoded({ extended: true }));
  * {
  *  status : 200,
  *  user : {
- *      github-id : 123,
+ *      github_id : 123,
  *      username : abc    
  *  }
  * }
@@ -35,9 +35,17 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 app.get('/authenticate/:access_code/:session_id', function(req, res) {
     //Using Access Code, get Access Token from GitHub
     store_user.storeUserData(req.params.access_code, req.params.session_id);
-    //TODO
-    //Status Code to Client
-    res.send(JSON.stringify(200));
+    
+    //TODO fill ret with actual data
+    var ret = {
+        status  : 200,
+        user    : {
+            github_id   : 123,
+            username    : 'abc'
+        }
+    }
+
+    res.send(JSON.stringify(ret));
 });
 
 //return list of repositories
@@ -45,13 +53,37 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
 /**
  * {
  *  status : 200,
- *  github-id : 123,
- *  repo-list : []
+ *  github_id : 123,
+ *  repo_list : []
  * }
  */
 app.get('/repos/:session_id', function(req, res) {
-    var repoList = ["x","y","z","a","b","c"];
-    res.send(JSON.stringify(repoList));
+    //TODO fill ret with actual data
+    var repo_list = [
+        {
+            repo_id      : 1,
+            repo_name    : 'repo1',
+            is_monitored : true
+        },
+        {
+            repo_id      : 2,
+            repo_name    : 'repo2',
+            is_monitored : true
+        },
+        {
+            repo_id      : 3,
+            repo_name    : 'repo3',
+            is_monitored : false
+        }
+    ];
+
+    var ret = {
+        status      : 200,
+        github_id   : 123,
+        repo_list   : repo_list
+    }
+
+    res.send(JSON.stringify(ret));
 });
 
 
@@ -60,13 +92,74 @@ app.get('/repos/:session_id', function(req, res) {
 /**
  * {
  *  status : 200,
+ *  repo_id : 123,
+ *  repo_list : []
+ * }
+ */
+app.get('/monitor/:session_id/:repo_id', function(req, res) {
+    //TODO fill ret with actual data
+    var repo_list = [
+        {
+            repo_id      : 1,
+            repo_name    : 'repo1',
+            is_monitored : true
+        },
+        {
+            repo_id      : 2,
+            repo_name    : 'repo2',
+            is_monitored : true
+        },
+        {
+            repo_id      : 3,
+            repo_name    : 'repo3',
+            is_monitored : true
+        }
+    ];
+    
+    var ret = {
+        status      : 200,
+        repo_id     : 123,
+        repo_list   : repo_list
+    }
+    res.send(JSON.stringify(ret));
+});
+
+
+//remove monitoring on a repo 
+//return object as 
+/**
+ * {
+ *  status : 200,
  *  repo-id : 123,
  *  repo-list : []
  * }
  */
-app.get('/monitor/:session_id/:repo_id', function(req, res) {
-    //TODO
-    res.send(JSON.stringify("Success"));
+app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
+    //TODO fill ret with actual data
+    var repo_list = [
+        {
+            repo_id      : 1,
+            repo_name    : 'repo1',
+            is_monitored : false
+        },
+        {
+            repo_id      : 2,
+            repo_name    : 'repo2',
+            is_monitored : true
+        },
+        {
+            repo_id      : 3,
+            repo_name    : 'repo3',
+            is_monitored : false
+        }
+    ];
+    
+    var ret = {
+        status      : 200,
+        repo_id     : 123,
+        repo_list   : repo_list
+    }
+    res.send(JSON.stringify(ret));
 });
 
 
@@ -82,9 +175,16 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
  */
 app.get('/testlogs/:session_id/:repo_id', function(req, res) {
     //need to run the first get() function to make sure the user exist
-    //TODO
-    var testLogList = ["test1","test2","test3","test4"];
-    res.send(JSON.stringify(testLogList));
+    //TODO fill ret with actual data
+    var test_logs = ["test1","test2","test3","test4"];
+    server_endpoints = ["123", "456", "789"]
+    var ret = {
+        status              : 200,
+        repo_id             : 123,
+        server_endpoints    : server_endpoints,
+        test_logs           : test_logs   
+    }
+    res.send(JSON.stringify(ret));
 });
 
 

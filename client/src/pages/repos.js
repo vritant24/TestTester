@@ -1,7 +1,7 @@
 import React, { Component }     from 'react';
 import styled                   from 'styled-components'
 import { Repository }           from '../components'
-import { session }              from '../helpers'
+import { session, user }        from '../helpers'
 
 var RepoContainer = styled.div`
     display             : flex;
@@ -23,27 +23,37 @@ export default class Repos extends Component {
         fetch('/repos/' + session.getSessionID())
         .then(res => res.json())
         .then(res => {
-
-            // change to res.repositories in the future
-            if(res && res.constructor === Array) {
-                this.setState({
-                    repos : res,
-                    error : false 
-                })
-            } else {
-                this.setState ({
-                    repos : null,
-                    error : true
-                })
+            
+            if(res.status === 200) {
+                //check if right user
+                if(user.getUser().github_id !== res.github_id) {
+                    this.setState ({ error : true })
+                    console.log("wrong user")
+                } 
+                else {
+                    this.setState({ repos : res.repo_list })
+                }
+            } 
+            else {
+                this.setState ({ error : true })
+                console.log(res)
             }
+        })
+        .catch(function(error) {
+            console.log(error)
         })
     }
     render() {
-
         // Will Change 
-
         var repos = this.state.repos
-        var repoList = (repos) ? repos.map( name => <Repository repoName={name} key={name}/>) : null
+        var repoList = (repos) 
+            ? 
+                repos.map( repo => {
+                    if(repo.is_monitored) 
+                        return <Repository repoName={repo.repo_name} key={repo.repo_id}/> 
+                })
+            : 
+                null
         var showError = "THERE WAS AN ERROR"
 
         return (

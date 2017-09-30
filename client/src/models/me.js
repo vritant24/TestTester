@@ -4,8 +4,8 @@ import Model from 'ampersand-model'
 
 export default Model.extend({
     initialize() {
-        this.token = window.localStorage.token,
-        this.on('change:token', this.onChangeToken)
+        this.session = window.localStorage.session,
+        this.on('change:session', this.onChangeSession)
     },
 
     props: {
@@ -18,7 +18,7 @@ export default Model.extend({
         token   : 'string'
     },
 
-    onChangeToken () {
-        window.localStorage.token = this.token
+    onChangeSession () {
+        window.localStorage.session = this.session
     }
 })

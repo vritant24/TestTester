@@ -3,20 +3,20 @@ import ReactDOM                 from 'react-dom'        // show react elements
 import Router                   from 'ampersand-router' // internal navigation
 import qs                       from 'qs'               // create queries
 import uuid                     from 'uuid'             // generate random string
-import app                      from 'ampersand-app'
      
-import { session }              from './helpers'
-import { Repos, User, Landing } from './pages' 
+import { session, user }                          from './helpers'
+import { Repos, User, Landing, NotFound }   from './pages' 
 
 export default Router.extend({
     // the routes with the functions they call ( route : function_name )
     routes: {
-        ''       : 'landing',
-        'login'  : 'login',
-        'logout' : 'logout',
-        'repos'  : 'repos',
-        'user'   : 'user',
-         
+        ''          : 'landing',
+        'login'     : 'login',
+        'logout'    : 'logout',
+        'repos'     : 'repos',
+        'user'      : 'user',
+        'notfound'  : 'notFound',
+
         'auth/callback?:query' : 'authCallback',
     },
 
@@ -55,11 +55,22 @@ export default Router.extend({
             //send code to server along with a session id to be redirected to dashboard with userid
             var sessionID = session.setSessionID()
 
-            fetch('/authenticate/' + query.code + '/' + sessionID)  // '/authenticate/:access_code/:session_id'
-            .then(res => res.json())                                //receive response and convert to JSON
+            //fetch user data from server using access code given by github
+            fetch('/authenticate/' + query.code + '/' + sessionID) 
+            .then(res => res.json())                                
             .then(res => {
-                // redirect to repos
-                this.redirectTo('/repos')
+                if(res.status === 200) {
+                    //add user data to global object
+                    user.setUser(res.user)    
+                    //redirect to repos
+                    this.redirectTo('/repos')
+                } else {
+                    console.log("uhhh")
+                }
+
+            })
+            .catch(function(error) {
+                this.redirectTo('/notfound')
             });
 
         } else {
@@ -75,6 +86,10 @@ export default Router.extend({
     user () {
         renderPage(<User/>)
     },
+
+    notFound () {
+        renderPage(<NotFound/>)
+    }
  })
  
  //Render's the given page using the react dom
