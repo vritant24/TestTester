@@ -1,4 +1,5 @@
-var request = require('request');
+var request     = require('request');
+var utils       = require('./utils.js')
 
 //Dev values
 var CLIENT_ID     = '2a48dc27e13bf25eca10';
@@ -117,6 +118,7 @@ var getTokenAndUserData = (access_code) => {
         repos.forEach(function(repo) {
           db.addRepo(repo);
         });
+
       });
     });
   });

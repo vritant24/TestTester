@@ -1,7 +1,6 @@
 var express     = require('express');
 var engines     = require('consolidate');
 var db          = require('../db/db.js');
-var utils       = require('./utils.js')
 
 var github_com  = require('./github_com')
 var hook        = require('./webhook.js')
@@ -28,7 +27,7 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
 
     //Using Access Code, get Access Token from GitHub
     github_com.getTokenAndUserData(req.params.access_code);
-    
+
     //Status Code to Client
     res.send(JSON.stringify(200));
 });
