@@ -7,5 +7,5 @@ export {
     Repos,
     Landing,
     NotFound,
-    Repository
+    Repository,
 }

@@ -2,7 +2,7 @@ import React, { Component }         from 'react';
 import styled                       from 'styled-components'
 import app                          from 'ampersand-app'
 
-import { Repository }                   from '../components'
+import { Repository, NavBar }           from '../components'
 import { session, user, api, status }   from '../helpers'
 
 var RepoContainer = styled.div`
@@ -69,6 +69,7 @@ export default class Repos extends Component {
 
         return (
             <div>
+                <NavBar/>
                 <h1>Repositories</h1>
                 {this.state.error && showError}
                 <RepoContainer>

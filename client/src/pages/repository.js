@@ -1,4 +1,6 @@
 import React, { Component }         from 'react';
+
+import { NavBar }                   from '../components'
 import { session, api, status }     from '../helpers'
 
 export default class Repository extends Component {
@@ -11,7 +13,7 @@ export default class Repository extends Component {
             test_logs           : null
         }
     }
-    
+
     componentWillMount() {
         //check if user logged in
         if(!session.isLoggedIn()) {
@@ -42,6 +44,7 @@ export default class Repository extends Component {
         var logs = (t_logs) ? t_logs.map( (log) => <li key={log}>{log}</li> ) : null
         return (
             <div>
+                <NavBar/>
                 <h1>{this.props.repoID}</h1>
                 <h2>{this.state.repo_name}</h2>
                 <br/>
