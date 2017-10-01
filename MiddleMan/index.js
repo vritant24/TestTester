@@ -169,18 +169,20 @@ app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
  * {
  *  status : 200,
  *  repo-id : 123,
+ *  repo_name : abc
  *  server-endpoints : []
  *  test-logs : []
  * }
  */
-app.get('/testlogs/:session_id/:repo_id', function(req, res) {
+app.get('/repo/:session_id/:repo_id', function(req, res) {
     //need to run the first get() function to make sure the user exist
     //TODO fill ret with actual data
     var test_logs = ["test1","test2","test3","test4"];
     server_endpoints = ["123", "456", "789"]
     var ret = {
         status              : 200,
-        repo_id             : 123,
+        repo_id             : req.params.repo_id,
+        repo_name           : 'abc',
         server_endpoints    : server_endpoints,
         test_logs           : test_logs   
     }

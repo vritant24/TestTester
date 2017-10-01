@@ -4,8 +4,8 @@ import Router                   from 'ampersand-router' // internal navigation
 import qs                       from 'qs'               // create queries
 import uuid                     from 'uuid'             // generate random string
      
-import { session, user }        from './helpers'
-import { Repos, Landing, Repository, NotFound }   from './pages' 
+import { session, user, api, status }               from './helpers'
+import { Repos, Landing, Repository, NotFound }     from './pages' 
 
 export default Router.extend({
     // the routes with the functions they call ( route : function_name )
@@ -52,14 +52,14 @@ export default Router.extend({
         if(query.state === window.localStorage.state) {
             window.localStorage.state = null; //remove state
 
-            //send code to server along with a session id to be redirected to dashboard with userid
-            var sessionID = session.setSessionID()
+            //create session ID
+            session.setSessionID()
 
             //fetch user data from server using access code given by github
-            fetch('/authenticate/' + query.code + '/' + sessionID) 
+            fetch(api.authUser(query.code)) 
             .then(res => res.json())                                
             .then(res => {
-                if(res.status === 200) {
+                if(res.status === status.success) {
                     //add user data to global object
                     user.setUser(res.user)    
                     //redirect to repos

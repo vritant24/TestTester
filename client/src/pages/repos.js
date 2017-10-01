@@ -2,8 +2,8 @@ import React, { Component }         from 'react';
 import styled                       from 'styled-components'
 import app                          from 'ampersand-app'
 
-import { Repository }               from '../components'
-import { session, user }            from '../helpers'
+import { Repository }                   from '../components'
+import { session, user, api, status }   from '../helpers'
 
 var RepoContainer = styled.div`
     display             : flex;
@@ -26,10 +26,10 @@ export default class Repos extends Component {
             window.location = '/'
         }
         else {
-            fetch('/repos/' + session.getSessionID())
+            fetch(api.getRepoList())
             .then(res => res.json())
             .then(res => {
-                if(res.status === 200) {
+                if(res.status === status.success) {
                     //check if right user
                     if(user.getUser().github_id !== res.github_id) {
                         this.setState ({ error : true })
@@ -45,9 +45,7 @@ export default class Repos extends Component {
                     console.log(res)
                 }
             })
-            .catch(function(error) {
-                console.log(error)
-            })
+            .catch((error) => console.log(error))
         }
     }
 
