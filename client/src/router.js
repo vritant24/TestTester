@@ -15,9 +15,10 @@ export default Router.extend({
         'logout'    : 'logout',
         'repos'     : 'repos',
         'notfound'  : 'notFound',
-
-        'repo/:repo_id'         : 'repoPage',
+        'repo/:repo_id'          : 'repoPage',
         'auth/callback?:query'   : 'authCallback',
+
+        '*404' : 'notFound'      
     },
 
     // functions called for each route
