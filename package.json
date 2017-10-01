@@ -30,7 +30,6 @@
     "nconf": "^0.8.4",
     "request": "^2.82.0",
     "ampersand-app": "^2.0.0",
-    "ampersand-model": "^8.0.0",
     "ampersand-router": "^5.0.0",
     "ampersand-state": "^5.0.2",
     "local-links": "^1.4.1",
