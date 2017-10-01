@@ -1,7 +1,9 @@
-import React, { Component }     from 'react';
-import styled                   from 'styled-components'
-import { Repository }           from '../components'
-import { session }              from '../helpers'
+import React, { Component }         from 'react';
+import styled                       from 'styled-components'
+import app                          from 'ampersand-app'
+
+import { Repository, NavBar }           from '../components'
+import { session, user, api, status }   from '../helpers'
 
 var RepoContainer = styled.div`
     display             : flex;
@@ -19,37 +21,55 @@ export default class Repos extends Component {
     }
    
     componentWillMount() {
-        //Will Change
-        console.log(session.getSessionID())
-        fetch('/repository/' + session.getSessionID())
-        .then(res => res.json())
-        .then(res => {
-
-            // change to res.repositories in the future
-            if(res && res.constructor === Array) {
-                this.setState({
-                    repos : res,
-                    error : false 
-                })
-            } else {
-                this.setState ({
-                    repos : null,
-                    error : true
-                })
-            }
-        })
+        //check if user logged in
+        if(!session.isLoggedIn()) {
+            window.location = '/'
+        }
+        else {
+            fetch(api.getRepoList())
+            .then(res => res.json())
+            .then(res => {
+                if(res.status === status.success) {
+                    //check if right user
+                    if(user.getUser().github_id !== res.github_id) {
+                        this.setState ({ error : true })
+                        console.log("wrong user")
+                    } 
+                    else {
+                        this.setState({ repos : res.repo_list })
+                    }
+                } 
+                //check for expired session
+                else {
+                    this.setState ({ error : true })
+                    console.log(res)
+                }
+            })
+            .catch((error) => console.log(error))
+        }
     }
+
+    onRepoClick(repo_id) {
+        //internal navigation
+        var url = '/repo/' + repo_id;
+        app.router.history.navigate(url)
+    }
+
     render() {
-
-        // Will Change 
-
         var repos = this.state.repos
-        var repoList = (repos) ? repos.map( name => <Repository repoName={name} key={name}/>) : null
+        var repoList = (repos) 
+            ?   repos.map( repo => {
+                    if(repo.is_monitored) 
+                        return  <Repository repoName={repo.repo_name} onclick={this.onRepoClick.bind(this,repo.repo_id)} key={repo.repo_id} />
+                })
+            :   null
+         
+        //There was an error    
         var showError = "THERE WAS AN ERROR"
 
         return (
             <div>
-                <a href="/user"> go to user page </a>
+                <NavBar/>
                 <h1>Repositories</h1>
                 {this.state.error && showError}
                 <RepoContainer>
