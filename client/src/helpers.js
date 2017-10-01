@@ -6,7 +6,11 @@ import uuid from 'uuid' // generate random string
 var session = {
     setSessionID : () => (window.localStorage.session = uuid()),
 
-    getSessionID : () => (window.localStorage.session)
+    getSessionID : () => (window.localStorage.session),
+
+    removeSessionId : () => {
+        window.localStorage.session = null
+    }
 }
 
 var user = {
@@ -16,9 +20,14 @@ var user = {
     },
     
     getUser : () => ({
-        github_id   : JSON.parse(window.localStorage.github_id),
-        username    : JSON.parse(window.localStorage.username)
+        github_id   : (window.localStorage.github_id) ? JSON.parse(window.localStorage.github_id) : null,
+        username    : (window.localStorage.username) ? JSON.parse(window.localStorage.username) : null
     }),
+
+    removeUser : () => {
+        window.localStorage.github_id = null
+        window.localStorage.username = null
+    }
 }
 
 // Export

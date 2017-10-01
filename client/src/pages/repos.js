@@ -22,7 +22,7 @@ export default class Repos extends Component {
    
     componentWillMount() {
         //check if user logged in
-
+        
         //Will Change
         fetch('/repos/' + session.getSessionID())
         .then(res => res.json())
@@ -67,7 +67,6 @@ export default class Repos extends Component {
 
         return (
             <div>
-                <a href="/user"> go to user page </a>
                 <h1>Repositories</h1>
                 {this.state.error && showError}
                 <RepoContainer>
