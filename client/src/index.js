@@ -7,7 +7,6 @@ window.app = app
 //global app between routes
 app.extend({
     init() {
-        window.localStorage.me = {}
         this.router = new Router()
         this.router.history.start()
     }

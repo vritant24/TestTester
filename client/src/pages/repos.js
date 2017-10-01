@@ -3,7 +3,7 @@ import styled                       from 'styled-components'
 import app                          from 'ampersand-app'
 
 import { Repository }               from '../components'
-import { session, user }            from '../helpers'
+import { session, user, isLoggedIn }from '../helpers'
 
 var RepoContainer = styled.div`
     display             : flex;
@@ -22,29 +22,33 @@ export default class Repos extends Component {
    
     componentWillMount() {
         //check if user logged in
-        
-        //Will Change
-        fetch('/repos/' + session.getSessionID())
-        .then(res => res.json())
-        .then(res => {
-            if(res.status === 200) {
-                //check if right user
-                if(user.getUser().github_id !== res.github_id) {
-                    this.setState ({ error : true })
-                    console.log("wrong user")
+        if(!isLoggedIn()) {
+            window.location = '/'
+        }
+        else {
+            fetch('/repos/' + session.getSessionID())
+            .then(res => res.json())
+            .then(res => {
+                if(res.status === 200) {
+                    //check if right user
+                    if(user.getUser().github_id !== res.github_id) {
+                        this.setState ({ error : true })
+                        console.log("wrong user")
+                    } 
+                    else {
+                        this.setState({ repos : res.repo_list })
+                    }
                 } 
+                //check for expired session
                 else {
-                    this.setState({ repos : res.repo_list })
+                    this.setState ({ error : true })
+                    console.log(res)
                 }
-            } 
-            else {
-                this.setState ({ error : true })
-                console.log(res)
-            }
-        })
-        .catch(function(error) {
-            console.log(error)
-        })
+            })
+            .catch(function(error) {
+                console.log(error)
+            })
+        }
     }
 
     onRepoClick(repo_id) {
