@@ -5,7 +5,7 @@ import qs                       from 'qs'               // create queries
 import uuid                     from 'uuid'             // generate random string
      
 import { session, user }        from './helpers'
-import { Repos, User, Landing, Repository, NotFound }   from './pages' 
+import { Repos, Landing, Repository, NotFound }   from './pages' 
 
 export default Router.extend({
     // the routes with the functions they call ( route : function_name )
@@ -14,7 +14,6 @@ export default Router.extend({
         'login'     : 'login',
         'logout'    : 'logout',
         'repos'     : 'repos',
-        'user'      : 'user',
         'notfound'  : 'notFound',
 
         'repo/:repo_id'         : 'repoPage',
@@ -85,10 +84,6 @@ export default Router.extend({
 
     repos () {
         renderPage(<Repos/>)
-    },
-
-    user () {
-        renderPage(<User/>)
     },
 
     repoPage (repo_id) {

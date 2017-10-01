@@ -3,7 +3,7 @@ import styled                       from 'styled-components'
 import app                          from 'ampersand-app'
 
 import { Repository }               from '../components'
-import { session, user, isLoggedIn }from '../helpers'
+import { session, user }            from '../helpers'
 
 var RepoContainer = styled.div`
     display             : flex;
@@ -22,7 +22,7 @@ export default class Repos extends Component {
    
     componentWillMount() {
         //check if user logged in
-        if(!isLoggedIn()) {
+        if(!session.isLoggedIn()) {
             window.location = '/'
         }
         else {

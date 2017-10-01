@@ -8,9 +8,11 @@ var session = {
 
     getSessionID : () => (window.localStorage.session),
 
-    removeSessionId : () => {
+    removeSessionID : () => {
         window.localStorage.session = null
-    }
+    },
+
+    isLoggedIn : () => ( window.localStorage.session != null )
 }
 
 var user = {
@@ -30,11 +32,8 @@ var user = {
     }
 }
 
-var isLoggedIn = () => ( session.getSessionID() != null )
-
 // Export
 export {
     session,
-    user,
-    isLoggedIn
+    user
 }
