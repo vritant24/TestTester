@@ -30,8 +30,11 @@ var user = {
     }
 }
 
+var isLoggedIn = () => ( this.getSessionID != null )
+
 // Export
 export {
     session,
-    user
+    user,
+    isLoggedIn
 }
