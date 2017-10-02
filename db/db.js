@@ -58,6 +58,11 @@ exports.addUserSession = (userData) => {
   });
 }
 
+//TODO: Add query for getting UserSession, UserAccess, and User data from gitHubId
+//      This can be done by selecting UserSession Data from sessionToken
+//      Then read up on how joins work in SQL. Use joins on
+//      UserSession.gitHubId = UserAccess.accessToken and UserSession.gitHubId = User.gitHubId
+
 exports.addUserRepo = (userRepoData) => {
   return new Promise((resolve, reject) => {
     connection.query('INSERT IGNORE INTO UserRepo SET repoId = ?, gitHubId = ?, isMonitored = ?', userRepoData ,function(error, results) {
@@ -69,6 +74,11 @@ exports.addUserRepo = (userRepoData) => {
     });
   });
 }
+
+//TODO: Add query for getting UserRepo and Repo data from gitHubId
+//      This can be done by selecting UserRepo Data from gitHubId
+//      Then read up on how joins work in SQL. Use a join on
+//      UserRepo.repoId = Repo.repoId.
 
 exports.addRepo = (repoData) => {
   return new Promise((resolve, reject) => {
