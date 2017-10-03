@@ -66,19 +66,19 @@ export default Router.extend({
                     //redirect to repos
                     this.redirectTo('/repos')
                 } else {
-                    session.removeSessionId()
+                    session.removeSessionID()
                     console.log("user login failed")
                 }
             })
             .catch(function(error) {
-                session.removeSessionId()
+                session.removeSessionID()
                 console.log(error)
                 console.log("Server Auth Failed")
             });
 
         } else {
             window.localStorage.state = null; //remove state
-            session.removeSessionId()
+            session.removeSessionID()
             console.log("GitHub Auth Failed")
         }
     },
