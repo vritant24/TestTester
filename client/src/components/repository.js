@@ -12,8 +12,9 @@ var Repo = styled.div`
 
 export default function Repository(props) {
     return (
-        <Repo onClick={props.onclick}>
-            <h3>{props.repoName}</h3>
+        <Repo>
+            <h4 onClick={props.ondelete}>Delete</h4>
+            <h3 onClick={props.onclick}>{props.repoName}</h3>
         </Repo>
     )
 }

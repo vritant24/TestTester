@@ -36,7 +36,9 @@ export default class Repos extends Component {
                         console.log("wrong user")
                     } 
                     else {
-                        this.setState({ repos : res.repo_list })
+                        this.setState({ repos : res.repo_list, 
+                            error : false 
+                        })
                     }
                 } 
                 //check for expired session
@@ -55,12 +57,50 @@ export default class Repos extends Component {
         app.router.history.navigate(url)
     }
 
+    apiCallMontioring(url, repo_id, err) {
+        fetch(url)
+        .then(res => res.json())
+        .then(res => {
+            if(res.status === status.success) {
+                if(res.repo_id !== repo_id) {
+                    console.log(repo_id)
+                    console.log(res.repo_id)
+                    console.log(err)
+                } 
+                else {
+                    this.setState({ 
+                        repos : res.repo_list, 
+                        error : false 
+                    })
+                }
+            }
+            else {
+                this.setState ({ error : true })
+                console.log(res)
+            }
+        })
+        .catch((error) => console.log(error))
+    }
+    monitorRepo(repo_id) {
+        this.apiCallMontioring(api.monitorRepo(repo_id), repo_id, "wrong repo")
+    }
+
+    dontMonitorRepo(repo_id) {
+        this.apiCallMontioring(api.dontMonitorRepo(repo_id), repo_id, "wrong repo")
+    }
+
     render() {
         var repos = this.state.repos
         var repoList = (repos) 
             ?   repos.map( repo => {
                     if(repo.is_monitored) 
-                        return  <Repository repoName={repo.repo_name} onclick={this.onRepoClick.bind(this,repo.repo_id)} key={repo.repo_id} />
+                        return  (
+                            <Repository 
+                            repoName={repo.repo_name} 
+                            onclick={this.onRepoClick.bind(this,repo.repo_id)} 
+                            ondelete={this.dontMonitorRepo.bind(this, repo.repo_id)} 
+                            key={repo.repo_id} />
+                        )
                 })
             :   null
          
