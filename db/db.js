@@ -63,6 +63,21 @@ exports.addUserSession = (userData) => {
 //      Then read up on how joins work in SQL. Use joins on
 //      UserSession.gitHubId = UserAccess.accessToken and UserSession.gitHubId = User.gitHubId
 
+
+exports.postUserSession = (userData) => {
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT * FROM User, UserSession, UserAccess WHERE UserSession.sessionToken = ?  AND User.gitHubId = UserSession.gitHubId AND UserAccess.gitHubId =  UserSession.gitHubId', userData ,function(error, results){         
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+        //console.log(results);
+      }
+    });
+  });
+}
+
+
 exports.addUserRepo = (userRepoData) => {
   return new Promise((resolve, reject) => {
     connection.query('INSERT IGNORE INTO UserRepo SET repoId = ?, gitHubId = ?, isMonitored = ?', userRepoData ,function(error, results) {
@@ -79,6 +94,23 @@ exports.addUserRepo = (userRepoData) => {
 //      This can be done by selecting UserRepo Data from gitHubId
 //      Then read up on how joins work in SQL. Use a join on
 //      UserRepo.repoId = Repo.repoId.
+
+
+exports.postUserRepo = (userData) => {
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT * FROM UserRepo, Repo WHERE UserRepo.gitHubId = ?  AND UserRepo.repoId = Repo.repoId', userData ,function(error, results){         
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+        console.log(results);
+      }
+    });
+  });
+}
+
+
+
 
 exports.addRepo = (repoData) => {
   return new Promise((resolve, reject) => {

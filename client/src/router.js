@@ -71,14 +71,14 @@ export default Router.extend({
                 }
             })
             .catch(function(error) {
-                session.removeSessionId()
+                session.removeSessionID()
                 console.log(error)
                 console.log("Server Auth Failed")
             });
 
         } else {
             window.localStorage.state = null; //remove state
-            session.removeSessionId()
+            session.removeSessionID()
             console.log("GitHub Auth Failed")
         }
     },

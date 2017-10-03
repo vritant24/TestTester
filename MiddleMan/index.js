@@ -36,6 +36,16 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
     //Using Access Code, get Access Token from GitHub
     store_user.storeUserData(req.params.access_code, req.params.session_id);
     
+
+
+    //Call the db.js function here
+     json_obj = JSON.parse(db.postUserSession(req.params.session_id));
+     db.postUserRepo(json_obj.gitHubId);
+    
+
+
+
+
     //TODO fill ret with actual data
     var ret = {
         status  : 200,
@@ -58,6 +68,11 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
  * }
  */
 app.get('/repos/:session_id', function(req, res) {
+    
+    //db function
+    
+
+
     //TODO fill ret with actual data
     var repo_list = [
         {
@@ -186,6 +201,7 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
         server_endpoints    : server_endpoints,
         test_logs           : test_logs   
     }
+    
     res.send(JSON.stringify(ret));
 });
 
