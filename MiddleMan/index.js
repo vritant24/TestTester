@@ -21,27 +21,30 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 
 //=========== Routes for API ============
 
-//authentication route. 
-//return object as - 
+//authentication route.
+//return object as -
 /**
  * {
  *  status : 200,
  *  user : {
  *      github_id : 123,
- *      username : abc    
+ *      username : abc
  *  }
  * }
  */
 app.get('/authenticate/:access_code/:session_id', function(req, res) {
     //Using Access Code, get Access Token from GitHub
     store_user.storeUserData(req.params.access_code, req.params.session_id);
-    
+
 
 
     //Call the db.js function here
-     json_obj = JSON.parse(db.postUserSession(req.params.session_id));
-     db.postUserRepo(json_obj.gitHubId);
-    
+     db.postUserSession(req.params.session_id).then(function(user_data) {
+       json_user_data = (user_data[0]);
+       console.log(json_user_data.gitHubId);
+
+     });
+
 
 
 
@@ -59,7 +62,7 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
 });
 
 //return list of repositories
-//return object as - 
+//return object as -
 /**
  * {
  *  status : 200,
@@ -68,9 +71,9 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
  * }
  */
 app.get('/repos/:session_id', function(req, res) {
-    
+
     //db function
-    
+
 
 
     //TODO fill ret with actual data
@@ -102,8 +105,8 @@ app.get('/repos/:session_id', function(req, res) {
 });
 
 
-//monitor a repo 
-//return object as 
+//monitor a repo
+//return object as
 /**
  * {
  *  status : 200,
@@ -130,7 +133,7 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
             is_monitored : true
         }
     ];
-    
+
     var ret = {
         status      : 200,
         repo_id     : 123,
@@ -140,8 +143,8 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
 });
 
 
-//remove monitoring on a repo 
-//return object as 
+//remove monitoring on a repo
+//return object as
 /**
  * {
  *  status : 200,
@@ -168,7 +171,7 @@ app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
             is_monitored : false
         }
     ];
-    
+
     var ret = {
         status      : 200,
         repo_id     : 123,
@@ -179,7 +182,7 @@ app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
 
 
 // return list of test logs
-//return object as 
+//return object as
 /**
  * {
  *  status : 200,
@@ -199,9 +202,9 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
         repo_id             : req.params.repo_id,
         repo_name           : 'abc',
         server_endpoints    : server_endpoints,
-        test_logs           : test_logs   
+        test_logs           : test_logs
     }
-    
+
     res.send(JSON.stringify(ret));
 });
 
@@ -216,4 +219,3 @@ app.post('/webhooks', function (req, res) {
 hook.listen();
 
 app.listen(8080);
-
