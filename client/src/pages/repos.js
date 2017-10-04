@@ -59,6 +59,7 @@ export default class Repos extends Component {
     }
 
     apiCallMontioring(url, repo_id, err) {
+        repo_id = repo_id + ""
         fetch(url)
         .then(res => res.json())
         .then(res => {
@@ -103,20 +104,19 @@ export default class Repos extends Component {
     render() {
         var repos = this.state.repos
         var monitored_repo_list = (repos) 
-            ?   repos.map( repo => {
-                    if(repo.is_monitored) 
-                        return  (
-                            <Repository 
-                            repoName={repo.repo_name} 
-                            onclick={this.onRepoClick.bind(this,repo.repo_id)} 
-                            ondelete={this.dontMonitorRepo.bind(this, repo.repo_id)} 
-                            key={repo.repo_id} />
-                        )
+            ?   repos.filter(repo => repo.is_monitored).map( repo => {
+                    return  (
+                        <Repository 
+                        repoName={repo.repo_name} 
+                        onclick={this.onRepoClick.bind(this,repo.repo_id)} 
+                        ondelete={this.dontMonitorRepo.bind(this, repo.repo_id)} 
+                        key={repo.repo_id} />
+                    )
                 })
             :   null
         
         var unmonitored_repo_list = (repos)
-            ?   repos.filter(repo => repo.is_monitored).map( repo => {
+            ?   repos.filter(repo => !repo.is_monitored).map( repo => {
                     return  (
                         <option key={repo.repo_id} value={repo.repo_id}>
                             {repo.repo_name}
