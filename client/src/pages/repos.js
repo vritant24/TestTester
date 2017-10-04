@@ -64,8 +64,8 @@ export default class Repos extends Component {
         .then(res => {
             if(res.status === status.success) {
                 if(res.repo_id !== repo_id) {
-                    console.log(repo_id)
-                    console.log(res.repo_id)
+                    console.log(typeof repo_id)
+                    console.log(typeof res.repo_id)
                     console.log(err)
                 } 
                 else {
@@ -82,6 +82,7 @@ export default class Repos extends Component {
         })
         .catch((error) => console.log(error))
     }
+    
     monitorRepo() {
         var repo_id = this.state.select_value
         if(repo_id) {
@@ -101,7 +102,7 @@ export default class Repos extends Component {
 
     render() {
         var repos = this.state.repos
-        var monitored_repo_ist = (repos) 
+        var monitored_repo_list = (repos) 
             ?   repos.map( repo => {
                     if(repo.is_monitored) 
                         return  (
@@ -114,17 +115,20 @@ export default class Repos extends Component {
                 })
             :   null
         
-        var unmonitored_repo_ist = (repos)
-            ?   repos.map( repo => {
-                if(!repo.is_monitored) 
+        var unmonitored_repo_list = (repos)
+            ?   repos.filter(repo => repo.is_monitored).map( repo => {
                     return  (
-                        <option value={repo.repo_id}>
+                        <option key={repo.repo_id} value={repo.repo_id}>
                             {repo.repo_name}
                         </option>
                     )
                 })
             :   null
 
+        var empty = <option key={"#31"} value={-1}></option>
+        if(unmonitored_repo_list)
+            unmonitored_repo_list = [empty, ...unmonitored_repo_list]
+   
         //There was an error    
         var showError = "THERE WAS AN ERROR"
 
@@ -134,11 +138,11 @@ export default class Repos extends Component {
                 <h1>Repositories</h1>
                 {this.state.error && showError}
                 <RepoContainer>
-                    {monitored_repo_ist}
+                    {monitored_repo_list}
                 </RepoContainer>
                 <br/>
                 <select id="monitor_repo" onChange={this.onselectChange.bind(this)}>
-                    {unmonitored_repo_ist}
+                    {unmonitored_repo_list}
                 </select>
                 <button onClick={this.monitorRepo.bind(this)}>
                     add repo
