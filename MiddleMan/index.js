@@ -121,7 +121,7 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
     
     var ret = {
         status      : 200,
-        repo_id     : Number(req.params.repo_id),
+        repo_id     : req.params.repo_id,
         repo_list   : repo_list
     }
     res.send(JSON.stringify(ret));
@@ -158,7 +158,7 @@ app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
     
     var ret = {
         status      : 200,
-        repo_id     : Number(req.params.repo_id),
+        repo_id     : req.params.repo_id,
         repo_list   : repo_list
     }
     res.send(JSON.stringify(ret));

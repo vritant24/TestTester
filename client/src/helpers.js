@@ -36,7 +36,7 @@ var api = {
 
     getRepo     : (repo_id) => ('/repo/' + session.getSessionID() + '/' + repo_id),
 
-    authUser    : (access_code) => ('/authenticate/' + access_code + '/' + session.getSessionID),
+    authUser    : (access_code) => ('/authenticate/' + access_code + '/' + session.getSessionID()),
 
     monitorRepo : (repo_id) => ('/monitor/' + session.getSessionID() + '/' + repo_id),
 
