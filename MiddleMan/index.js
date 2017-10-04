@@ -18,6 +18,8 @@ app.set('view engine', 'html');
 //for parsing JSON requests and responses
 app.use(require('body-parser').urlencoded({ extended: true }));
 
+//set up webhook middleware
+hook.webhook(app);
 
 //=========== Routes for API ============
 
@@ -124,7 +126,6 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
     res.send(JSON.stringify(ret));
 });
 
-
 //remove monitoring on a repo 
 //return object as 
 /**
@@ -196,8 +197,5 @@ app.post('/webhooks', function (req, res) {
     //determineMaster(url for master)
     res.send(JSON.stringify("POST request made"));
 });
-//webhook call
-hook.listen();
 
 app.listen(8080);
-
