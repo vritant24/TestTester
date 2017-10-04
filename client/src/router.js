@@ -3,21 +3,22 @@ import ReactDOM                 from 'react-dom'        // show react elements
 import Router                   from 'ampersand-router' // internal navigation
 import qs                       from 'qs'               // create queries
 import uuid                     from 'uuid'             // generate random string
-import app                      from 'ampersand-app'
      
-import { session }              from './helpers'
-import { Repos, User, Landing } from './pages' 
+import { session, user, api, status }               from './helpers'
+import { Repos, Landing, Repository, NotFound }     from './pages' 
 
 export default Router.extend({
     // the routes with the functions they call ( route : function_name )
     routes: {
-        ''       : 'landing',
-        'login'  : 'login',
-        'logout' : 'logout',
-        'repos'  : 'repos',
-        'user'   : 'user',
-         
-        'auth/callback?:query' : 'authCallback',
+        ''          : 'landing',
+        'login'     : 'login',
+        'logout'    : 'logout',
+        'repos'     : 'repos',
+        'notfound'  : 'notFound',
+        'repo/:repo_id'          : 'repoPage',
+        'auth/callback?:query'   : 'authCallback',
+
+        '*404' : 'notFound'      
     },
 
     // functions called for each route
@@ -52,19 +53,33 @@ export default Router.extend({
         if(query.state === window.localStorage.state) {
             window.localStorage.state = null; //remove state
 
-            //send code to server along with a session id to be redirected to dashboard with userid
-            var sessionID = session.setSessionID()
+            //create session ID
+            session.setSessionID()
 
-            fetch('/authenticate/' + query.code + '/' + sessionID)  // '/authenticate/:access_code/:session_id'
-            .then(res => res.json())                                //receive response and convert to JSON
+            //fetch user data from server using access code given by github
+            fetch(api.authUser(query.code)) 
+            .then(res => res.json())                                
             .then(res => {
-                // redirect to repos
-                this.redirectTo('/repos')
+                if(res.status === status.success) {
+                    //add user data to global object
+                    user.setUser(res.user)    
+                    //redirect to repos
+                    this.redirectTo('/repos')
+                } else {
+                    session.removeSessionID()
+                    console.log("user login failed")
+                }
+            })
+            .catch(function(error) {
+                session.removeSessionID()
+                console.log(error)
+                console.log("Server Auth Failed")
             });
 
         } else {
             window.localStorage.state = null; //remove state
-            console.log("uh oh")
+            session.removeSessionID()
+            console.log("GitHub Auth Failed")
         }
     },
 
@@ -72,9 +87,13 @@ export default Router.extend({
         renderPage(<Repos/>)
     },
 
-    user () {
-        renderPage(<User/>)
+    repoPage (repo_id) {
+        renderPage(<Repository repoID={repo_id}/>)
     },
+
+    notFound () {
+        renderPage(<NotFound/>)
+    }
  })
  
  //Render's the given page using the react dom

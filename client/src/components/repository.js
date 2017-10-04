@@ -12,7 +12,7 @@ var Repo = styled.div`
 
 export default function Repository(props) {
     return (
-        <Repo>
+        <Repo onClick={props.onclick}>
             <h3>{props.repoName}</h3>
         </Repo>
     )
