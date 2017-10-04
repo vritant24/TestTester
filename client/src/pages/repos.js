@@ -64,8 +64,8 @@ export default class Repos extends Component {
         .then(res => {
             if(res.status === status.success) {
                 if(res.repo_id !== repo_id) {
-                    console.log(repo_id)
-                    console.log(res.repo_id)
+                    console.log(typeof repo_id)
+                    console.log(typeof res.repo_id)
                     console.log(err)
                 } 
                 else {
