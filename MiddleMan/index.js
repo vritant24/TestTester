@@ -100,6 +100,7 @@ app.get('/repos/:session_id', function(req, res) {
  */
 app.get('/monitor/:session_id/:repo_id', function(req, res) {
     //TODO fill ret with actual data
+    console.log("here")
     var repo_list = [
         {
             repo_id      : 1,
