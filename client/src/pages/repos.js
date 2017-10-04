@@ -82,6 +82,7 @@ export default class Repos extends Component {
         })
         .catch((error) => console.log(error))
     }
+    
     monitorRepo() {
         var repo_id = this.state.select_value
         if(repo_id) {
@@ -123,6 +124,7 @@ export default class Repos extends Component {
                     )
                 })
             :   null
+
         var empty = <option key={"#31"} value={-1}></option>
         if(unmonitored_repo_list)
             unmonitored_repo_list = [empty, ...unmonitored_repo_list]
