@@ -15,8 +15,9 @@ export default class Repos extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            repos : null,
-            error : false
+            repos           : null,
+            error           : false,
+            select_value    : null
         }
     }
    
@@ -36,7 +37,9 @@ export default class Repos extends Component {
                         console.log("wrong user")
                     } 
                     else {
-                        this.setState({ repos : res.repo_list })
+                        this.setState({ repos : res.repo_list, 
+                            error : false 
+                        })
                     }
                 } 
                 //check for expired session
@@ -55,15 +58,73 @@ export default class Repos extends Component {
         app.router.history.navigate(url)
     }
 
+    apiCallMontioring(url, repo_id, err) {
+        fetch(url)
+        .then(res => res.json())
+        .then(res => {
+            if(res.status === status.success) {
+                if(res.repo_id !== repo_id) {
+                    console.log(repo_id)
+                    console.log(res.repo_id)
+                    console.log(err)
+                } 
+                else {
+                    this.setState({ 
+                        repos : res.repo_list, 
+                        error : false 
+                    })
+                }
+            }
+            else {
+                this.setState ({ error : true })
+                console.log(res)
+            }
+        })
+        .catch((error) => console.log(error))
+    }
+    monitorRepo() {
+        var repo_id = this.state.select_value
+        if(repo_id) {
+            this.apiCallMontioring(api.monitorRepo(repo_id), repo_id, "wrong repo")
+        }
+    }
+
+    dontMonitorRepo(repo_id) {
+        this.apiCallMontioring(api.dontMonitorRepo(repo_id), repo_id, "wrong repo")
+    }
+
+    onselectChange(event) {
+        this.setState({
+            select_value : event.target.value
+        })
+    }
+
     render() {
         var repos = this.state.repos
-        var repoList = (repos) 
+        var monitored_repo_ist = (repos) 
             ?   repos.map( repo => {
                     if(repo.is_monitored) 
-                        return  <Repository repoName={repo.repo_name} onclick={this.onRepoClick.bind(this,repo.repo_id)} key={repo.repo_id} />
+                        return  (
+                            <Repository 
+                            repoName={repo.repo_name} 
+                            onclick={this.onRepoClick.bind(this,repo.repo_id)} 
+                            ondelete={this.dontMonitorRepo.bind(this, repo.repo_id)} 
+                            key={repo.repo_id} />
+                        )
                 })
             :   null
-         
+        
+        var unmonitored_repo_ist = (repos)
+            ?   repos.map( repo => {
+                if(!repo.is_monitored) 
+                    return  (
+                        <option value={repo.repo_id}>
+                            {repo.repo_name}
+                        </option>
+                    )
+                })
+            :   null
+
         //There was an error    
         var showError = "THERE WAS AN ERROR"
 
@@ -73,8 +134,15 @@ export default class Repos extends Component {
                 <h1>Repositories</h1>
                 {this.state.error && showError}
                 <RepoContainer>
-                    {repoList}
+                    {monitored_repo_ist}
                 </RepoContainer>
+                <br/>
+                <select id="monitor_repo" onChange={this.onselectChange.bind(this)}>
+                    {unmonitored_repo_ist}
+                </select>
+                <button onClick={this.monitorRepo.bind(this)}>
+                    add repo
+                </button>
             </div>
         )
     }
