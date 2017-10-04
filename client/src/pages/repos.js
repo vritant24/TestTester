@@ -15,8 +15,9 @@ export default class Repos extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            repos : null,
-            error : false
+            repos           : null,
+            error           : false,
+            select_value    : null
         }
     }
    
@@ -81,17 +82,26 @@ export default class Repos extends Component {
         })
         .catch((error) => console.log(error))
     }
-    monitorRepo(repo_id) {
-        this.apiCallMontioring(api.monitorRepo(repo_id), repo_id, "wrong repo")
+    monitorRepo() {
+        var repo_id = this.state.select_value
+        if(repo_id) {
+            this.apiCallMontioring(api.monitorRepo(repo_id), repo_id, "wrong repo")
+        }
     }
 
     dontMonitorRepo(repo_id) {
         this.apiCallMontioring(api.dontMonitorRepo(repo_id), repo_id, "wrong repo")
     }
 
+    onselectChange(event) {
+        this.setState({
+            select_value : event.target.value
+        })
+    }
+
     render() {
         var repos = this.state.repos
-        var repoList = (repos) 
+        var monitored_repo_ist = (repos) 
             ?   repos.map( repo => {
                     if(repo.is_monitored) 
                         return  (
@@ -103,7 +113,18 @@ export default class Repos extends Component {
                         )
                 })
             :   null
-         
+        
+        var unmonitored_repo_ist = (repos)
+            ?   repos.map( repo => {
+                if(!repo.is_monitored) 
+                    return  (
+                        <option value={repo.repo_id}>
+                            {repo.repo_name}
+                        </option>
+                    )
+                })
+            :   null
+
         //There was an error    
         var showError = "THERE WAS AN ERROR"
 
@@ -113,8 +134,15 @@ export default class Repos extends Component {
                 <h1>Repositories</h1>
                 {this.state.error && showError}
                 <RepoContainer>
-                    {repoList}
+                    {monitored_repo_ist}
                 </RepoContainer>
+                <br/>
+                <select id="monitor_repo" onChange={this.onselectChange.bind(this)}>
+                    {unmonitored_repo_ist}
+                </select>
+                <button onClick={this.monitorRepo.bind(this)}>
+                    add repo
+                </button>
             </div>
         )
     }
