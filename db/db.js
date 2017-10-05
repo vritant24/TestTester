@@ -81,3 +81,27 @@ exports.addRepo = (repoData) => {
     });
   });
 }
+
+exports.monitorUserRepo = (userRepoData) => {
+  return new Promise((resolve, reject) => {
+    connection.query('UPDATE UserRepo SET isMonitored = 1 WHERE repoId = ? AND gitHubId = ?', userRepoData ,function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+exports.unmonitorUserRepo = (userRepoData) => {
+  return new Promise((resolve, reject) => {
+    connection.query('UPDATE UserRepo SET isMonitored = 0 WHERE repoId = ? AND gitHubId = ?', userRepoData ,function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}

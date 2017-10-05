@@ -1,7 +1,6 @@
 var githubhook = require('githubhook');
 
-var webhookSecret = "1234567890987654321" //update later
-//need the user to create a webhook for their repo for now
+var webhookSecret = "1234567890987654321"
 
 var listen = function() {
   var hook = githubhook ({
