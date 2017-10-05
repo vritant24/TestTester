@@ -42,10 +42,10 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
      db.postUserSession(req.params.session_id).then(function(user_data) {
        json_user_data = (user_data[0]);
        console.log(json_user_data.gitHubId);
-
+       db.postUserRepo(json_user_data.github_id);
      });
 
-
+     
 
 
 
