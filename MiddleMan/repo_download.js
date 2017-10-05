@@ -1,7 +1,7 @@
 var ghdownload = require('github-download')
 
 
-export function downloadRepo(url){
+module.exports = function downloadRepo(url){
 
     ghdownload(url)
 

@@ -1,4 +1,5 @@
 var githubWebhook = require('express-github-webhook');
+var repo_download = require('./repo_download.js');
 
 var webhook = function(app) {
   //set up middleware
@@ -11,26 +12,16 @@ var webhook = function(app) {
       var masterPath = "refs/heads/master";
       //console.log(jsonObj.ref);
       var comp = path.localeCompare(masterPath);
-      console.log(comp);
       if (comp == 0) {
-        console.log("This is the master branch");
-        //find master, call brandon's function
-        //brandonFunction(data)
+        //console.log("This is the master branch");
+        repo_download(jsonObj.repository.html_url);
       }
   });
 
-  webhookHandler.on('pull request', function(repo, data) {
-      //pull request
-  });
-
-  webhookHandler.on('commit_comment', function(repo, data) {
-      //for commits also
+  webhookHandler.on('pull_request', function(repo, data) {
+      //pull request (works)
   });
 }
-
-/*function brandonFunction(data) {
-  //do somethung with data
-}*/
 
 module.exports = {
   webhook
