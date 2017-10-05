@@ -1,4 +1,7 @@
-var request     = require('request');
+var request = require('request');
+var sys = require('sys')
+var exec = require('child_process').exec;
+var child;
 
 //Dev values
 var CLIENT_ID     = '2a48dc27e13bf25eca10';
@@ -50,7 +53,7 @@ var getUserData = (access_token) => {
   });
 }
 
-//gets yser;s repo data from github
+//gets user's repo data from github
 var getUserRepoData = (access_token) => {
   const options = {
       url: 'https://api.github.com/user/repos?access_token=' + access_token,
@@ -73,11 +76,47 @@ var getUserRepoData = (access_token) => {
   });
 }
 
+var getPrivateRepoDownload = (github_id, repo_url, access_token) => {
+
+  var dl_command = ('cd UserRepositories; mkdir -p ' + github_id +
+                   '; cd ' + github_id + '; ' + 'curl -H "Authorization: token '
+                   + access_token + "\"" + ' -L ' + "\"" + repo_url + 'tarball' + "\";");
+
+  console.log(dl_command);
+
+  child = exec(dl_command, function (error, stdout, stderr) {
+  sys.print('stdout: ' + stdout);
+  sys.print('stderr: ' + stderr);
+  if (error !== null) {
+    console.log('exec error: ' + error);
+  }
+  });
+
+  /*child = exec("cd " + github_id, function (error, stdout, stderr) {
+  sys.print('stdout: ' + stdout);
+  sys.print('stderr: ' + stderr);
+  if (error !== null) {
+    console.log('exec error: ' + error);
+  }
+  });
+
+  child = exec("pwd " + github_id, function (error, stdout, stderr) {
+  sys.print('stdout: ' + stdout);
+  sys.print('stderr: ' + stderr);
+  if (error !== null) {
+    console.log('exec error: ' + error);
+  }
+});*/
+
+}
+
+
 
 
 
 module.exports = {
     getUserRepoData,
     getToken,
-    getUserData
+    getUserData,
+    getPrivateRepoDownload
 }

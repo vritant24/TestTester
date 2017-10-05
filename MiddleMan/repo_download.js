@@ -6,3 +6,7 @@ export function downloadRepo(url){
     ghdownload(url)
 
 }
+
+var downloadPrivateRepo = (repoId, access_token) => {
+
+}
