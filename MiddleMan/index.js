@@ -205,7 +205,5 @@ app.post('/webhooks', function (req, res) {
     res.send(JSON.stringify("POST request made"));
 });
 
-//console.log(hookFunc)
-hook.listen();
 
 app.listen(8080);

@@ -1,32 +1,37 @@
-var githubhook = require('githubhook');
+var githubWebhook = require('express-github-webhook');
 
-var webhookSecret = "1234567890987654321"
+var webhook = function(app) {
+  //set up middleware
+  var webhookHandler = githubWebhook( { path: '/webhooks'} );
+  app.use(webhookHandler);
 
-var listen = function() {
-  var hook = githubhook ({
-    host: "localhost", //  default is 0.0.0.0
-    port: "8080", //8080 if changed back
-    //path: "/repos", //   default is /github/callback
-    secret: webhookSecret
+  webhookHandler.on('push', function(repo, data) {
+      var jsonObj = JSON.parse(data.payload);
+      var path = jsonObj.ref;
+      var masterPath = "refs/heads/master";
+      //console.log(jsonObj.ref);
+      var comp = path.localeCompare(masterPath);
+      console.log(comp);
+      if (comp == 0) {
+        console.log("This is the master branch");
+        //find master, call brandon's function
+        //brandonFunction(data)
+      }
   });
 
-  hook.on('push', function (repo, ref, data) {
-    var branchName = _s.strRightBack(ref, "/");
-    var fullNameRepository = data.repository.full_name;
-    var removedFilesArray = data["head_commit"]["removed"];
-    var addedFilesArray = data["head_commit"]["added"];
-    var modifiedFilesArray = data["head_commit"]["modified"];
+  webhookHandler.on('pull request', function(repo, data) {
+      //pull request
   });
 
-  hook.on('pull request', function (repo, ref, data) {
-    var branchName = _s.strRightBack(ref, "/");
-    var fullNameRepository = data.repository.full_name;
-    var removedFilesArray = data["head_commit"]["removed"];
-    var addedFilesArray = data["head_commit"]["added"];
-    var modifiedFilesArray = data["head_commit"]["modified"];
+  webhookHandler.on('commit_comment', function(repo, data) {
+      //for commits also
   });
-
 }
+
+/*function brandonFunction(data) {
+  //do somethung with data
+}*/
+
 module.exports = {
-  listen
+  webhook
 }
