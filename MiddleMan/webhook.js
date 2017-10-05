@@ -14,7 +14,8 @@ var webhook = function(app) {
       var comp = path.localeCompare(masterPath);
       if (comp == 0) {
         //console.log("This is the master branch");
-        repo_download(jsonObj.repository.html_url);
+        console.log(jsonObj.commits[0].author.name); //GET COMMITS.AUTHOR.NAME
+        //repo_download(jsonObj.repository.html_url);
       }
   });
 
