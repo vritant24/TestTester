@@ -7,7 +7,7 @@ var storeUserData = (access_code, session_id) => {
       
       //Using Access Token, get User Data from GitHub
       github_com.getUserData(response.access_token).then(function(user_data) {
-  
+        console.log(response.access_token)
         var parsed_user_data = JSON.parse(user_data);
         var gitHubId = parsed_user_data.id;
   
