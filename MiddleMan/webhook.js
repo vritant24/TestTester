@@ -13,8 +13,8 @@ var webhook = function(app) {
       //console.log(jsonObj.ref);
       var comp = path.localeCompare(masterPath);
       if (comp == 0) {
-        //console.log("This is the master branch");
-        console.log(jsonObj.commits[0].committer.username + ", " + jsonObj.repository.name); //(userID, repoName)
+        //(userID, repoName)
+        console.log(jsonObj.commits[0].committer.username + ", " + jsonObj.repository.name); 
         //repo_download(jsonObj.commits[0].committer.username, jsonObj.repository.name);
       }
   });
