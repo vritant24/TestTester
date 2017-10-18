@@ -78,9 +78,11 @@ var getUserRepoData = (access_token) => {
 
 var getPrivateRepoDownload = (github_id, repo_url, access_token) => {
 
+  //Repo URL is in format https://github.com/user/repo
+  //Repo URL should be in form https://api.github.com/user/repo
   var dl_command = ('cd UserRepositories; mkdir -p ' + github_id +
                    '; cd ' + github_id + '; ' + 'curl -H "Authorization: token '
-                   + access_token + "\"" + ' -L ' + "\"" + repo_url + 'tarball' + "\";");
+                   + access_token + "\"" + ' -L ' + repo_url + '/tarball' + " > repo.tar.gz;");
 
   console.log(dl_command);
 

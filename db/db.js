@@ -22,6 +22,30 @@ exports.getUsers = () => {
   });
 }
 
+exports.getUserAccessFromSession = (sessionToken) => {
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT * FROM UserAccess WHERE gitHubId = (SELECT gitHubId FROM UserSession WHERE sessionToken = ? LIMIT 1 );', sessionToken, function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+exports.getRepoURL = (repoId) => {
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT repoURL FROM Repo WHERE repoId = ?;', repoId, function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 exports.addUser = (userData) => {
   return new Promise((resolve, reject) => {
     connection.query('INSERT IGNORE INTO User SET gitHubId = ?, username = ?', userData ,function(error, results) {

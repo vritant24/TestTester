@@ -37,22 +37,28 @@ hook.webhook(app);
  */
 app.get('/authenticate/:access_code/:session_id', function(req, res) {
     //Using Access Code, get Access Token from GitHub
-    console.log(req.params.access_code);
-    var access = req.params.access_code;
-    store_user.storeUserData(access, req.params.session_id);
+    store_user.storeUserData(req.params.access_code, req.params.session_id).then(function(access_token) {
+        console.log(access_token);
+        
+            //TODO fill ret with actual data
+            var ret = {
+                status  : 200,
+                user    : {
+                    github_id   : 123,
+                    username    : 'abc'
+                }
+            }
+            
+            db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
+                var user_access = user_access_row[0];
+                db.getRepoURL(102294535).then(function(repo_rows) {
+                    var repo = repo_rows[0];
+                    github.getPrivateRepoDownload(user_access.gitHubId, repo.repoURL , user_access.accessToken);
+                });
+            });
 
-    //TODO fill ret with actual data
-    var ret = {
-        status  : 200,
-        user    : {
-            github_id   : 123,
-            username    : 'abc'
-        }
-    }
-
-    github.getPrivateRepoDownload(1747618, 'https://api.github.com/repos/vritant24/TestTester/' ,access);
-
-    res.send(JSON.stringify(ret));
+            res.send(JSON.stringify(ret));
+    });
 });
 
 //return list of repositories
@@ -105,6 +111,7 @@ app.get('/repos/:session_id', function(req, res) {
  */
 app.get('/monitor/:session_id/:repo_id', function(req, res) {
     //TODO fill ret with actual data
+
     var repo_list = [
         {
             repo_id      : 1,
