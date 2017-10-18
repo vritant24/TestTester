@@ -48,14 +48,6 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
                     username    : 'abc'
                 }
             }
-            
-            db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
-                var user_access = user_access_row[0];
-                db.getRepoURL(102294535).then(function(repo_rows) {
-                    var repo = repo_rows[0];
-                    github.getPrivateRepoDownload(user_access.gitHubId, repo.repoURL , user_access.accessToken);
-                });
-            });
 
             res.send(JSON.stringify(ret));
     });
@@ -111,6 +103,14 @@ app.get('/repos/:session_id', function(req, res) {
  */
 app.get('/monitor/:session_id/:repo_id', function(req, res) {
     //TODO fill ret with actual data
+
+    db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
+        var user_access = user_access_row[0];
+        db.getRepoURL(req.params.repo_id).then(function(repo_rows) {
+            var repo = repo_rows[0];
+            github.getPrivateRepoDownload(user_access.gitHubId, repo.repoURL , user_access.accessToken);
+        });
+    });
 
     var repo_list = [
         {
