@@ -5,7 +5,8 @@ var child;
 
 //cd USER_NAME; mkdir repo; tar -zxvf REPO_NAME.tar.gz --directory ./repo --strip-components=1
 var unzipAndStore = (USER_NAME, REPO_NAME) => {
-    var uz_command = ('cd UserRepositories; cd ' + USER_NAME + '; mkdir repo; tar -zxvf ' + REPO_NAME + '.tar.gz --directory ./repo --strip-components=1')
+    var uz_command = ('cd UserRepositories; cd ' + USER_NAME + '; mkdir repos; mkdir repos/' + REPO_NAME + '/; tar -zxvf ' + REPO_NAME + '.tar.gz --directory ./repos/' + REPO_NAME +
+    '/ --strip-components=1')
 
     child = exec(uz_command, function(error, stdout, stderr){
         if(error != null){
@@ -17,19 +18,19 @@ var unzipAndStore = (USER_NAME, REPO_NAME) => {
 
 //PC Jonah
 
-var runTesScript = (USER_NAME) => {
-    var rt_command = ('cd UserRepositories; cd ' + USER_NAME + '; cd repo;' + ' npm test > ../test_results.txt')
+var runTestScript = (USER_NAME, REPO_NAME) => {
+    var rt_command = ('cd UserRepositories; cd ' + USER_NAME + '; cd repos; cd ' + REPO_NAME  + '; npm test > test_results.txt')
 
     child = exec(rt_command, function(error, stdout, stderr){
         if(error != null){
             console.log('exec error: ' + error)
-        }
+        }   
     });
 }
 
 module.exports = {
     unzipAndStore,
-    runTesScript
+    runTestScript
 
 }
 

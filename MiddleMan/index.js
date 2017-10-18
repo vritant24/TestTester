@@ -194,6 +194,12 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
     res.send(JSON.stringify(ret));
 });
 
+//github.getPublicRepoDownload("BMARX123", "https://github.com/BMARX123/HelpMe", "HelpMe")
+//runtest.unzipAndStore("BMARX123", "HelpMe")
+//runtest.unzipAndStore("BMARX123", "SMSplash")
+//runtest.runTestScript("BMARX123", "HelpMe")
+//runtest.runTestScript("BMARX123", "SMSplash")
+
 
 //Receive notification from GitHub that commit to master has been made
 app.post('/webhooks', function (req, res) {
