@@ -1,6 +1,7 @@
 var express     = require('express');
 var engines     = require('consolidate');
 var githubhook  = require('githubhook');
+var github      = require('./github_com');
 
 var db          = require('../db/db.js');
 var store_user  = require('./store_user')
@@ -23,35 +24,37 @@ hook.webhook(app);
 
 //=========== Routes for API ============
 
-//authentication route. 
-//return object as - 
+//authentication route.
+//return object as -
 /**
  * {
  *  status : 200,
  *  user : {
  *      github_id : 123,
- *      username : abc    
+ *      username : abc
  *  }
  * }
  */
 app.get('/authenticate/:access_code/:session_id', function(req, res) {
     //Using Access Code, get Access Token from GitHub
-    store_user.storeUserData(req.params.access_code, req.params.session_id);
-    
-    //TODO fill ret with actual data
-    var ret = {
-        status  : 200,
-        user    : {
-            github_id   : 123,
-            username    : 'abc'
-        }
-    }
+    store_user.storeUserData(req.params.access_code, req.params.session_id).then(function(access_token) {
+        console.log(access_token);
+        
+            //TODO fill ret with actual data
+            var ret = {
+                status  : 200,
+                user    : {
+                    github_id   : 123,
+                    username    : 'abc'
+                }
+            }
 
-    res.send(JSON.stringify(ret));
+            res.send(JSON.stringify(ret));
+    });
 });
 
 //return list of repositories
-//return object as - 
+//return object as -
 /**
  * {
  *  status : 200,
@@ -89,8 +92,8 @@ app.get('/repos/:session_id', function(req, res) {
 });
 
 
-//monitor a repo 
-//return object as 
+//monitor a repo
+//return object as
 /**
  * {
  *  status : 200,
@@ -100,6 +103,15 @@ app.get('/repos/:session_id', function(req, res) {
  */
 app.get('/monitor/:session_id/:repo_id', function(req, res) {
     //TODO fill ret with actual data
+
+    db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
+        var user_access = user_access_row[0];
+        db.getRepoURL(req.params.repo_id).then(function(repo_rows) {
+            var repo = repo_rows[0];
+            github.getPrivateRepoDownload(user_access.gitHubId, repo.repoURL , user_access.accessToken);
+        });
+    });
+
     var repo_list = [
         {
             repo_id      : 1,
@@ -117,7 +129,7 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
             is_monitored : true
         }
     ];
-    
+
     var ret = {
         status      : 200,
         repo_id     : req.params.repo_id,
@@ -126,8 +138,8 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
     res.send(JSON.stringify(ret));
 });
 
-//remove monitoring on a repo 
-//return object as 
+//remove monitoring on a repo
+//return object as
 /**
  * {
  *  status : 200,
@@ -154,7 +166,7 @@ app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
             is_monitored : false
         }
     ];
-    
+
     var ret = {
         status      : 200,
         repo_id     : req.params.repo_id,
@@ -165,7 +177,7 @@ app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
 
 
 // return list of test logs
-//return object as 
+//return object as
 /**
  * {
  *  status : 200,
@@ -185,7 +197,7 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
         repo_id             : req.params.repo_id,
         repo_name           : 'abc',
         server_endpoints    : server_endpoints,
-        test_logs           : test_logs   
+        test_logs           : test_logs
     }
     res.send(JSON.stringify(ret));
 });

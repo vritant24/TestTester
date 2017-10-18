@@ -3,6 +3,7 @@ var db          = require('../db/db.js');
 var github_com  = require('./github_com.js');
 
 var storeUserData = (access_code, session_id) => {
+  return new Promise((resolve, reject) => {
     github_com.getToken(access_code).then(function(response) {
       
       //Using Access Token, get User Data from GitHub
@@ -42,11 +43,12 @@ var storeUserData = (access_code, session_id) => {
           repos.forEach(function(repo) {
             db.addRepo(repo);
           });
-  
         });
+        resolve(response.access_token);
       });
     });
-  }
+  });
+}
 
 module.exports = {
     storeUserData
