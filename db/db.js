@@ -22,6 +22,18 @@ exports.getUsers = () => {
   });
 }
 
+exports.getRepos = (sessionToken) => {
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT * FROM UserRepo NATURAL JOIN Repo WHERE gitHubId = (SELECT gitHubId FROM UserSession WHERE sessionToken = ? LIMIT 1 );', sessionToken, function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 exports.getUserAccessFromSession = (sessionToken) => {
   return new Promise((resolve, reject) => {
     connection.query('SELECT * FROM UserAccess WHERE gitHubId = (SELECT gitHubId FROM UserSession WHERE sessionToken = ? LIMIT 1 );', sessionToken, function(error, results) {

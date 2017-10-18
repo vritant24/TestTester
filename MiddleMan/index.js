@@ -64,31 +64,9 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
  */
 app.get('/repos/:session_id', function(req, res) {
     //TODO fill ret with actual data
-    var repo_list = [
-        {
-            repo_id      : 1,
-            repo_name    : 'repo1',
-            is_monitored : true
-        },
-        {
-            repo_id      : 2,
-            repo_name    : 'repo2',
-            is_monitored : true
-        },
-        {
-            repo_id      : 3,
-            repo_name    : 'repo3',
-            is_monitored : false
-        }
-    ];
-
-    var ret = {
-        status      : 200,
-        github_id   : 123,
-        repo_list   : repo_list
-    }
-
-    res.send(JSON.stringify(ret));
+    db.getRepos(req.params.session_id).then(function(repo_rows) {
+        res.send(JSON.stringify(repo_rows))
+    });
 });
 
 
