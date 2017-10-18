@@ -63,10 +63,21 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
  * }
  */
 app.get('/repos/:session_id', function(req, res) {
-    //TODO fill ret with actual data
-    db.getRepos(req.params.session_id).then(function(repo_rows) {
-        res.send(JSON.stringify(repo_rows))
-    });
+    var ret;
+    db.getRepos(req.params.session_id)
+        .then(function(repo_rows) {
+            ret = {
+                status      : 200,
+                repo_list   : repo_rows
+            }
+        })
+        .catch(function(error) {
+            ret = {
+                status      : 500,
+                error       : error
+            }
+        });
+        res.send(JSON.stringify(ret));
 });
 
 
