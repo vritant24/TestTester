@@ -14,10 +14,23 @@ var unzipAndStore = (USER_NAME, REPO_NAME) => {
     });
 }
 
-module.exports = {
-    unzipAndStore
-}
 
 //PC Jonah
+
+var runTesScript = (USER_NAME) => {
+    var rt_command = ('cd UserRepositories; cd ' + USER_NAME + '; cd repo;' + ' npm test > ../test_results.txt')
+
+    child = exec(rt_command, function(error, stdout, stderr){
+        if(error != null){
+            console.log('exec error: ' + error)
+        }
+    });
+}
+
+module.exports = {
+    unzipAndStore,
+    runTesScript
+
+}
 
 

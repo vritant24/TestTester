@@ -197,9 +197,11 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
 
 
 
-//github.getPublicRepoDownload("BMARX123", "https://github.com/BMARX123/SMSplash", "SMSplash");
+//github.getPublicRepoDownload("vritant24", "https://github.com/vritant24/Adwyse-Challenge", "Adwyse-Challenge");
 
-runtest.unzipAndStore("BMARX123", "SMSplash");
+//runtest.unzipAndStore("vritant24", "Adwyse-Challenge");
+
+runtest.runTesScript("vritant24")
 
 //Receive notification from GitHub that commit to master has been made
 app.post('/webhooks', function (req, res) {
