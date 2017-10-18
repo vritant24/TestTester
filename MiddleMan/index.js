@@ -195,14 +195,6 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
 });
 
 
-
-
-//github.getPublicRepoDownload("vritant24", "https://github.com/vritant24/Adwyse-Challenge", "Adwyse-Challenge");
-
-//runtest.unzipAndStore("vritant24", "Adwyse-Challenge");
-
-runtest.runTesScript("vritant24")
-
 //Receive notification from GitHub that commit to master has been made
 app.post('/webhooks', function (req, res) {
     //create a new function that determines if the push was made by master call it here
