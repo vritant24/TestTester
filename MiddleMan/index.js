@@ -63,32 +63,22 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
  * }
  */
 app.get('/repos/:session_id', function(req, res) {
-    //TODO fill ret with actual data
-    var repo_list = [
-        {
-            repo_id      : 1,
-            repo_name    : 'repo1',
-            is_monitored : true
-        },
-        {
-            repo_id      : 2,
-            repo_name    : 'repo2',
-            is_monitored : true
-        },
-        {
-            repo_id      : 3,
-            repo_name    : 'repo3',
-            is_monitored : false
-        }
-    ];
-
-    var ret = {
-        status      : 200,
-        github_id   : 123,
-        repo_list   : repo_list
-    }
-
-    res.send(JSON.stringify(ret));
+    var ret;
+    db.getRepos(req.params.session_id)
+        .then(function(repo_rows) {
+            ret = {
+                status      : 200,
+                github_id   : repo_rows[0].gitHubId,
+                repo_list   : repo_rows
+            }
+        })
+        .catch(function(error) {
+            ret = {
+                status      : 500,
+                error       : error
+            }
+        });
+        res.send(JSON.stringify(ret));
 });
 
 
@@ -108,9 +98,11 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
         var user_access = user_access_row[0];
         db.getRepoURL(req.params.repo_id).then(function(repo_rows) {
             var repo = repo_rows[0];
-            github.getPrivateRepoDownload(user_access.gitHubId, repo.repoURL , user_access.accessToken);
+            github.getPrivateRepoDownload(user_access.gitHubId, repo.repoURL, req.params.repo_id, user_access.accessToken);
         });
     });
+
+    db.monitorUserRepo(req.params.repo_id);
 
     var repo_list = [
         {

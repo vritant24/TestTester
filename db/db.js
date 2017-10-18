@@ -22,6 +22,18 @@ exports.getUsers = () => {
   });
 }
 
+exports.getRepos = (sessionToken) => {
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT * FROM UserRepo NATURAL JOIN Repo WHERE gitHubId = (SELECT gitHubId FROM UserSession WHERE sessionToken = ? LIMIT 1 );', sessionToken, function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 exports.getUserAccessFromSession = (sessionToken) => {
   return new Promise((resolve, reject) => {
     connection.query('SELECT * FROM UserAccess WHERE gitHubId = (SELECT gitHubId FROM UserSession WHERE sessionToken = ? LIMIT 1 );', sessionToken, function(error, results) {
@@ -106,9 +118,9 @@ exports.addRepo = (repoData) => {
   });
 }
 
-exports.monitorUserRepo = (userRepoData) => {
+exports.monitorUserRepo = (repoId) => {
   return new Promise((resolve, reject) => {
-    connection.query('UPDATE UserRepo SET isMonitored = 1 WHERE repoId = ? AND gitHubId = ?', userRepoData ,function(error, results) {
+    connection.query('UPDATE UserRepo SET isMonitored = 1 WHERE repoId = ?', repoId ,function(error, results) {
       if (error) {
         reject(error);
       } else {
@@ -118,9 +130,9 @@ exports.monitorUserRepo = (userRepoData) => {
   });
 }
 
-exports.unmonitorUserRepo = (userRepoData) => {
+exports.unmonitorUserRepo = (repoId) => {
   return new Promise((resolve, reject) => {
-    connection.query('UPDATE UserRepo SET isMonitored = 0 WHERE repoId = ? AND gitHubId = ?', userRepoData ,function(error, results) {
+    connection.query('UPDATE UserRepo SET isMonitored = 0 WHERE repoId = ?', repoId ,function(error, results) {
       if (error) {
         reject(error);
       } else {

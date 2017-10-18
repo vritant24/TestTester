@@ -75,7 +75,7 @@ var getUserRepoData = (access_token) => {
   });
 }
 
-var getPrivateRepoDownload = (github_id, repo_url, access_token) => {
+var getPrivateRepoDownload = (github_id, repo_url, repo_id, access_token) => {
 
   var url = repo_url.slice(8);
   var slash_pos = url.search('/');
@@ -84,7 +84,7 @@ var getPrivateRepoDownload = (github_id, repo_url, access_token) => {
 
   var dl_command = ('cd UserRepositories; mkdir -p ' + github_id +
                    '; cd ' + github_id + '; ' + 'curl -H "Authorization: token '
-                   + access_token + "\"" + ' -L ' + api_url + '/tarball' + " > repo.tar.gz;");
+                   + access_token + "\"" + ' -L ' + api_url + '/tarball' + " > " + repo_id + ".tar.gz;");
 
   child = exec(dl_command, function (error, stdout, stderr) {
   if (error !== null) {
