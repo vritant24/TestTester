@@ -118,9 +118,9 @@ exports.addRepo = (repoData) => {
   });
 }
 
-exports.monitorUserRepo = (userRepoData) => {
+exports.monitorUserRepo = (repoId) => {
   return new Promise((resolve, reject) => {
-    connection.query('UPDATE UserRepo SET isMonitored = 1 WHERE repoId = ? AND gitHubId = ?', userRepoData ,function(error, results) {
+    connection.query('UPDATE UserRepo SET isMonitored = 1 WHERE repoId = ?', repoId ,function(error, results) {
       if (error) {
         reject(error);
       } else {
@@ -130,9 +130,9 @@ exports.monitorUserRepo = (userRepoData) => {
   });
 }
 
-exports.unmonitorUserRepo = (userRepoData) => {
+exports.unmonitorUserRepo = (repoId) => {
   return new Promise((resolve, reject) => {
-    connection.query('UPDATE UserRepo SET isMonitored = 0 WHERE repoId = ? AND gitHubId = ?', userRepoData ,function(error, results) {
+    connection.query('UPDATE UserRepo SET isMonitored = 0 WHERE repoId = ?', repoId ,function(error, results) {
       if (error) {
         reject(error);
       } else {

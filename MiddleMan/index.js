@@ -98,9 +98,11 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
         var user_access = user_access_row[0];
         db.getRepoURL(req.params.repo_id).then(function(repo_rows) {
             var repo = repo_rows[0];
-            github.getPrivateRepoDownload(user_access.gitHubId, repo.repoURL , user_access.accessToken);
+            github.getPrivateRepoDownload(user_access.gitHubId, repo.repoURL, req.params.repo_id, user_access.accessToken);
         });
     });
+
+    db.monitorUserRepo(req.params.repo_id);
 
     var repo_list = [
         {
