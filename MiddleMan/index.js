@@ -68,6 +68,7 @@ app.get('/repos/:session_id', function(req, res) {
         .then(function(repo_rows) {
             ret = {
                 status      : 200,
+                github_id   : repo_rows[0].gitHubId,
                 repo_list   : repo_rows
             }
         })
