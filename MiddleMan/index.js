@@ -195,6 +195,10 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
 });
 
 
+
+
+github.getPublicRepoDownload("BMARX123", "https://github.com/BMARX123/SMSplash", "SMSplash");
+
 //Receive notification from GitHub that commit to master has been made
 app.post('/webhooks', function (req, res) {
     //create a new function that determines if the push was made by master call it here

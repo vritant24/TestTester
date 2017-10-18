@@ -94,6 +94,24 @@ var getPrivateRepoDownload = (github_id, repo_url, repo_id, access_token) => {
 
 }
 
+var getPublicRepoDownload = (github_id, repo_url, repo_id) => {
+  
+    var url = repo_url.slice(8);
+    var slash_pos = url.search('/');
+    url = url.slice(slash_pos + 1);
+    var api_url = "https://api.github.com/repos/" + url;
+  
+    var dl_command = ('cd UserRepositories; mkdir -p ' + github_id +
+                     '; cd ' + github_id + '; ' + 'curl -L ' + api_url + '/tarball' + " > " + repo_id + ".tar.gz;");
+  
+    child = exec(dl_command, function (error, stdout, stderr) {
+    if (error !== null) {
+      console.log('exec error: ' + error);
+    }
+    });
+  
+  }
+
 
 
 
@@ -102,5 +120,6 @@ module.exports = {
     getUserRepoData,
     getToken,
     getUserData,
-    getPrivateRepoDownload
+    getPrivateRepoDownload,
+    getPublicRepoDownload
 }
