@@ -134,27 +134,34 @@ export default class Repos extends Component {
 
     render() {
         var repos = this.state.repos
-        var monitored_repo_list = (repos) 
-            ?   repos.filter(repo => repo.isMonitored !== 0).map( (repo, index) => {
-                    return  (
-                        <Repository 
-                        repoName={repo.repoName} 
-                        onclick={this.onRepoClick.bind(this,repo.repoId)} 
-                        ondelete={this.dontMonitorRepo.bind(this, repo.repoId, index)} 
-                        key={repo.repoId} />
-                    )
-                })
-            :   null
+        var repo;
+        var idx;
         
-        var unmonitored_repo_list = (repos)
-            ?   repos.filter(repo => repo.isMonitored === 0).map( (repo, index) => {
-                    return  (
-                        <option key={repo.repoId} value={index}>
-                            {repo.repoName}
-                        </option>
-                    )
-                })
-            :   null
+        var monitored_repo_list = [];
+        for(idx in repos) {
+            repo = repos[idx];
+            if(repo.isMonitored === 1) {
+                monitored_repo_list.push(
+                    <Repository 
+                    repoName={repo.repoName} 
+                    onclick={this.onRepoClick.bind(this,repo.repoId)} 
+                    ondelete={this.dontMonitorRepo.bind(this, repo.repoId, idx)} 
+                    key={repo.repoId} />
+                )
+            }
+        }
+
+        var unmonitored_repo_list = [];
+        for(idx in repos) {
+            repo = repos[idx];
+            if(repo.isMonitored === 0) {
+                unmonitored_repo_list.push(
+                    <option key={repo.repoId} value={idx}>
+                        {repo.repoName}
+                    </option>
+                )
+            }
+        }
 
         var empty = <option key={"#31"} value={-1}></option>
         if(unmonitored_repo_list)
