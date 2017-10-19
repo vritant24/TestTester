@@ -93,7 +93,7 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
         var user_access = user_access_row[0];
         db.getRepoURL(req.params.repo_id).then(function(repo_rows) {
             var repo = repo_rows[0];
-            github.getPrivateRepoDownload(user_access.gitHubId, repo.repoURL, req.params.repo_id, user_access.accessToken);
+            github.getRepoDownload(user_access.gitHubId, repo.repoURL, req.params.repo_id, user_access.accessToken);
         });
     });
 
@@ -147,12 +147,6 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
     }
     res.send(JSON.stringify(ret));
 });
-
-//github.getPublicRepoDownload("BMARX123", "https://github.com/BMARX123/HelpMe", "HelpMe")
-//runtest.unzipAndStore("BMARX123", "HelpMe")
-//runtest.unzipAndStore("BMARX123", "SMSplash")
-//runtest.runTestScript("BMARX123", "HelpMe")
-//runtest.runTestScript("BMARX123", "SMSplash")
 
 
 //Receive notification from GitHub that commit to master has been made
