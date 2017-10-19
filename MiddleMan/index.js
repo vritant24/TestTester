@@ -6,7 +6,8 @@ var runtest     = require('./run_tests.js')
 var db          = require('../db/db.js');
 var store_user  = require('./store_user')
 var hook        = require('./webhook.js')
-var utils       = require('./utils.js')
+var utils       = require('./utils.js');
+var run_tests   = require('./run_tests.js');
 
 
 var app = express();
@@ -94,7 +95,13 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
         var user_access = user_access_row[0];
         db.getRepoURL(req.params.repo_id).then(function(repo_rows) {
             var repo = repo_rows[0];
-            github.getRepoDownload(user_access.gitHubId, repo.repoURL, req.params.repo_id, user_access.accessToken);
+            github.getRepoDownload(user_access.gitHubId, repo.repoURL, req.params.repo_id, user_access.accessToken).then(function() {
+                run_tests.unzipAndStore(user_access.gitHubId, req.params.repo_id).then(function() {
+                    run_tests.runTestScript(user_access.gitHubId, req.params.repo_id).then(function() {
+                        run_tests.parseScripts(user_access.gitHubId, req.params.repo_id);
+                    })
+                })
+            });
         });
     });
 
