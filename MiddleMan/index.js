@@ -37,8 +37,6 @@ hook.webhook(app);
  */
 app.get('/authenticate/:access_code/:session_id', function(req, res) {
     //Using Access Code, get Access Token from GitHub
-
-    //TODO catch error and send status code
     store_user.storeUserData(req.params.access_code, req.params.session_id).then(function(obj) {
         var ret = {
             status  : 200,
