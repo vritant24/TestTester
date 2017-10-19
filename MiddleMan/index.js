@@ -6,7 +6,6 @@ var runtest     = require('./run_tests.js')
 var db          = require('../db/db.js');
 var store_user  = require('./store_user')
 var hook        = require('./webhook.js')
-var utils       = require('./utils.js')
 
 
 var app = express();
@@ -115,10 +114,6 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
 app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
     //TODO catch error and send status code
     db.unmonitorUserRepo(req.params.repo_id);
-    db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
-        user_access = user_access_row[0];
-        utils.removeDownloadedRepo(user_access.gitHubId, req.params.repo_id);
-    });
 
     var ret = {
         status      : 200,

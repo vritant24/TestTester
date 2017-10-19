@@ -1,6 +1,3 @@
-var exec = require('child_process').exec;
-var child;
-
 exports.pullUserData = data => {
   var userDataInputs = [];
   userDataInputs.push(parseInt(data.profile.id));
@@ -28,17 +25,6 @@ exports.packageUserRepoData = (repo_data, gitHubId) => {
   });
   return db_repos_data;
 };
-
-exports.removeDownloadedRepo = (github_id, repo_id) => {
-  var removeCommand = 'cd UserRepositories; cd ' + github_id + '; ' + 'rm -r ' + repo_id;
-
-  child = exec(removeCommand, function (error, stdout, stderr) {
-    if (error !== null) {
-      //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
-      console.log('exec error: ' + error);
-    }
-});
-}
 
 exports.packageRepoData = (repo_data) => {
   var parsed_repos_data = JSON.parse(repo_data);
