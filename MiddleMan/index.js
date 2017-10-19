@@ -37,6 +37,8 @@ hook.webhook(app);
  */
 app.get('/authenticate/:access_code/:session_id', function(req, res) {
     //Using Access Code, get Access Token from GitHub
+
+    //TODO catch error and send status code
     store_user.storeUserData(req.params.access_code, req.params.session_id).then(function(obj) {
         var ret = {
             status  : 200,
@@ -87,7 +89,7 @@ app.get('/repos/:session_id', function(req, res) {
  * }
  */
 app.get('/monitor/:session_id/:repo_id', function(req, res) {
-    //TODO fill ret with actual data
+    //TODO catch error and send status code
 
     db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
         var user_access = user_access_row[0];
@@ -101,7 +103,6 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
     var ret = {
         status: 200,
     }
-
     res.send(JSON.stringify(ret));
 });
 
@@ -113,7 +114,8 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
  * }
  */
 app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
-    //TODO fill ret with actual data
+    //TODO catch error and send status code
+    db.unmonitorUserRepo(req.params.repo_id);
 
     var ret = {
         status      : 200,
