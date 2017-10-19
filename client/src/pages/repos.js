@@ -37,7 +37,8 @@ export default class Repos extends Component {
                         console.log("wrong user")
                     } 
                     else {
-                        this.setState({ repos : res.repo_list, 
+                        this.setState({ 
+                            repos : res.repo_list, 
                             error : false 
                         })
                     }
@@ -58,41 +59,71 @@ export default class Repos extends Component {
         app.router.history.navigate(url)
     }
 
-    apiCallMontioring(url, repo_id, err) {
+    async apiCallMontioring(url, repo_id, err) {
         repo_id = repo_id + ""
         fetch(url)
         .then(res => res.json())
         .then(res => {
             if(res.status === status.success) {
-                if(res.repo_id !== repo_id) {
-                    console.log(typeof repo_id)
-                    console.log(typeof res.repo_id)
-                    console.log(err)
-                } 
-                else {
-                    this.setState({ 
-                        repos : res.repo_list, 
-                        error : false 
-                    })
-                }
+               return true
             }
             else {
                 this.setState ({ error : true })
-                console.log(res)
+                return false;
             }
         })
         .catch((error) => console.log(error))
     }
     
     monitorRepo() {
-        var repo_id = this.state.select_value
+        var repo_id = this.state.repos[this.state.select_value].repoId
+        var url = api.monitorRepo(repo_id)
         if(repo_id) {
-            this.apiCallMontioring(api.monitorRepo(repo_id), repo_id, "wrong repo")
+            repo_id = repo_id + ""
+            fetch(url)
+            .then(res => res.json())
+            .then(res => {
+                if(res.status === status.success) {
+                    var newlist = this.state.repos.slice(0)
+                    newlist[this.state.select_value].isMonitored = 1;
+                    console.log(newlist)
+                    this.setState({
+                        repos: newlist
+                    })
+                    console.log("monitored")
+                }
+                else {
+                    this.setState ({ error : true })
+                    console.log("failed monitoring")
+                }
+            })
+            .catch((error) => console.log(error))
         }
     }
 
-    dontMonitorRepo(repo_id) {
-        this.apiCallMontioring(api.dontMonitorRepo(repo_id), repo_id, "wrong repo")
+    dontMonitorRepo(repo_id, idx) {
+        var url = api.dontMonitorRepo(repo_id)
+        
+        if(repo_id) {
+            repo_id = repo_id + ""
+            fetch(url)
+            .then(res => res.json())
+            .then(res => {
+                if(res.status === status.success) {
+                    var newlist = this.state.repos.slice(0)
+                    newlist[idx].isMonitored = 0;
+                    this.setState({
+                        repos: newlist
+                    })
+                    console.log("unmonitored")
+                }
+                else {
+                    this.setState ({ error : true })
+                    console.log("failed unmonitored")
+                }
+            })
+            .catch((error) => console.log(error))
+        }
     }
 
     onselectChange(event) {
@@ -103,27 +134,34 @@ export default class Repos extends Component {
 
     render() {
         var repos = this.state.repos
-        var monitored_repo_list = (repos) 
-            ?   repos.filter(repo => repo.is_monitored).map( repo => {
-                    return  (
-                        <Repository 
-                        repoName={repo.repo_name} 
-                        onclick={this.onRepoClick.bind(this,repo.repo_id)} 
-                        ondelete={this.dontMonitorRepo.bind(this, repo.repo_id)} 
-                        key={repo.repo_id} />
-                    )
-                })
-            :   null
+        var repo;
+        var idx;
         
-        var unmonitored_repo_list = (repos)
-            ?   repos.filter(repo => !repo.is_monitored).map( repo => {
-                    return  (
-                        <option key={repo.repo_id} value={repo.repo_id}>
-                            {repo.repo_name}
-                        </option>
-                    )
-                })
-            :   null
+        var monitored_repo_list = [];
+        for(idx in repos) {
+            repo = repos[idx];
+            if(repo.isMonitored === 1) {
+                monitored_repo_list.push(
+                    <Repository 
+                    repoName={repo.repoName} 
+                    onclick={this.onRepoClick.bind(this,repo.repoId)} 
+                    ondelete={this.dontMonitorRepo.bind(this, repo.repoId, idx)} 
+                    key={repo.repoId} />
+                )
+            }
+        }
+
+        var unmonitored_repo_list = [];
+        for(idx in repos) {
+            repo = repos[idx];
+            if(repo.isMonitored === 0) {
+                unmonitored_repo_list.push(
+                    <option key={repo.repoId} value={idx}>
+                        {repo.repoName}
+                    </option>
+                )
+            }
+        }
 
         var empty = <option key={"#31"} value={-1}></option>
         if(unmonitored_repo_list)

@@ -44,7 +44,12 @@ var storeUserData = (access_code, session_id) => {
             db.addRepo(repo);
           });
         });
-        resolve(response.access_token);
+        var obj = {
+          access_token: response.access_token,
+          login       : parsed_user_data.login,
+          id          : parsed_user_data.id,
+        }
+        resolve(obj);
       });
     });
   });

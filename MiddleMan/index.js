@@ -37,20 +37,16 @@ hook.webhook(app);
  */
 app.get('/authenticate/:access_code/:session_id', function(req, res) {
     //Using Access Code, get Access Token from GitHub
-    store_user.storeUserData(req.params.access_code, req.params.session_id).then(function(access_token) {
-        console.log(access_token);
-        
-            //TODO fill ret with actual data
-            var ret = {
-                status  : 200,
-                user    : {
-                    github_id   : 123,
-                    username    : 'abc'
-                }
+    store_user.storeUserData(req.params.access_code, req.params.session_id).then(function(obj) {
+        var ret = {
+            status  : 200,
+            user    : {
+                github_id  : obj.id,
+                username   : obj.login
             }
-
-            res.send(JSON.stringify(ret));
-    });
+        }
+        res.send(JSON.stringify(ret))
+    }).catch((err) => console.log("storeUserData failed"));
 });
 
 //return list of repositories
@@ -71,14 +67,15 @@ app.get('/repos/:session_id', function(req, res) {
                 github_id   : repo_rows[0].gitHubId,
                 repo_list   : repo_rows
             }
+            res.send(JSON.stringify(ret));
         })
         .catch(function(error) {
             ret = {
                 status      : 500,
                 error       : error
             }
+            res.send(JSON.stringify(ret));
         });
-        res.send(JSON.stringify(ret));
 });
 
 
@@ -87,12 +84,10 @@ app.get('/repos/:session_id', function(req, res) {
 /**
  * {
  *  status : 200,
- *  repo_id : 123,
- *  repo_list : []
  * }
  */
 app.get('/monitor/:session_id/:repo_id', function(req, res) {
-    //TODO fill ret with actual data
+    //TODO catch error and send status code
 
     db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
         var user_access = user_access_row[0];
@@ -103,29 +98,8 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
     });
 
     db.monitorUserRepo(req.params.repo_id);
-
-    var repo_list = [
-        {
-            repo_id      : 1,
-            repo_name    : 'repo1',
-            is_monitored : true
-        },
-        {
-            repo_id      : 2,
-            repo_name    : 'repo2',
-            is_monitored : true
-        },
-        {
-            repo_id      : 3,
-            repo_name    : 'repo3',
-            is_monitored : true
-        }
-    ];
-
     var ret = {
-        status      : 200,
-        repo_id     : req.params.repo_id,
-        repo_list   : repo_list
+        status: 200,
     }
     res.send(JSON.stringify(ret));
 });
@@ -135,34 +109,14 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
 /**
  * {
  *  status : 200,
- *  repo-id : 123,
- *  repo-list : []
  * }
  */
 app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
-    //TODO fill ret with actual data
-    var repo_list = [
-        {
-            repo_id      : 1,
-            repo_name    : 'repo1',
-            is_monitored : false
-        },
-        {
-            repo_id      : 2,
-            repo_name    : 'repo2',
-            is_monitored : true
-        },
-        {
-            repo_id      : 3,
-            repo_name    : 'repo3',
-            is_monitored : false
-        }
-    ];
+    //TODO catch error and send status code
+    db.unmonitorUserRepo(req.params.repo_id);
 
     var ret = {
         status      : 200,
-        repo_id     : req.params.repo_id,
-        repo_list   : repo_list
     }
     res.send(JSON.stringify(ret));
 });
