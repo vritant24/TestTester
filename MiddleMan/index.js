@@ -2,7 +2,7 @@ var express     = require('express');
 var engines     = require('consolidate');
 var githubhook  = require('githubhook');
 var github      = require('./github_com');
-
+var runtest     = require('./run_tests.js')
 var db          = require('../db/db.js');
 var store_user  = require('./store_user')
 var hook        = require('./webhook.js')
@@ -149,6 +149,12 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
     }
     res.send(JSON.stringify(ret));
 });
+
+//github.getPublicRepoDownload("BMARX123", "https://github.com/BMARX123/HelpMe", "HelpMe")
+//runtest.unzipAndStore("BMARX123", "HelpMe")
+//runtest.unzipAndStore("BMARX123", "SMSplash")
+//runtest.runTestScript("BMARX123", "HelpMe")
+//runtest.runTestScript("BMARX123", "SMSplash")
 
 
 //Receive notification from GitHub that commit to master has been made
