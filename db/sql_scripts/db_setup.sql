@@ -7,4 +7,4 @@ CREATE TABLE UserRepo (repoId BIGINT, gitHubId BIGINT, isMonitored BOOLEAN, PRIM
 CREATE TABLE Repo (repoId BIGINT, repoName VARCHAR(150), repoURL VARCHAR(150), isPublic BOOLEAN,
                    PRIMARY KEY(repoId));
 
-CREATE TABLE UserSession (gitHubId BIGINT, sessionToken VARCHAR(1000), PRIMARY KEY(sessionToken));
+CREATE TABLE UserSession (gitHubId BIGINT, sessionToken VARCHAR(1000), PRIMARY KEY(gitHubId));
