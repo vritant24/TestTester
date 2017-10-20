@@ -97,6 +97,15 @@ app.get('/repos/:session_id', function(req, res) {
  */
 app.get('/monitor/:session_id/:repo_id', function(req, res) {
     //TODO catch error and send status code
+    //console.log(req);
+    //console.log('----------------------------------');
+    //console.log(res);
+    //console.log(req.params.session_id);
+    var session_id = req.params.session_id;
+    var repo_id = req.params.repo_id;
+    //repo ID
+    //user ID
+    
 
     db.monitorUserRepo(req.params.repo_id).then(() => {
         var ret = {
@@ -108,6 +117,21 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
             status: utils.statusCodes.server_error,
         }
         res.json(ret);
+    });
+
+    db.getUserAccessFromSession(session_id).then(function(user_access_row) {
+        var user_access = user_access_row[0];
+        db.getRepoURL(repo_id).then(function(repo_rows) {
+            var repo = repo_rows[0];
+            //console.log(repo_id);
+            github.getRepoDownload(user_access.gitHubId, repo.repoURL, repo_id, user_access.accessToken).then(function() {
+                run_tests.unzipAndStore(user_access.gitHubId, repo_id).then(function() {
+                    run_tests.runTestScript(user_access.gitHubId, repo_id).then(function() {
+                        run_tests.parseScripts(user_access.gitHubId, repo_id);
+                    })
+                })
+            });
+        });
     });
     
 });
