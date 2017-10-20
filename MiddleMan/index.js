@@ -150,9 +150,9 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
 
 github.getRepoDownload("vritant24", "https://github.com/vritant24/Adwyse-Challenge", "Adwyse-Challenge").then(() => {
     runtest.unzipAndStore("vritant24", "Adwyse-Challenge").then(() => {
-        // runtest.runTestScript("vritant24", "Adwyse-Challenge").then(() => {
-        //     runtest.parseScripts("vritant24", "Adwyse-Challenge").then((logs) => console.log(logs))
-        // }).catch(err => console.log(err))
+        runtest.runTestScript("vritant24", "Adwyse-Challenge").then(() => {
+            runtest.parseScripts("vritant24", "Adwyse-Challenge").then((logs) => console.log(logs))
+        }).catch(err => console.log(err))
     }).catch(err => console.log(err))
 }).catch(err => console.log(err))
 //runtest.unzipAndStore("BMARX123", "HelpM

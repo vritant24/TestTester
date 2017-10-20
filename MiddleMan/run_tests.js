@@ -7,11 +7,10 @@ var child;
 //cd USER_NAME; mkdir repo; tar -zxvf REPO_NAME.tar.gz --directory ./repo --strip-components=1
 var unzipAndStore = (USER_NAME, REPO_NAME) => {
   return new Promise((resolve, reject) => {
-    var uz_command = ('cd UserRepositories; cd ' + USER_NAME + '; mkdir ' + REPO_NAME + '/; tar -zxvf ' + REPO_NAME + '.tar.gz --directory ./' + REPO_NAME 
-    + '/ --strip-components=1; rm ' + REPO_NAME + '.tar.gz')
+    var uz_command = ('cd UserRepositories; cd ' + USER_NAME + '; mkdir ' + REPO_NAME + '/; tar -zxvf ' + REPO_NAME + '.tar.gz --directory ./' + REPO_NAME + 
+    '/ --strip-components=1; rm ' + REPO_NAME + '.tar.gz')
     child = exec(uz_command, function(error, stdout, stderr){
       if(error != null){
-        console.log('exec error: ' + error)
         reject(error)
       }
       resolve()
@@ -44,7 +43,7 @@ var runTestScript = (USER_NAME, REPO_NAME) => {
     })
     return new Promise((resolve, reject) => {
         Promise.all(promises).then(() => {
-            resolve(testLogs)
+            resolve()
         }).catch(err => reject(err))
     })
 }
@@ -53,27 +52,22 @@ var parseScripts = (USER_NAME, REPO_NAME) => {
     console.log("TEST")
     var fileNameArray = ["test-alpha.json","test-beta.json","test-prod.json"]
     paths = fileNameArray.map((file) => "./UserRepositories/" + USER_NAME + "/" + REPO_NAME + "/" + file)
-    var testLogs = []
-    
-    var promises = []
-    
-    paths.forEach((path) => {
-        promises.push(
-            new Promise((resolve, reject) => {
-                loadJsonFile(path).then(json => {
-                    if(!json) {
-                        reject("json empty");
-                    }
-                    testLogs.push(json)
-                    resolve()  
-                }).catch((err) => reject("load file failed"))
-            })
-        )
-    })
-
     return new Promise((resolve, reject) => {
-        Promise.all(promises).then(() => {
-            resolve(testLogs)
+        var promises = []
+        paths.forEach((path) => {
+            promises.push(
+                new Promise((resolve, reject) => {
+                    loadJsonFile(path).then(json => {
+                        if(!json) {
+                            reject("json empty");
+                        }
+                        resolve(json)  
+                    }).catch((err) => reject("load file failed"))
+                })
+            )
+        })
+        Promise.all(promises).then((jsons) => {
+            resolve(jsons)
         }).catch(err => reject(err))
     })
 }
