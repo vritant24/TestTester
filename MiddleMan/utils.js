@@ -1,3 +1,4 @@
+var firstOpenPort = require('first-open-port');
 var exec = require('child_process').exec;
 var child;
 
@@ -38,6 +39,81 @@ exports.removeDownloadedRepo = (github_id, repo_id) => {
       console.log('exec error: ' + error);
     }
 });
+}
+
+exports.deployAlpha = (github_id, repo_id, report) => {
+  return new Promise((resolve, reject) => {
+    var deployed_ports = [];
+    firstOpenPort(10000, 65000)
+    .then(port => { 
+      if(!report[0].log.stats.failures) {
+        var deployAlpha = 'cd UserRepositories; cd ' + github_id + '; cd ' + repo_id + '; PORT=' + port + ' npm start';
+        child = exec(deployAlpha, function (error, stdout, stderr) {
+          if (error !== null) {
+            //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
+            console.log('exec error: ' + error);
+          }
+          else {
+            console.log(error);
+            resolve(port);
+          }
+        });
+      }
+    })
+    .catch(error => {
+      reject(error);
+    })
+  });
+}
+
+exports.deployBeta = (github_id, repo_id, report) => {
+  return new Promise((resolve, reject) => {
+    var deployed_ports = [];
+    firstOpenPort(10000, 65000)
+    .then(port => {
+      if(!report[0].log.stats.failures) {
+        var deployBeta = 'cd UserRepositories; cd ' + github_id + '; cd ' + repo_id + '; PORT=' + port + ' npm start';
+        child = exec(deployBeta, function (error, stdout, stderr) {
+          if (error !== null) {
+            //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
+            console.log('exec error: ' + error);
+          }
+          else {
+            console.log(error);
+          }
+        });
+      }
+      resolve(port);
+    })
+    .catch(error => {
+      reject(error);
+    })
+  });
+}
+
+exports.deployProd = (github_id, repo_id, report) => {
+  return new Promise((resolve, reject) => {
+    var deployed_ports = [];
+    firstOpenPort(10000, 65000)
+    .then(port => {
+      if(!report[0].log.stats.failures) {
+        var deployProd = 'cd UserRepositories; cd ' + github_id + '; cd ' + repo_id + '; PORT=' + port + ' npm start';
+        child = exec(deployProd, function (error, stdout, stderr) {
+          if (error !== null) {
+            //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
+            console.log('exec error: ' + error);
+          }
+          else {
+            console.log(error);
+          }
+        });
+      }
+      resolve(port);
+    })
+    .catch(error => {
+      reject(error);
+    })
+  });
 }
 
 exports.packageRepoData = (repo_data) => {

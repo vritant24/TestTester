@@ -27,6 +27,7 @@
     "express": "4.15.4",
     "express-github-webhook": "^1.0.6",
     "express-session": "^1.15.5",
+    "first-open-port": "^0.1.2",
     "github-download": "^0.5.0",
     "githubhook": "^1.9.1",
     "load-json-file": "^3.0.0",

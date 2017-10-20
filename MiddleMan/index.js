@@ -98,8 +98,20 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
             github.getRepoDownload(user_access.gitHubId, repo.repoURL, req.params.repo_id, user_access.accessToken).then(function() {
                 run_tests.unzipAndStore(user_access.gitHubId, req.params.repo_id).then(function() {
                     run_tests.runTestScript(user_access.gitHubId, req.params.repo_id).then(function() {
-                        run_tests.parseScripts(user_access.gitHubId, req.params.repo_id).then(function(reports) {
-                            console.log(reports[0].log.stats.passes);
+                        run_tests.parseScripts(user_access.gitHubId, req.params.repo_id).then(function(report) {
+                            console.log(report[0].log.stats.passes);
+                            utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report).then(function(alpha_port) {
+                                utils.deployBeta(user_access.gitHubId, req.params.repo_id, report).then(function(beta_port) {
+                                    utils.deployProd(user_access.gitHubId, req.params.repo_id, report).then(function(prod_port) {
+                                        var ret = {
+                                            "alphaPort": alpha_port,
+                                            "betaPort": beta_port,
+                                            "prodPort": prod_port
+                                        }
+                                        console.log(ret);
+                                    });
+                                });
+                            });
                         });
                     })
                 })
