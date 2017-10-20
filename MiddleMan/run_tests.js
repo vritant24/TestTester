@@ -61,7 +61,7 @@ var parseScripts = (USER_NAME, REPO_NAME) => {
                         if(!json) {
                             reject("json empty");
                         }
-                        resolve({idx: json})  
+                        resolve({id: idx, log: json})  
                     }).catch((err) => reject("load file failed"))
                 })
             )
