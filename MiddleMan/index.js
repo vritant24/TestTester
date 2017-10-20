@@ -114,7 +114,7 @@ app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
     });
 
     var ret = {
-        status      : 200,
+        status: 200,
     }
     res.send(JSON.stringify(ret));
 });
