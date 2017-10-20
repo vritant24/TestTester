@@ -6,14 +6,15 @@ var child;
 
 //cd USER_NAME; mkdir repo; tar -zxvf REPO_NAME.tar.gz --directory ./repo --strip-components=1
 var unzipAndStore = (USER_NAME, REPO_NAME) => {
-    var uz_command = ('cd UserRepositories; cd ' + USER_NAME + '; mkdir ' + REPO_NAME + '/; tar -zxvf ' + REPO_NAME + '.tar.gz --directory ./' + REPO_NAME +
-    '/ --strip-components=1; rm ' + REPO_NAME + '.tar.gz')
-
+  return new Promise((resolve, reject) => {
+    var uz_command = ('cd UserRepositories; cd ' + USER_NAME + '; mkdir repos; mkdir repos/' + REPO_NAME + '/; tar -zxvf ' + REPO_NAME + '.tar.gz --directory ./repos/' + REPO_NAME +
+      '/ --strip-components=1')
     child = exec(uz_command, function(error, stdout, stderr){
-        if(error != null){
-            console.log('exec error: ' + error)
-        }
+      if(error != null){
+        console.log('exec error: ' + error)
+      }
     });
+  });
 }
 
 

@@ -14,6 +14,20 @@ var webhook = function(app) {
       console.log(comp);
       if (comp == 0) {
         console.log("This is the master branch");
+
+        db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
+          var user_access = user_access_row[0];
+          db.getRepoURL(req.params.repo_id).then(function(repo_rows) {
+              var repo = repo_rows[0];
+              github.getRepoDownload(user_access.gitHubId, repo.repoURL, req.params.repo_id, user_access.accessToken).then(function() {
+                  run_tests.unzipAndStore(user_access.gitHubId, req.params.repo_id).then(function() {
+                      run_tests.runTestScript(user_access.gitHubId, req.params.repo_id).then(function() {
+                          run_tests.parseScripts(user_access.gitHubId, req.params.repo_id);
+                      })
+                  })
+              });
+          });
+      });
         //find master, call brandon's function
         //brandonFunction(data)
       }
