@@ -76,12 +76,21 @@ var getUserRepoData = (access_token) => {
 }
 
 var getRepoDownload = (github_id, repo_url, repo_id, access_token) => {
-  var api_url = getApiUrl(repo_url);
-  var dl_command = ('cd UserRepositories; mkdir -p ' + github_id +
-                   '; cd ' + github_id + '; ' + 'curl -H "Authorization: token '
-                   + access_token + "\"" + ' -L ' + api_url + '/tarball' + " > " + repo_id + ".tar.gz;");
-
-  execDownload(dl_command);
+  return new Promise((resolve, reject) => {
+    var api_url = getApiUrl(repo_url);
+    var dl_command = ('cd UserRepositories; mkdir -p ' + github_id +
+                     '; cd ' + github_id + '; ' + 'curl -H "Authorization: token '
+                     + access_token + "\"" + ' -L ' + api_url + '/tarball' + " > " + repo_id + ".tar.gz;");
+  
+    child = exec(dl_command, function (error, stdout, stderr) {
+      if (error !== null) {
+        reject(error);
+      }
+      else {
+        resolve();
+      }
+    });
+  });
 }
 
 var getApiUrl = (repo_url)=> {
@@ -92,12 +101,7 @@ var getApiUrl = (repo_url)=> {
 }
 
 var execDownload = (dl_command) => {
-  child = exec(dl_command, function (error, stdout, stderr) {
-  if (error !== null) {
-    //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
-    console.log('exec error: ' + error);
-  }
-  });
+  
 
 }
 
