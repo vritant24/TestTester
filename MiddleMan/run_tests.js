@@ -12,7 +12,9 @@ var unzipAndStore = (USER_NAME, REPO_NAME) => {
     child = exec(uz_command, function(error, stdout, stderr){
       if(error != null){
         console.log('exec error: ' + error)
+        reject(error)
       }
+      resolve()
     });
   });
 }
@@ -26,14 +28,25 @@ var runTestScript = (USER_NAME, REPO_NAME) => {
     var rp_command = ('cd UserRepositories; cd ' + USER_NAME + '; cd ' + REPO_NAME  + '; mocha "test-prod/**/*.js" --reporter json > test-prod.json')
     
     var commandArray = [ra_command,rb_command,rp_command]
-
-    for(var command of commandArray){
-        child = exec(command, function(error, stdout, stderr){
-            if(error != null){
-                console.log('exec error: ' + error)
-            }   
-        });
-    }
+    var promises = [];
+    commandArray.forEach((command) => {
+        promises.push(
+            new Promise((resolve, reject) => {
+                child = exec(command, function(error, stdout, stderr){
+                    if(error != null){
+                        reject(error)
+                    } else {
+                        resolve()
+                    }
+                })
+            })
+        )
+    })
+    return new Promise((resolve, reject) => {
+        Promise.all(promises).then(() => {
+            resolve(testLogs)
+        }).catch(err => reject(err))
+    })
 }
 
 var parseScripts = (USER_NAME, REPO_NAME) => {
