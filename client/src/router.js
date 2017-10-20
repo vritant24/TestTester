@@ -60,7 +60,7 @@ export default Router.extend({
             fetch(api.authUser(query.code)) 
             .then(res => res.json())                                
             .then(res => {
-                if(res.status === status.success) {
+                if(res.status === status.ok) {
                     //add user data to global object
                     user.setUser(res.user)    
                     //redirect to repos

@@ -41,14 +41,21 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
     //Using Access Code, get Access Token from GitHub
     store_user.storeUserData(req.params.access_code, req.params.session_id).then(function(obj) {
         var ret = {
-            status  : 200,
+            status  : utils.statusCodes.ok,
             user    : {
                 github_id  : obj.id,
                 username   : obj.login
             }
         }
-        res.send(JSON.stringify(ret))
-    }).catch((err) => console.log("storeUserData failed"));
+        res.json(ret);
+    }).catch((err) => {
+        var ret = {
+            status  : utils.statusCodes.server_error,
+            user    : null,
+        }
+        console.log(err);
+        res.json(ret);
+    });
 });
 
 //return list of repositories
@@ -65,19 +72,19 @@ app.get('/repos/:session_id', function(req, res) {
     db.getRepos(req.params.session_id)
         .then(function(repo_rows) {
             ret = {
-                status      : 200,
+                status      : utils.statusCodes.ok,
                 github_id   : repo_rows[0].gitHubId,
                 repo_list   : repo_rows
             }
-            res.send(JSON.stringify(ret));
+            res.json(ret);
         })
         .catch(function(error) {
             ret = {
-                status      : 500,
+                status      : utils.statusCodes.server_error,
                 error       : error
             }
-            res.send(JSON.stringify(ret));
-        });
+            res.json(ret);
+        })
 });
 
 
@@ -91,27 +98,18 @@ app.get('/repos/:session_id', function(req, res) {
 app.get('/monitor/:session_id/:repo_id', function(req, res) {
     //TODO catch error and send status code
 
-    db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
-        var user_access = user_access_row[0];
-        db.getRepoURL(req.params.repo_id).then(function(repo_rows) {
-            var repo = repo_rows[0];
-            github.getRepoDownload(user_access.gitHubId, repo.repoURL, req.params.repo_id, user_access.accessToken).then(function() {
-                run_tests.unzipAndStore(user_access.gitHubId, req.params.repo_id).then(function() {
-                    run_tests.runTestScript(user_access.gitHubId, req.params.repo_id).then(function() {
-                        run_tests.parseScripts(user_access.gitHubId, req.params.repo_id).then(function(reports) {
-                            console.log(reports[0].log.stats.passes);
-                        });
-                    })
-                })
-            });
-        });
-      });
-
-    db.monitorUserRepo(req.params.repo_id);
-    var ret = {
-        status: 200,
-    }
-    res.send(JSON.stringify(ret));
+    db.monitorUserRepo(req.params.repo_id).then(() => {
+        var ret = {
+            status: utils.statusCodes.ok,
+        }
+        res.json(ret);
+    }).catch((err) => {
+        var ret = {
+            status: utils.statusCodes.server_error,
+        }
+        res.json(ret);
+    });
+    
 });
 
 //remove monitoring on a repo
@@ -123,16 +121,22 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
  */
 app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
     //TODO catch error and send status code
-    db.unmonitorUserRepo(req.params.repo_id);
-    db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
-        user_access = user_access_row[0];
-        utils.removeDownloadedRepo(user_access.gitHubId, req.params.repo_id);
+    db.unmonitorUserRepo(req.params.repo_id).then((resolve, reject) => {
+        db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
+            user_access = user_access_row[0];
+            utils.removeDownloadedRepo(user_access.gitHubId, req.params.repo_id);
+        }).then(() => {
+            var ret = {
+                status: utils.statusCodes.ok,
+            }
+            res.json(ret);
+        }).catch((err) => reject(err));
+    }).catch(err => {
+        var ret = {
+            status: utils.statusCodes.server_error,
+        }
+        res.json(ret);
     });
-
-    var ret = {
-        status      : 200,
-    }
-    res.send(JSON.stringify(ret));
 });
 
 
@@ -170,3 +174,5 @@ app.post('/webhooks', function (req, res) {
 });
 
 app.listen(8080);
+
+module.exports = app;

@@ -30,7 +30,7 @@ export default class Repos extends Component {
             fetch(api.getRepoList())
             .then(res => res.json())
             .then(res => {
-                if(res.status === status.success) {
+                if(res.status === status.ok) {
                     //check if right user
                     if(user.getUser().github_id !== res.github_id) {
                         this.setState ({ error : true })
@@ -64,7 +64,7 @@ export default class Repos extends Component {
         fetch(url)
         .then(res => res.json())
         .then(res => {
-            if(res.status === status.success) {
+            if(res.status === status.ok) {
                return true
             }
             else {
@@ -83,7 +83,7 @@ export default class Repos extends Component {
             fetch(url)
             .then(res => res.json())
             .then(res => {
-                if(res.status === status.success) {
+                if(res.status === status.ok) {
                     var newlist = this.state.repos.slice(0)
                     newlist[this.state.select_value].isMonitored = 1;
                     console.log(newlist)
@@ -109,7 +109,7 @@ export default class Repos extends Component {
             fetch(url)
             .then(res => res.json())
             .then(res => {
-                if(res.status === status.success) {
+                if(res.status === status.ok) {
                     var newlist = this.state.repos.slice(0)
                     newlist[idx].isMonitored = 0;
                     this.setState({
