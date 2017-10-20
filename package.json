@@ -22,6 +22,8 @@
     "ampersand-router": "^5.0.0",
     "ampersand-state": "^5.0.2",
     "body-parser": "^1.18.1",
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
     "consolidate": "^0.14.5",
     "cookie-parser": "^1.4.3",
     "express": "4.15.4",
@@ -30,6 +32,7 @@
     "github-download": "^0.5.0",
     "githubhook": "^1.9.1",
     "local-links": "^1.4.1",
+    "mocha": "^4.0.1",
     "mustache": "^2.3.0",
     "mysql": "^2.14.1",
     "nconf": "^0.8.4",
@@ -41,6 +44,7 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
+    "jest": "^21.2.1",
     "react-scripts": "1.0.13"
   }
 }
