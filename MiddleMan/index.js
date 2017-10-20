@@ -69,15 +69,15 @@ app.get('/repos/:session_id', function(req, res) {
                 github_id   : repo_rows[0].gitHubId,
                 repo_list   : repo_rows
             }
-            res.send(JSON.stringify(ret));
+            res.json(ret);
         })
         .catch(function(error) {
             ret = {
                 status      : 500,
                 error       : error
             }
-            res.send(JSON.stringify(ret));
-        });
+            res.json(ret);
+        })
 });
 
 
@@ -148,13 +148,13 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
 
 //github.getPublicRepoDownload("BMARX123", "https://github.com/BMARX123/SMSplash", "SMSplash")
 
-github.getRepoDownload("vritant24", "https://github.com/vritant24/Adwyse-Challenge", "Adwyse-Challenge").then(() => {
-    runtest.unzipAndStore("vritant24", "Adwyse-Challenge").then(() => {
-        runtest.runTestScript("vritant24", "Adwyse-Challenge").then(() => {
-            runtest.parseScripts("vritant24", "Adwyse-Challenge").then((logs) => console.log(logs))
-        }).catch(err => console.log(err))
-    }).catch(err => console.log(err))
-}).catch(err => console.log(err))
+// github.getRepoDownload("vritant24", "https://github.com/vritant24/Adwyse-Challenge", "Adwyse-Challenge").then(() => {
+//     runtest.unzipAndStore("vritant24", "Adwyse-Challenge").then(() => {
+//         runtest.runTestScript("vritant24", "Adwyse-Challenge").then(() => {
+//             runtest.parseScripts("vritant24", "Adwyse-Challenge").then((logs) => console.log(logs))
+//         }).catch(err => console.log(err))
+//     }).catch(err => console.log(err))
+// }).catch(err => console.log(err))
 //runtest.unzipAndStore("BMARX123", "HelpM
 // runtest.parseScripts("vritant24", "Adwyse-Challenge").then((logs) => console.log(logs))
 //runtest.unzipAndStore("BMARX123", "SMSplash")
@@ -169,3 +169,5 @@ app.post('/webhooks', function (req, res) {
 });
 
 app.listen(8080);
+
+module.exports = app;
