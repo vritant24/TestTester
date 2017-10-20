@@ -11,9 +11,8 @@ var webhook = function(app) {
       var masterPath = "refs/heads/master";
       //console.log(jsonObj.ref);
       var comp = path.localeCompare(masterPath);
-      console.log(comp);
       if (comp == 0) {
-        console.log("This is the master branch");
+        //master branch
 
         db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
           var user_access = user_access_row[0];
@@ -33,9 +32,19 @@ var webhook = function(app) {
       }
   });
 
-  webhookHandler.on('pull request', function(repo, data) {
-      //pull request
+  webhookHandler.on('pull_request', function(repo, data) {
+      console.log('Pull Request');
+      var jsonObj = JSON.parse(data.payload);
+      var path = jsonObj.ref;
+      var masterPath = "refs/heads/master";
+      //console.log(jsonObj.ref);
+      var comp = path.localeCompare(masterPath);
+      console.log(comp);
+      if (comp == 0) {
+        //master branch
+      }
   });
+}
 
 module.exports = {
   webhook
