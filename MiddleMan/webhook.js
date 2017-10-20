@@ -1,4 +1,6 @@
 var githubWebhook = require('express-github-webhook');
+var github = require('./github_com');
+var db = require('../db/db.js');
 
 var webhook = function(app) {
   //set up middleware
@@ -6,13 +8,17 @@ var webhook = function(app) {
   app.use(webhookHandler);
 
   webhookHandler.on('push', function(repo, data) {
+    console.log('Push');
       var jsonObj = JSON.parse(data.payload);
       var path = jsonObj.ref;
       var masterPath = "refs/heads/master";
-      //console.log(jsonObj.ref);
+      console.log(jsonObj.sender);
       var comp = path.localeCompare(masterPath);
       if (comp == 0) {
         //master branch
+
+        //get repo ID
+        //owner -> ID
 
         db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
           var user_access = user_access_row[0];
