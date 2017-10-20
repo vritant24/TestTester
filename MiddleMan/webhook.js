@@ -23,15 +23,6 @@ var webhook = function(app) {
       //pull request
   });
 
-  webhookHandler.on('commit_comment', function(repo, data) {
-      //for commits also
-  });
-}
-
-/*function brandonFunction(data) {
-  //do somethung with data
-}*/
-
 module.exports = {
   webhook
 }
