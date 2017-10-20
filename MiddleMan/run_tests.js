@@ -1,5 +1,5 @@
-var exec        = require('child_process').exec;
-var jsonfile    = require('jsonfile');
+var exec            = require('child_process').exec;
+const loadJsonFile  = require('load-json-file');
 var child;
 
 //WORKS, BUT IF YOU TRY TO CALL THIS AFTER A DOWNLOAD IT FAILS. NEED TO WAIT
@@ -38,15 +38,30 @@ var runTestScript = (USER_NAME, REPO_NAME) => {
 var parseScripts = (USER_NAME, REPO_NAME) => {
     console.log("TEST")
     var fileNameArray = ["test-alpha.json","test-beta.json","test-prod.json"]
+    paths = fileNameArray.map((file) => "./UserRepositories/" + USER_NAME + "/" + REPO_NAME + "/" + file)
     var testLogs = []
-    for(var testFile of fileNameArray){
-        var tempString = "./UserRepositories/" + USER_NAME + "/" + REPO_NAME + "/" + testFile
-        
-        jsonfile.readFileSync(tempString, (err, obj) => {
-            testLogs.push(obj);
-            console.log(obj)  
-        })      
-    }
+    
+    var promises = []
+    
+    paths.forEach((path) => {
+        promises.push(
+            new Promise((resolve, reject) => {
+                loadJsonFile(path).then(json => {
+                    if(!json) {
+                        reject("json empty");
+                    }
+                    testLogs.push(json)
+                    resolve()  
+                }).catch((err) => reject("load file failed"))
+            })
+        )
+    })
+
+    return new Promise((resolve, reject) => {
+        Promise.all(promises).then(() => {
+            resolve(testLogs)
+        }).catch(err => reject(err))
+    })
 }
 
 module.exports = {

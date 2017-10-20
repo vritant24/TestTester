@@ -149,12 +149,12 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
 });
 
 //github.getPublicRepoDownload("BMARX123", "https://github.com/BMARX123/SMSplash", "SMSplash")
-//github.getPublicRepoDownload("vritant24", "https://github.com/vritant24/Adwyse-Challenge", "Adwyse-Challenge")
+// github.getPublicRepoDownload("vritant24", "https://github.com/vritant24/Adwyse-Challenge", "Adwyse-Challenge")
 
-//runtest.unzipAndStore("vritant24", "Adwyse-Challenge")
-//runtest.runTestScript("vritant24", "Adwyse-Challenge")
+// runtest.unzipAndStore("vritant24", "Adwyse-Challenge")
+// runtest.runTestScript("vritant24", "Adwyse-Challenge")
 //runtest.unzipAndStore("BMARX123", "HelpM
-//runtest.parseScripts("vritant24", "Adwyse-Challenge")
+// runtest.parseScripts("vritant24", "Adwyse-Challenge").then((logs) => console.log(logs))
 //runtest.unzipAndStore("BMARX123", "SMSplash")
 //runtest.runTestScript("BMARX123", "HelpMe")
 //runtest.runTestScript("BMARX123", "SMSplash")

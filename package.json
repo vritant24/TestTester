@@ -29,6 +29,7 @@
     "express-session": "^1.15.5",
     "github-download": "^0.5.0",
     "githubhook": "^1.9.1",
+    "load-json-file": "^3.0.0",
     "local-links": "^1.4.1",
     "mocha": "^4.0.1",
     "mustache": "^2.3.0",
