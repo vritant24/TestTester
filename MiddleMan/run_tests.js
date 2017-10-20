@@ -54,14 +54,14 @@ var parseScripts = (USER_NAME, REPO_NAME) => {
     paths = fileNameArray.map((file) => "./UserRepositories/" + USER_NAME + "/" + REPO_NAME + "/" + file)
     return new Promise((resolve, reject) => {
         var promises = []
-        paths.forEach((path) => {
+        paths.forEach((path, idx) => {
             promises.push(
                 new Promise((resolve, reject) => {
                     loadJsonFile(path).then(json => {
                         if(!json) {
                             reject("json empty");
                         }
-                        resolve(json)  
+                        resolve({id: idx, log: json})  
                     }).catch((err) => reject("load file failed"))
                 })
             )
