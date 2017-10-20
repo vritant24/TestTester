@@ -46,6 +46,18 @@ exports.getUserAccessFromSession = (sessionToken) => {
   });
 }
 
+exports.getUserAccessFromUserId = (userId) => {
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT * FROM UserAccess WHERE gitHubId = ? LIMIT 1;', userId, function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 exports.getRepoURL = (repoId) => {
   return new Promise((resolve, reject) => {
     connection.query('SELECT repoURL FROM Repo WHERE repoId = ?;', repoId, function(error, results) {

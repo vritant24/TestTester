@@ -49,7 +49,7 @@ var runTestScript = (USER_NAME, REPO_NAME) => {
 }
 
 var parseScripts = (USER_NAME, REPO_NAME) => {
-    console.log("TEST")
+    //console.log("TEST")
     var fileNameArray = ["test-alpha.json","test-beta.json","test-prod.json"]
     paths = fileNameArray.map((file) => "./UserRepositories/" + USER_NAME + "/" + REPO_NAME + "/" + file)
     return new Promise((resolve, reject) => {
