@@ -87,7 +87,7 @@ var getRepoDownload = (github_id, repo_url, repo_id, access_token) => {
         reject(error);
       }
       else {
-        resolve;
+        resolve();
       }
     });
   });
