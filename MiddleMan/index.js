@@ -104,7 +104,6 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
                                 utils.deployProd(user_access.gitHubId, req.params.repo_id, report)])
                             .then(values => {
                                 console.log(values);
-                                // resolve();
                             }).catch(err => console.log(err));
                         }).catch(err => console.log(err));
                     }).catch(err => console.log(err));
