@@ -47,18 +47,14 @@ exports.deployAlpha = (github_id, repo_id, report) => {
     firstOpenPort(10000, 65000)
     .then(port => { 
       if(!report[0].log.stats.failures) {
-        var deployAlpha = 'cd UserRepositories; cd ' + github_id + '; cd ' + repo_id + '; PORT=' + port + ' npm start';
-        child = exec(deployAlpha, function (error, stdout, stderr) {
-          if (error !== null) {
-            //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
-            console.log('exec error: ' + error);
-          }
-          else {
-            console.log(error);
-            resolve(port);
-          }
+        var deployAlpha = 'cd UserRepositories; cd ' + github_id + '; cd ' + repo_id + '; npm install; PORT=' + port + ' npm start';
+        child = exec(deployAlpha, (error, stdout, stderr) => {
+          //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
+          console.log('exec error: ' + error);
+          reject(error);
         });
       }
+      resolve(port)
     })
     .catch(error => {
       reject(error);
@@ -74,13 +70,9 @@ exports.deployBeta = (github_id, repo_id, report) => {
       if(!report[0].log.stats.failures) {
         var deployBeta = 'cd UserRepositories; cd ' + github_id + '; cd ' + repo_id + '; PORT=' + port + ' npm start';
         child = exec(deployBeta, function (error, stdout, stderr) {
-          if (error !== null) {
-            //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
-            console.log('exec error: ' + error);
-          }
-          else {
-            console.log(error);
-          }
+          //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
+          console.log('exec error: ' + error);
+          reject(error);
         });
       }
       resolve(port);
@@ -99,13 +91,9 @@ exports.deployProd = (github_id, repo_id, report) => {
       if(!report[0].log.stats.failures) {
         var deployProd = 'cd UserRepositories; cd ' + github_id + '; cd ' + repo_id + '; PORT=' + port + ' npm start';
         child = exec(deployProd, function (error, stdout, stderr) {
-          if (error !== null) {
-            //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
-            console.log('exec error: ' + error);
-          }
-          else {
-            console.log(error);
-          }
+          //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
+          console.log('exec error: ' + error);
+          reject(error);
         });
       }
       resolve(port);
