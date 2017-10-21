@@ -91,33 +91,27 @@ app.get('/repos/:session_id', function(req, res) {
 app.get('/monitor/:session_id/:repo_id', function(req, res) {
     //TODO catch error and send status code
 
-    db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
+    db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row, resolve, reject) {
         var user_access = user_access_row[0];
         db.getRepoURL(req.params.repo_id).then(function(repo_rows) {
             var repo = repo_rows[0];
-            github.getRepoDownload(user_access.gitHubId, repo.repoURL, req.params.repo_id, user_access.accessToken).then(function() {
+            github.getRepoDownload(user_access.gitHubId, repo.repoURL, req.params.repo_id, user_access.accessToken).then(function(resolve, reject) {
                 run_tests.unzipAndStore(user_access.gitHubId, req.params.repo_id).then(function() {
                     run_tests.runTestScript(user_access.gitHubId, req.params.repo_id).then(function() {
                         run_tests.parseScripts(user_access.gitHubId, req.params.repo_id).then(function(report) {
                             console.log(report[0].log.stats.passes);
-                            utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report).then(function(alpha_port) {
-                                utils.deployBeta(user_access.gitHubId, req.params.repo_id, report).then(function(beta_port) {
-                                    utils.deployProd(user_access.gitHubId, req.params.repo_id, report).then(function(prod_port) {
-                                        var ret = {
-                                            "alphaPort": alpha_port,
-                                            "betaPort": beta_port,
-                                            "prodPort": prod_port
-                                        }
-                                        console.log(ret);
-                                    });
-                                });
-                            });
-                        });
-                    })
-                })
-            });
-        });
-      });
+                            Promise.all([utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report), utils.deployBeta(user_access.gitHubId, req.params.repo_id, report), 
+                                utils.deployProd(user_access.gitHubId, req.params.repo_id, report)])
+                            .then(values => {
+                                console.log(values);
+                                // resolve();
+                            }).catch(err => console.log(err));
+                        }).catch(err => console.log(err));
+                    }).catch(err => console.log(err));
+                }).catch(err => console.log(err));
+            }).catch(err => console.log(err));
+        }).catch(err => console.log(err));
+      }).catch(err => console.log(err));
 
     db.monitorUserRepo(req.params.repo_id);
     var ret = {
