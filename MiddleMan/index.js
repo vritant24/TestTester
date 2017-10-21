@@ -109,6 +109,7 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
                             // Promise.all([utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report)])    
                             .then(values => {
                                 console.log(values);
+                                res.json({status: 200})
                             })
                             .catch(err => {
                                 console.log(err);
