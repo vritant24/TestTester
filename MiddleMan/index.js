@@ -111,36 +111,50 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
                     .then(() => {
                         run_tests.parseScripts(user_access.gitHubId, req.params.repo_id)
                         .then((report) => {
+                            db.monitorUserRepo(req.params.repo_id);
                             Promise.all([utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report), utils.deployBeta(user_access.gitHubId, req.params.repo_id, report), 
                                 utils.deployProd(user_access.gitHubId, req.params.repo_id, report)])
                             // Promise.all([utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report)])    
                             .then(values => {
                                 console.log(values);
-                                res.json({status: 200})
+                                res.json({status: utils.statusCodes.ok})
                             })
                             .catch(err => {
                                 console.log(err);
+                                res.json({status: utils.statusCodes.server_error})
                             })
-                            return;
                         })
-                        .catch(err => console.log(err));
+                        .catch(err => {
+                            console.log(err);
+                            res.json({status: utils.statusCodes.server_error})
+                        })
                     })
-                    .catch(err => console.log(err));
+                    .catch(err => {
+                        console.log(err);
+                        res.json({status: utils.statusCodes.server_error})
+                    })
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                    console.log(err);
+                    res.json({status: utils.statusCodes.server_error})
+                })
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err);
+                res.json({status: utils.statusCodes.server_error})
+            })
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+            res.json({status: utils.statusCodes.server_error})
+        })
     })
-    .catch(err => console.log(err));
-
-    db.monitorUserRepo(req.params.repo_id);
-    var ret = {
-        status: 200,
-    }
-    res.send(JSON.stringify(ret));
-});
+    .catch(err => {
+        console.log(err);
+        res.json({status: utils.statusCodes.server_error})
+    })
+    // res.json({status: utils.statusCodes.server_error})
+}); 
 
 //remove monitoring on a repo
 //return object as
