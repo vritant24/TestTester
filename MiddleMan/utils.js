@@ -121,3 +121,12 @@ exports.packageRepoData = (repo_data) => {
   });
   return db_repos_data;
 };
+
+exports.statusCodes = {
+  ok            : 200,
+  bad_request   : 400,
+  unauthorised  : 401,
+  forbidden     : 403,
+  notFound      : 404,
+  server_error  : 500
+}

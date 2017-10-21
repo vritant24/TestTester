@@ -1,4 +1,7 @@
 var githubWebhook = require('express-github-webhook');
+var github = require('./github_com.js');
+var db = require('../db/db.js');
+var run_tests = require('./run_tests.js');
 
 var webhook = function(app) {
   //set up middleware
@@ -9,20 +12,19 @@ var webhook = function(app) {
       var jsonObj = JSON.parse(data.payload);
       var path = jsonObj.ref;
       var masterPath = "refs/heads/master";
-      //console.log(jsonObj.ref);
+      //console.log(jsonObj.sender.id);
       var comp = path.localeCompare(masterPath);
-      console.log(comp);
       if (comp == 0) {
-        console.log("This is the master branch");
+        //console.log("This is the master branch");
 
-        db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
+        db.getUserAccessFromUserId(jsonObj.sender.id).then(function(user_access_row) {
           var user_access = user_access_row[0];
-          db.getRepoURL(req.params.repo_id).then(function(repo_rows) {
+          db.getRepoURL(jsonObj.repository.id).then(function(repo_rows) {
               var repo = repo_rows[0];
-              github.getRepoDownload(user_access.gitHubId, repo.repoURL, req.params.repo_id, user_access.accessToken).then(function() {
-                  run_tests.unzipAndStore(user_access.gitHubId, req.params.repo_id).then(function() {
-                      run_tests.runTestScript(user_access.gitHubId, req.params.repo_id).then(function() {
-                          run_tests.parseScripts(user_access.gitHubId, req.params.repo_id);
+              github.getRepoDownload(user_access.gitHubId, repo.repoURL, jsonObj.repository.id, user_access.accessToken).then(function() {
+                  run_tests.unzipAndStore(user_access.gitHubId, jsonObj.repository.id).then(function() {
+                      run_tests.runTestScript(user_access.gitHubId, jsonObj.repository.id).then(function() {
+                          run_tests.parseScripts(user_access.gitHubId, jsonObj.repository.id);
                       })
                   })
               });
@@ -35,11 +37,30 @@ var webhook = function(app) {
 
   webhookHandler.on('pull request', function(repo, data) {
       //pull request
-  });
+      var jsonObj = JSON.parse(data.payload);
+      var path = jsonObj.ref;
+      var masterPath = "refs/heads/master";
+  
+      console.log(jsonObj.sender.id);
+      var comp = path.localeCompare(masterPath);
+      if (comp == 0) {
+        //console.log("This is the master branch");
 
-  webhookHandler.on('commit_comment', function(repo, data) {
-      //for commits also
-  });
+        db.getUserAccessFromUserId(jsonObj.sender.id).then(function(user_access_row) {
+          var user_access = user_access_row[0];
+          db.getRepoURL(jsonObj.repository.id).then(function(repo_rows) {
+              var repo = repo_rows[0];
+              github.getRepoDownload(user_access.gitHubId, repo.repoURL, jsonObj.repository.id, user_access.accessToken).then(function() {
+                  run_tests.unzipAndStore(user_access.gitHubId, jsonObj.repository.id).then(function() {
+                      run_tests.runTestScript(user_access.gitHubId, jsonObj.repository.id).then(function() {
+                          run_tests.parseScripts(user_access.gitHubId, jsonObj.repository.id);
+                      })
+                  })
+              });
+          });
+        });
+    }
+});
 }
 
 /*function brandonFunction(data) {

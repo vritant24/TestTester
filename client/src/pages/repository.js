@@ -23,7 +23,7 @@ export default class Repository extends Component {
             fetch(api.getRepo())
             .then(res => res.json())
             .then(res => {
-                if(res.status === status.success) {
+                if(res.status === status.ok) {
                     this.setState({
                         repo_name           : res.repo_name,
                         server_endpoints    : res.server_endpoints,
