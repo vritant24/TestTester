@@ -171,6 +171,12 @@ app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
     //TODO catch error and send status code
     db.unmonitorUserRepo(req.params.repo_id).then((resolve, reject) => {
         db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
+            db.getRepoDeployment(req.params.repo_id).then(function(deploymentData) {
+                db.releaseRepoDeployment(req.params.repo_id);
+                deploymentData.forEach(function(deployment) {
+                    utils.killProcessOnPort(deployment.port);
+                });
+            });
             user_access = user_access_row[0];
             utils.removeDownloadedRepo(user_access.gitHubId, req.params.repo_id);
         }).then(() => {
