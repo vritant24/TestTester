@@ -46,7 +46,7 @@ exports.deployAlpha = (github_id, repo_id, report) => {
     var deployed_ports = [];
     firstOpenPort(10000, 65000)
     .then(port => { 
-      if(!report[0].log.stats.failures) {
+      if(!report.alpha.stats.failures) {
         var deployAlpha = 'cd UserRepositories; cd ' + github_id + '; cd ' + repo_id + '; npm install; PORT=' + port + ' npm start';
         child = exec(deployAlpha, (error, stdout, stderr) => {
           //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
@@ -67,7 +67,7 @@ exports.deployBeta = (github_id, repo_id, report) => {
     var deployed_ports = [];
     firstOpenPort(10000, 65000)
     .then(port => {
-      if(!report[0].log.stats.failures) {
+      if(!report.beta.stats.failures) {
         var deployBeta = 'cd UserRepositories; cd ' + github_id + '; cd ' + repo_id + '; PORT=' + port + ' npm start';
         child = exec(deployBeta, function (error, stdout, stderr) {
           //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
@@ -88,7 +88,7 @@ exports.deployProd = (github_id, repo_id, report) => {
     var deployed_ports = [];
     firstOpenPort(10000, 65000)
     .then(port => {
-      if(!report[0].log.stats.failures) {
+      if(!report.prod.stats.failures) {
         var deployProd = 'cd UserRepositories; cd ' + github_id + '; cd ' + repo_id + '; PORT=' + port + ' npm start';
         child = exec(deployProd, function (error, stdout, stderr) {
           //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
