@@ -104,6 +104,17 @@ exports.deployProd = (github_id, repo_id, report) => {
   });
 }
 
+exports.killProcessOnPort = (port) => {
+  return new Promise((resolve, reject) => {
+    var killProcess = 'kill $(lsof -t -i:' + port + ')';
+    child = exec(killProcess, function (error, stdout, stderr) {
+      //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
+      console.log('exec error: ' + error);
+      reject(error);
+    });
+  });
+};
+
 exports.packageRepoData = (repo_data) => {
   var parsed_repos_data = JSON.parse(repo_data);
   var db_repos_data = [];
