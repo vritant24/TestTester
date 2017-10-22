@@ -189,3 +189,15 @@ exports.getRepoDeployment = (repoId) => {
     });
   });
 }
+
+exports.getAllDeployments = () => {
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT RepoDeployments.repoId, RepoDeployments.port, UserRepo.gitHubId FROM RepoDeployments INNER JOIN UserRepo ON  RepoDeployments.repoId = UserRepo.repoId;', function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
