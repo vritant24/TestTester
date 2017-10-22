@@ -66,7 +66,12 @@ var parseScripts = (USER_NAME, REPO_NAME) => {
             )
         })
         Promise.all(promises).then((jsons) => {
-            resolve(jsons)
+            var arr = ['alpha', 'beta', 'prod'];
+            var obj = jsons.reduce((acc, curr) => {
+                acc[arr[curr.id]] = curr.log;
+                return acc;
+            }, {})
+            resolve(obj)
         }).catch(err => reject(err))
     })
 }

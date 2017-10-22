@@ -15,7 +15,7 @@ export default Router.extend({
         'logout'    : 'logout',
         'repos'     : 'repos',
         'notfound'  : 'notFound',
-        'repo/:repo_id'          : 'repoPage',
+        'repo/:repo_id/:repo_name': 'repoPage',
         'auth/callback?:query'   : 'authCallback',
 
         '*404' : 'notFound'      
@@ -87,8 +87,8 @@ export default Router.extend({
         renderPage(<Repos/>)
     },
 
-    repoPage (repo_id) {
-        renderPage(<Repository repoID={repo_id}/>)
+    repoPage (repo_id, repo_name) {
+        renderPage(<Repository repoID={repo_id} repoName={repo_name}/>)
     },
 
     notFound () {
