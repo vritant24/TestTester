@@ -187,7 +187,6 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
             res.json({
                 status              : utils.statusCodes.ok,
                 repo_id             : req.params.repo_id,
-                repo_name           : user_access.repoName,
                 server_endpoints    : server_endpoints,
                 test_logs           : logs
             });
@@ -196,7 +195,6 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
             res.json({
                 status              : utils.statusCodes.server_error,
                 repo_id             : null,
-                repo_name           : null,
                 server_endpoints    : null,
                 test_logs           : null
             })
@@ -207,7 +205,6 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
         res.json({
             status              : utils.statusCodes.server_error,
             repo_id             : null,
-            repo_name           : null,
             server_endpoints    : null,
             test_logs           : null
         })

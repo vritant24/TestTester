@@ -67,9 +67,9 @@ export default class Repos extends Component {
         }
     }
 
-    onRepoClick(repo_id) {
+    onRepoClick(repo_id, repo_name) {
         //internal navigation
-        var url = '/repo/' + repo_id;
+        var url = '/repo/' + repo_id + '/' + repo_name;
         app.router.history.navigate(url)
     }
 
@@ -162,7 +162,7 @@ export default class Repos extends Component {
                 monitored_repo_list.push(
                     <Repository 
                     repoName={repo.repoName} 
-                    onclick={this.onRepoClick.bind(this,repo.repoId)} 
+                    onclick={this.onRepoClick.bind(this,repo.repoId, repo.repoName)} 
                     ondelete={this.dontMonitorRepo.bind(this, repo.repoId, idx)} 
                     key={repo.repoId} />
                 )
