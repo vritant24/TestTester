@@ -153,3 +153,27 @@ exports.unmonitorUserRepo = (repoId) => {
     });
   });
 }
+
+exports.addRepoDeployment = (deploymentData) => {
+  return new Promise((resolve, reject) => {
+    connection.query('INSERT INTO RepoDeployments VALUES(?, ?)', deploymentData ,function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+exports.releaseRepoDeployment = (repoId) => {
+  return new Promise((resolve, reject) => {
+    connection.query('DELETE FROM RepoDeployments WHERE repoId = ?', repoId ,function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
