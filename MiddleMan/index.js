@@ -112,10 +112,14 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
                         run_tests.parseScripts(user_access.gitHubId, req.params.repo_id)
                         .then((report) => {
                             db.monitorUserRepo(req.params.repo_id);
-                            Promise.all([utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report), utils.deployBeta(user_access.gitHubId, req.params.repo_id, report), 
-                                utils.deployProd(user_access.gitHubId, req.params.repo_id, report)])
+                            Promise.all([utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report), 
+                                         utils.deployBeta(user_access.gitHubId, req.params.repo_id, report), 
+                                         utils.deployProd(user_access.gitHubId, req.params.repo_id, report)])
                             // Promise.all([utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report)])    
                             .then(values => {
+                                values.forEach(function(port) {
+                                    db.addRepoDeployment([req.params.repo_id, port]);
+                                })
                                 console.log(values);
                                 res.json({status: utils.statusCodes.ok})
                             })
@@ -167,6 +171,12 @@ app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
     //TODO catch error and send status code
     db.unmonitorUserRepo(req.params.repo_id).then((resolve, reject) => {
         db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
+            db.getRepoDeployment(req.params.repo_id).then(function(deploymentData) {
+                db.releaseRepoDeployment(req.params.repo_id);
+                deploymentData.forEach(function(deployment) {
+                    utils.killProcessOnPort(deployment.port);
+                });
+            });
             user_access = user_access_row[0];
             utils.removeDownloadedRepo(user_access.gitHubId, req.params.repo_id);
         }).then(() => {
