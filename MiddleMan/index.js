@@ -9,7 +9,6 @@ var hook        = require('./webhook.js')
 var utils       = require('./utils.js');
 var run_tests   = require('./run_tests.js');
 
-
 var app = express();
 
 //Serve react and static files
@@ -147,7 +146,7 @@ app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
     //TODO catch error and send status code
     db.unmonitorUserRepo(req.params.repo_id).then((resolve, reject) => {
         db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
-            user_access = user_access_row[0];
+            var user_access = user_access_row[0];
             utils.removeDownloadedRepo(user_access.gitHubId, req.params.repo_id);
         }).then(() => {
             var ret = {
@@ -178,16 +177,42 @@ app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
 app.get('/repo/:session_id/:repo_id', function(req, res) {
     //need to run the first get() function to make sure the user exist
     //TODO fill ret with actual data
-    var test_logs = ["test1","test2","test3","test4"];
     server_endpoints = ["123", "456", "789"]
-    var ret = {
-        status              : 200,
-        repo_id             : req.params.repo_id,
-        repo_name           : 'abc',
-        server_endpoints    : server_endpoints,
-        test_logs           : test_logs
-    }
-    res.send(JSON.stringify(ret));
+    db.getUserAccessFromSession(req.params.session_id)
+    .then(function(user_access_row) {
+        var user_access = user_access_row[0];
+        var id = user_access.gitHubId;
+        var repo_id = req.params.repo_id;
+        run_tests.parseScripts(id, repo_id).then((logs) => {
+            res.json({
+                status              : utils.statusCodes.ok,
+                repo_id             : req.params.repo_id,
+                repo_name           : user_access.repoName,
+                server_endpoints    : server_endpoints,
+                test_logs           : logs
+            });
+        })
+        .catch(err => {
+            res.json({
+                status              : utils.statusCodes.server_error,
+                repo_id             : null,
+                repo_name           : null,
+                server_endpoints    : null,
+                test_logs           : null
+            })
+            console.log(err);
+        });
+    })
+    .catch(err => {
+        res.json({
+            status              : utils.statusCodes.server_error,
+            repo_id             : null,
+            repo_name           : null,
+            server_endpoints    : null,
+            test_logs           : null
+        })
+        console.log(err);
+    });
 });
 
 //Receive notification from GitHub that commit to master has been made

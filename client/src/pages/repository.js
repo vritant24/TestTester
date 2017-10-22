@@ -8,9 +8,11 @@ export default class Repository extends Component {
         super(props);
         this.state = {
             repo_name           : null,
-            repo_id             : this.props.repo_id,
+            repo_id             : this.props.repoID,
             server_endpoints    : null,
-            test_logs           : null
+            test_logs           : null,
+            error               : false,
+            error_string        : null
         }
     }
 
@@ -20,9 +22,11 @@ export default class Repository extends Component {
             window.location = '/'
         }
         else {
-            fetch(api.getRepo())
+            console.log(this.state.repo_id)
+            fetch(api.getRepo(this.state.repo_id))
             .then(res => res.json())
             .then(res => {
+                console.log(res.test_logs)
                 if(res.status === status.ok) {
                     this.setState({
                         repo_name           : res.repo_name,
