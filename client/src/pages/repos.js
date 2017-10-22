@@ -17,6 +17,7 @@ export default class Repos extends Component {
         this.state = {
             repos           : null,
             error           : false,
+            error_string    : null,
             select_value    : null
         }
     }
@@ -33,8 +34,12 @@ export default class Repos extends Component {
                 if(res.status === status.ok) {
                     //check if right user
                     if(user.getUser().github_id !== res.github_id) {
-                        this.setState ({ error : true })
+                        this.setState ({ 
+                            error           : true,
+                            error_string    : "encountered error user doesn't match "
+                        })
                         console.log("wrong user")
+
                     } 
                     else {
                         this.setState({ 
@@ -45,11 +50,20 @@ export default class Repos extends Component {
                 } 
                 //check for expired session
                 else {
-                    this.setState ({ error : true })
+                    this.setState ({ 
+                        error           : true,
+                        error_string    : "encountered error in getting repos " + res.status
+                    })
                     console.log(res)
                 }
             })
-            .catch((error) => console.log(error))
+            .catch((error) => {
+                this.setState ({ 
+                    error           : true,
+                    error_string    : "encountered error parsing in http response "
+                })
+                console.log(error)
+            })
         }
     }
 
@@ -59,22 +73,6 @@ export default class Repos extends Component {
         app.router.history.navigate(url)
     }
 
-    async apiCallMontioring(url, repo_id, err) {
-        repo_id = repo_id + ""
-        fetch(url)
-        .then(res => res.json())
-        .then(res => {
-            if(res.status === status.ok) {
-               return true
-            }
-            else {
-                this.setState ({ error : true })
-                return false;
-            }
-        })
-        .catch((error) => console.log(error))
-    }
-    
     monitorRepo() {
         var repo_id = this.state.repos[this.state.select_value].repoId
         var url = api.monitorRepo(repo_id)
@@ -88,16 +86,26 @@ export default class Repos extends Component {
                     newlist[this.state.select_value].isMonitored = 1;
                     console.log(newlist)
                     this.setState({
+                        error: false,
                         repos: newlist
                     })
                     console.log("monitored")
                 }
                 else {
-                    this.setState ({ error : true })
+                    this.setState ({ 
+                        error           : true,
+                        error_string    : "encountered error in monitoring repo " + res.status
+                    })
                     console.log("failed monitoring")
                 }
             })
-            .catch((error) => console.log(error))
+            .catch((error) => {
+                this.setState ({ 
+                    error           : true,
+                    error_string    : "encountered error in parsing http response "
+                })
+                console.log(error)
+            })
         }
     }
 
@@ -113,16 +121,26 @@ export default class Repos extends Component {
                     var newlist = this.state.repos.slice(0)
                     newlist[idx].isMonitored = 0;
                     this.setState({
+                        error: false,
                         repos: newlist
                     })
                     console.log("unmonitored")
                 }
                 else {
-                    this.setState ({ error : true })
+                    this.setState ({ 
+                        error           : true,
+                        error_string    : "encountered error in unmonitoring repo " + res.status
+                    })
                     console.log("failed unmonitored")
                 }
             })
-            .catch((error) => console.log(error))
+            .catch((error) => {
+                this.setState ({ 
+                    error           : true,
+                    error_string    : "encountered error in parsing http response "
+                })
+                console.log(error)
+            })
         }
     }
 
@@ -168,7 +186,7 @@ export default class Repos extends Component {
             unmonitored_repo_list = [empty, ...unmonitored_repo_list]
    
         //There was an error    
-        var showError = "THERE WAS AN ERROR"
+        var showError = this.state.error_string
 
         return (
             <div>
