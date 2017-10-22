@@ -35,9 +35,9 @@ export default class Repository extends Component {
                 } else {
                     this.setState ({ 
                         error           : true,
-                        error_string    : "repository not found " + res.status
+                        error_string    : "repository not found or was not formatted properly" + res.status
                     })
-                    console.log("error : repo not found")
+                    console.log("error : repo not found or was not formatted properly")
                 }
             })
             .catch((error) => {
