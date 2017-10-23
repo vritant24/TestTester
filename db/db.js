@@ -189,3 +189,15 @@ exports.getRepoDeployment = (repoId) => {
     });
   });
 }
+
+exports.getAllReposDeployed = () => {
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT * FROM RepoDeployments', function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
