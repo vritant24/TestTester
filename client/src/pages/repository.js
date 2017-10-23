@@ -32,7 +32,11 @@ export default class Repository extends Component {
                         server_endpoints    : res.server_endpoints,
                         test_logs           : res.test_logs    
                     })
-                } else {
+                }
+                else if(res.status === status.unauthorised){
+                    window.location = '/'
+                } 
+                else {
                     this.setState ({ 
                         error           : true,
                         error_string    : "repository not found or was not formatted properly" + res.status
@@ -43,7 +47,7 @@ export default class Repository extends Component {
             .catch((error) => {
                 this.setState ({ 
                     error           : true,
-                    error_string    : "encountered error in parsing http response "
+                    error_string    : "encountered error in receiving http response "
                 })
                 console.log(error)
             })

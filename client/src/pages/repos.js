@@ -48,7 +48,9 @@ export default class Repos extends Component {
                         })
                     }
                 } 
-                //check for expired session
+                else if(res.status === status.unauthorised){
+                    window.location = '/'
+                } 
                 else {
                     this.setState ({ 
                         error           : true,
@@ -60,7 +62,7 @@ export default class Repos extends Component {
             .catch((error) => {
                 this.setState ({ 
                     error           : true,
-                    error_string    : "encountered error parsing in http response "
+                    error_string    : "encountered error recceiving in http response "
                 })
                 console.log(error)
             })
@@ -84,7 +86,6 @@ export default class Repos extends Component {
                 if(res.status === status.ok) {
                     var newlist = this.state.repos.slice(0)
                     newlist[this.state.select_value].isMonitored = 1;
-                    console.log(newlist)
                     this.setState({
                         error: false,
                         repos: newlist
@@ -102,7 +103,7 @@ export default class Repos extends Component {
             .catch((error) => {
                 this.setState ({ 
                     error           : true,
-                    error_string    : "encountered error in parsing http response "
+                    error_string    : "encountered error in receiving http response "
                 })
                 console.log(error)
             })
@@ -137,7 +138,7 @@ export default class Repos extends Component {
             .catch((error) => {
                 this.setState ({ 
                     error           : true,
-                    error_string    : "encountered error in parsing http response "
+                    error_string    : "encountered error in receiving http response "
                 })
                 console.log(error)
             })
