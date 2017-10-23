@@ -72,7 +72,7 @@ exports.getRepoURL = (repoId) => {
 
 exports.addUser = (userData) => {
   return new Promise((resolve, reject) => {
-    connection.query('INSERT IGNORE INTO User SET gitHubId = ?, username = ?', userData ,function(error, results) {
+    connection.query('INSERT IGNORE INTO User SET gitHubId = ?, username = ?', userData, function(error, results) {
       if (error) {
         reject(error);
       } else {
@@ -84,7 +84,7 @@ exports.addUser = (userData) => {
 
 exports.addUserAccess = (userData) => {
   return new Promise((resolve, reject) => {
-    connection.query('REPLACE INTO UserAccess SET gitHubId = ?, accessToken = ?', userData ,function(error, results) {
+    connection.query('REPLACE INTO UserAccess SET gitHubId = ?, accessToken = ?', userData, function(error, results) {
       if (error) {
         reject(error);
       } else {
@@ -96,7 +96,7 @@ exports.addUserAccess = (userData) => {
 
 exports.addUserSession = (userData) => {
   return new Promise((resolve, reject) => {
-    connection.query('REPLACE INTO UserSession SET gitHubId = ?, sessionToken = ?', userData ,function(error, results) {
+    connection.query('REPLACE INTO UserSession SET gitHubId = ?, sessionToken = ?', userData, function(error, results) {
       if (error) {
         reject(error);
       } else {
@@ -108,7 +108,7 @@ exports.addUserSession = (userData) => {
 
 exports.addUserRepo = (userRepoData) => {
   return new Promise((resolve, reject) => {
-    connection.query('INSERT IGNORE INTO UserRepo SET repoId = ?, gitHubId = ?, isMonitored = ?', userRepoData ,function(error, results) {
+    connection.query('INSERT IGNORE INTO UserRepo SET repoId = ?, gitHubId = ?, isMonitored = ?', userRepoData, function(error, results) {
       if (error) {
         reject(error);
       } else {
@@ -120,7 +120,7 @@ exports.addUserRepo = (userRepoData) => {
 
 exports.addRepo = (repoData) => {
   return new Promise((resolve, reject) => {
-    connection.query('INSERT IGNORE INTO Repo SET RepoId = ?, RepoName = ?, RepoUrl = ?, IsPublic = ?', repoData ,function(error, results) {
+    connection.query('INSERT IGNORE INTO Repo SET RepoId = ?, RepoName = ?, RepoUrl = ?, IsPublic = ?', repoData, function(error, results) {
       if (error) {
         reject(error);
       } else {
@@ -132,7 +132,7 @@ exports.addRepo = (repoData) => {
 
 exports.monitorUserRepo = (repoId) => {
   return new Promise((resolve, reject) => {
-    connection.query('UPDATE UserRepo SET isMonitored = 1 WHERE repoId = ?', repoId ,function(error, results) {
+    connection.query('UPDATE UserRepo SET isMonitored = 1 WHERE repoId = ?', repoId, function(error, results) {
       if (error) {
         reject(error);
       } else {
@@ -144,7 +144,43 @@ exports.monitorUserRepo = (repoId) => {
 
 exports.unmonitorUserRepo = (repoId) => {
   return new Promise((resolve, reject) => {
-    connection.query('UPDATE UserRepo SET isMonitored = 0 WHERE repoId = ?', repoId ,function(error, results) {
+    connection.query('UPDATE UserRepo SET isMonitored = 0 WHERE repoId = ?', repoId, function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+exports.addRepoDeployment = (deploymentData) => {
+  return new Promise((resolve, reject) => {
+    connection.query('INSERT INTO RepoDeployments VALUES(?, ?)', deploymentData, function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+exports.releaseRepoDeployment = (repoId) => {
+  return new Promise((resolve, reject) => {
+    connection.query('DELETE FROM RepoDeployments WHERE repoId = ?', repoId, function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+exports.getRepoDeployment = (repoId) => {
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT * FROM RepoDeployments WHERE repoId = ?', repoId, function(error, results) {
       if (error) {
         reject(error);
       } else {

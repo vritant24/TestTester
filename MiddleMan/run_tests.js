@@ -49,7 +49,6 @@ var runTestScript = (USER_NAME, REPO_NAME) => {
 }
 
 var parseScripts = (USER_NAME, REPO_NAME) => {
-    //console.log("TEST")
     var fileNameArray = ["test-alpha.json","test-beta.json","test-prod.json"]
     paths = fileNameArray.map((file) => "./UserRepositories/" + USER_NAME + "/" + REPO_NAME + "/" + file)
     return new Promise((resolve, reject) => {
@@ -67,7 +66,12 @@ var parseScripts = (USER_NAME, REPO_NAME) => {
             )
         })
         Promise.all(promises).then((jsons) => {
-            resolve(jsons)
+            var arr = ['alpha', 'beta', 'prod'];
+            var obj = jsons.reduce((acc, curr) => {
+                acc[arr[curr.id]] = curr.log;
+                return acc;
+            }, {})
+            resolve(obj)
         }).catch(err => reject(err))
     })
 }

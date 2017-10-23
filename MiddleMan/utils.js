@@ -1,3 +1,4 @@
+var firstOpenPort = require('first-open-port');
 var exec = require('child_process').exec;
 var child;
 
@@ -39,6 +40,80 @@ exports.removeDownloadedRepo = (github_id, repo_id) => {
     }
 });
 }
+
+exports.deployAlpha = (github_id, repo_id, report) => {
+  return new Promise((resolve, reject) => {
+    var deployed_ports = [];
+    firstOpenPort(10000, 65000)
+    .then(port => { 
+      if(!report.alpha.stats.failures) {
+        var deployAlpha = 'cd UserRepositories; cd ' + github_id + '; cd ' + repo_id + '; npm install; PORT=' + port + ' npm start';
+        child = exec(deployAlpha, (error, stdout, stderr) => {
+          //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
+          console.log('exec error: ' + error);
+          reject(error);
+        });
+      }
+      resolve(port)
+    })
+    .catch(error => {
+      reject(error);
+    })
+  });
+}
+
+exports.deployBeta = (github_id, repo_id, report) => {
+  return new Promise((resolve, reject) => {
+    var deployed_ports = [];
+    firstOpenPort(10000, 65000)
+    .then(port => {
+      if(!report.beta.stats.failures) {
+        var deployBeta = 'cd UserRepositories; cd ' + github_id + '; cd ' + repo_id + '; PORT=' + port + ' npm start';
+        child = exec(deployBeta, function (error, stdout, stderr) {
+          //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
+          console.log('exec error: ' + error);
+          reject(error);
+        });
+      }
+      resolve(port);
+    })
+    .catch(error => {
+      reject(error);
+    })
+  });
+}
+
+exports.deployProd = (github_id, repo_id, report) => {
+  return new Promise((resolve, reject) => {
+    var deployed_ports = [];
+    firstOpenPort(10000, 65000)
+    .then(port => {
+      if(!report.prod.stats.failures) {
+        var deployProd = 'cd UserRepositories; cd ' + github_id + '; cd ' + repo_id + '; PORT=' + port + ' npm start';
+        child = exec(deployProd, function (error, stdout, stderr) {
+          //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
+          console.log('exec error: ' + error);
+          reject(error);
+        });
+      }
+      resolve(port);
+    })
+    .catch(error => {
+      reject(error);
+    })
+  });
+}
+
+exports.killProcessOnPort = (port) => {
+  return new Promise((resolve, reject) => {
+    var killProcess = 'kill $(lsof -t -i:' + port + ')';
+    child = exec(killProcess, function (error, stdout, stderr) {
+      //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
+      console.log('exec error: ' + error);
+      reject(error);
+    });
+  });
+};
 
 exports.packageRepoData = (repo_data) => {
   var parsed_repos_data = JSON.parse(repo_data);
