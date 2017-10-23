@@ -17,6 +17,14 @@ var webhook = function(app) {
         db.getUserAccessFromUserId(jsonObj.sender.id)
         .then(function(user_access_row) {
         var user_access = user_access_row[0];
+
+        db.getRepoDeployment(jsonObj.repository.id).then(function(deploymentData) {
+            db.releaseRepoDeployment(jsonObj.repository.id);
+            deploymentData.forEach(function(deployment) {
+                utils.killProcessOnPort(deployment.port);
+            });
+        });
+
         db.getRepoURL(jsonObj.repository.id)
             .then(function(repo_rows) {
                     var repo = repo_rows[0];
@@ -26,7 +34,24 @@ var webhook = function(app) {
                         .then(function() {
                             run_tests.runTestScript(user_access.gitHubId, jsonObj.repository.id)
                             .then(function() {
-                                run_tests.parseScripts(user_access.gitHubId, jsonObj.repository.id);
+                                run_tests.parseScripts(user_access.gitHubId, jsonObj.repository.id)
+                                .then((report) => {
+                                    Promise.all([utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report), 
+                                                 utils.deployBeta(user_access.gitHubId, req.params.repo_id, report), 
+                                                 utils.deployProd(user_access.gitHubId, req.params.repo_id, report)])
+                                    .then(values => {
+                                        console.log(values);
+                                        values.forEach(function(port) {
+                                            db.addRepoDeployment([req.params.repo_id, port])
+                                            .catch(err => console.log(err));
+                                        })
+                                        res.json({status: utils.statusCodes.ok})
+                                    })
+                                    .catch(err => {
+                                        console.log(err);
+                                        res.json({status: utils.statusCodes.server_error})
+                                    })
+                                })
                             })
                             .catch(err => console.log(err))
                         })
@@ -51,6 +76,13 @@ var webhook = function(app) {
       if (comp == 0) {
         //console.log("This is the master branch");
 
+        db.getRepoDeployment(jsonObj.repository.id).then(function(deploymentData) {
+            db.releaseRepoDeployment(jsonObj.repository.id);
+            deploymentData.forEach(function(deployment) {
+                utils.killProcessOnPort(deployment.port);
+            });
+        });
+
         db.getUserAccessFromUserId(jsonObj.sender.id)
         .then(function(user_access_row) {
             var user_access = user_access_row[0];
@@ -63,7 +95,24 @@ var webhook = function(app) {
                     .then(function() {
                         run_tests.runTestScript(user_access.gitHubId, jsonObj.repository.id)
                         .then(function() {
-                            run_tests.parseScripts(user_access.gitHubId, jsonObj.repository.id);
+                            run_tests.parseScripts(user_access.gitHubId, jsonObj.repository.id)
+                            .then((report) => {
+                                Promise.all([utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report), 
+                                             utils.deployBeta(user_access.gitHubId, req.params.repo_id, report), 
+                                             utils.deployProd(user_access.gitHubId, req.params.repo_id, report)])
+                                .then(values => {
+                                    console.log(values);
+                                    values.forEach(function(port) {
+                                        db.addRepoDeployment([req.params.repo_id, port])
+                                        .catch(err => console.log(err));
+                                    })
+                                    res.json({status: utils.statusCodes.ok})
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                    res.json({status: utils.statusCodes.server_error})
+                                })
+                            })
                         })
                         .catch(err => console.log(err))
                     })

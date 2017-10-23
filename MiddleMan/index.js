@@ -114,7 +114,6 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
                             Promise.all([utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report), 
                                          utils.deployBeta(user_access.gitHubId, req.params.repo_id, report), 
                                          utils.deployProd(user_access.gitHubId, req.params.repo_id, report)])
-                            // Promise.all([utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report)])    
                             .then(values => {
                                 console.log(values);
                                 values.forEach(function(port) {
