@@ -38,7 +38,8 @@ hook.webhook(app);
  */
 app.get('/authenticate/:access_code/:session_id', function(req, res) {
     //Using Access Code, get Access Token from GitHub
-    store_user.storeUserData(req.params.access_code, req.params.session_id).then(function(obj) {
+    store_user.storeUserData(req.params.access_code, req.params.session_id)
+    .then((obj) => {
         var ret = {
             status  : utils.statusCodes.ok,
             user    : {
@@ -47,7 +48,8 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
             }
         }
         res.json(ret);
-    }).catch((err) => {
+    })
+    .catch((err) => {
         var ret = {
             status  : utils.statusCodes.server_error,
             user    : null,
@@ -69,21 +71,21 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
 app.get('/repos/:session_id', function(req, res) {
     var ret;
     db.getRepos(req.params.session_id)
-        .then(function(repo_rows) {
-            ret = {
-                status      : utils.statusCodes.ok,
-                github_id   : repo_rows[0].gitHubId,
-                repo_list   : repo_rows
-            }
-            res.json(ret);
-        })
-        .catch(function(error) {
-            ret = {
-                status      : utils.statusCodes.server_error,
-                error       : error
-            }
-            res.json(ret);
-        })
+    .then((repo_rows) => {
+        ret = {
+            status      : utils.statusCodes.ok,
+            github_id   : repo_rows[0].gitHubId,
+            repo_list   : repo_rows
+        }
+        res.json(ret);
+    })
+    .catch((error) => {
+        ret = {
+            status      : utils.statusCodes.unauthorised,
+            error       : error
+        }
+        res.json(ret);
+    })
 });
 
 
@@ -99,26 +101,29 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
     db.getUserAccessFromSession(req.params.session_id)
     .then((user_access_row, resolve, reject) => {
         var user_access = user_access_row[0];
+        var id = user_access.gitHubId;
+        var access_token = user_access.accessToken;
+        var repo_id = req.params.repo_id;
         db.getRepoURL(req.params.repo_id)
         .then((repo_rows) => {
             var repo = repo_rows[0];
-            github.getRepoDownload(user_access.gitHubId, repo.repoURL, req.params.repo_id, user_access.accessToken)
+            github.getRepoDownload(id, repo.repoURL, repo_id, access_token)
             .then((resolve, reject) => {
-                run_tests.unzipAndStore(user_access.gitHubId, req.params.repo_id)
+                run_tests.unzipAndStore(id, repo_id)
                 .then(() => {
-                    run_tests.runTestScript(user_access.gitHubId, req.params.repo_id)
+                    run_tests.runTestScript(id, repo_id)
                     .then(() => {
-                        run_tests.parseScripts(user_access.gitHubId, req.params.repo_id)
+                        run_tests.parseScripts(id, repo_id)
                         .then((report) => {
-                            db.monitorUserRepo(req.params.repo_id);
-                            Promise.all([utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report), 
-                                         utils.deployBeta(user_access.gitHubId, req.params.repo_id, report), 
-                                         utils.deployProd(user_access.gitHubId, req.params.repo_id, report)])
+                            db.monitorUserRepo(repo_id);
+                            Promise.all([utils.deployAlpha(id, repo_id, report), 
+                                         utils.deployBeta(id, repo_id, report), 
+                                         utils.deployProd(id, repo_id, report)])
                             // Promise.all([utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report)])    
                             .then(values => {
                                 console.log(values);
                                 values.forEach(function(port) {
-                                    db.addRepoDeployment([req.params.repo_id, port])
+                                    db.addRepoDeployment([repo_id, port])
                                     .catch(err => console.log(err));
                                 })
                                 res.json({status: utils.statusCodes.ok})
@@ -155,7 +160,7 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
     })
     .catch(err => {
         console.log(err);
-        res.json({status: utils.statusCodes.server_error})
+        res.json({status: utils.statusCodes.unauthorised})
     })
     // res.json({status: utils.statusCodes.server_error})
 }); 
@@ -169,25 +174,33 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
  */
 app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
     //TODO catch error and send status code
-    db.unmonitorUserRepo(req.params.repo_id).then((resolve, reject) => {
-        db.getUserAccessFromSession(req.params.session_id).then(function(user_access_row) {
-            db.getRepoDeployment(req.params.repo_id).then(function(deploymentData) {
-                db.releaseRepoDeployment(req.params.repo_id);
-                deploymentData.forEach(function(deployment) {
+    db.getUserAccessFromSession(req.params.session_id)
+    .then((user_access_row) => {
+        var user_access = user_access_row[0];
+        var id = user_access.gitHubId;
+        var repo_id = req.params.repo_id;
+        db.unmonitorUserRepo(repo_id)
+        .then((resolve, reject) => {
+            db.getRepoDeployment(repo_id)
+            .then((deploymentData) => {
+                db.releaseRepoDeployment(repo_id);
+                deploymentData.forEach((deployment) => {
                     utils.killProcessOnPort(deployment.port);
                 });
             });
-            user_access = user_access_row[0];
-            utils.removeDownloadedRepo(user_access.gitHubId, req.params.repo_id);
-        }).then(() => {
+            utils.removeDownloadedRepo(id, repo_id);
+        })
+        .then(() => {
             var ret = {
                 status: utils.statusCodes.ok,
             }
             res.json(ret);
-        }).catch((err) => reject(err));
-    }).catch(err => {
+        })
+        .catch((err) => reject(err));
+    })
+    .catch(err => {
         var ret = {
-            status: utils.statusCodes.server_error,
+            status: utils.statusCodes.unauthorised,
         }
         res.json(ret);
     });
@@ -208,14 +221,15 @@ app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
 app.get('/repo/:session_id/:repo_id', function(req, res) {
     //need to run the first get() function to make sure the user exist
     //TODO fill ret with actual data
-    db.getRepoDeployment(req.params.repo_id)
-    .then((server_endpoints) => {
-        db.getUserAccessFromSession(req.params.session_id)
-        .then(function(user_access_row) {
-            var user_access = user_access_row[0];
-            var id = user_access.gitHubId;
-            var repo_id = req.params.repo_id;
-            run_tests.parseScripts(id, repo_id).then((logs) => {
+    db.getUserAccessFromSession(req.params.session_id)
+    .then((user_access_row) => {
+        var user_access = user_access_row[0];
+        var id = user_access.gitHubId;
+        var repo_id = req.params.repo_id;
+        db.getRepoDeployment(req.params.repo_id)
+        .then((server_endpoints) => {
+            run_tests.parseScripts(id, repo_id)
+            .then((logs) => {
                 res.json({
                     status              : utils.statusCodes.ok,
                     repo_id             : req.params.repo_id,
@@ -245,7 +259,7 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
     })
     .catch(err => {
         res.json({
-            status              : utils.statusCodes.server_error,
+            status              : utils.statusCodes.unauthorised,
             repo_id             : null,
             server_endpoints    : null,
             test_logs           : null
