@@ -36,6 +36,25 @@ hook.webhook(app);
  *  }
  * }
  */
+
+
+ db.getAllReposDeployed().then(function(reposToDeploy){
+
+    for(var i = 0; i < reposToDeploy.length; i++){
+        var toDeploy = reposToDeploy[i];
+
+        //NONFUNCTIOAL GET GITHUBID AND WHERE TO DEPLOY
+        Promise.all([utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report), 
+            utils.deployBeta(user_access.gitHubId, req.params.repo_id, report), 
+            utils.deployProd(user_access.gitHubId, req.params.repo_id, report)])
+    }
+
+ })
+
+
+
+
+
 app.get('/authenticate/:access_code/:session_id', function(req, res) {
     //Using Access Code, get Access Token from GitHub
     store_user.storeUserData(req.params.access_code, req.params.session_id).then(function(obj) {
