@@ -101,8 +101,8 @@ export default class Repository extends Component {
         var t_logs      = this.state.test_logs
         var test_list
 
-        var ends = (s_ends) ? s_ends.map( (s_e) => <li key={s_e}>{s_e}</li> ) : null
-
+        var ends = (s_ends) ? s_ends.map( (s_e) => <li key={s_e.port}>{s_e.port}</li> ) : null
+        
         var alpha_tests = (t_logs) ? t_logs.alpha : null;
         var beta_tests  = (t_logs) ? t_logs.beta  : null;
         var prod_tests  = (t_logs) ? t_logs.prod  : null;

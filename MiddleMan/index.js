@@ -116,10 +116,11 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
                                          utils.deployProd(user_access.gitHubId, req.params.repo_id, report)])
                             // Promise.all([utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report)])    
                             .then(values => {
-                                values.forEach(function(port) {
-                                    db.addRepoDeployment([req.params.repo_id, port]);
-                                })
                                 console.log(values);
+                                values.forEach(function(port) {
+                                    db.addRepoDeployment([req.params.repo_id, port])
+                                    .catch(err => console.log(err));
+                                })
                                 res.json({status: utils.statusCodes.ok})
                             })
                             .catch(err => {
@@ -207,19 +208,29 @@ app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
 app.get('/repo/:session_id/:repo_id', function(req, res) {
     //need to run the first get() function to make sure the user exist
     //TODO fill ret with actual data
-    server_endpoints = ["123", "456", "789"]
-    db.getRepoDeployment(req.params.repo_id).then(obj => (console.log(obj)))
-    db.getUserAccessFromSession(req.params.session_id)
-    .then(function(user_access_row) {
-        var user_access = user_access_row[0];
-        var id = user_access.gitHubId;
-        var repo_id = req.params.repo_id;
-        run_tests.parseScripts(id, repo_id).then((logs) => {
-            res.json({
-                status              : utils.statusCodes.ok,
-                repo_id             : req.params.repo_id,
-                server_endpoints    : server_endpoints,
-                test_logs           : logs
+    db.getRepoDeployment(req.params.repo_id)
+    .then((server_endpoints) => {
+        db.getUserAccessFromSession(req.params.session_id)
+        .then(function(user_access_row) {
+            var user_access = user_access_row[0];
+            var id = user_access.gitHubId;
+            var repo_id = req.params.repo_id;
+            run_tests.parseScripts(id, repo_id).then((logs) => {
+                res.json({
+                    status              : utils.statusCodes.ok,
+                    repo_id             : req.params.repo_id,
+                    server_endpoints    : server_endpoints,
+                    test_logs           : logs
+                });
+            })
+            .catch(err => {
+                res.json({
+                    status              : utils.statusCodes.server_error,
+                    repo_id             : null,
+                    server_endpoints    : null,
+                    test_logs           : null
+                });
+                console.log(err);
             });
         })
         .catch(err => {
@@ -228,7 +239,7 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
                 repo_id             : null,
                 server_endpoints    : null,
                 test_logs           : null
-            })
+            });
             console.log(err);
         });
     })
@@ -238,7 +249,7 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
             repo_id             : null,
             server_endpoints    : null,
             test_logs           : null
-        })
+        });
         console.log(err);
     });
 });
