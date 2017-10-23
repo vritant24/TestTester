@@ -208,7 +208,8 @@ app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
 app.get('/repo/:session_id/:repo_id', function(req, res) {
     //need to run the first get() function to make sure the user exist
     //TODO fill ret with actual data
-    db.getRepoDeployment(req.params.repo_id).then((server_endpoints) => {
+    db.getRepoDeployment(req.params.repo_id)
+    .then((server_endpoints) => {
         db.getUserAccessFromSession(req.params.session_id)
         .then(function(user_access_row) {
             var user_access = user_access_row[0];
