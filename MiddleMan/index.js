@@ -38,35 +38,32 @@ hook.webhook(app);
  */
 
 
-db.getAllReposDeployed().then(function (reposToDeploy) {
-    var count = 1;
-    console.log(reposToDeploy)
-    for (var i in reposToDeploy) {
-        console.log(reposToDeploy[i])
-        prom(reposToDeploy[i])
-    }
-})
+// db.getAllReposDeployed().then(function (reposToDeploy) {
+//     var count = 1;
+//     console.log(reposToDeploy)
+//     for (var i in reposToDeploy) {
+//         console.log(reposToDeploy[i])
+//         prom(reposToDeploy[i])
+//     }
+// })
 
-var prom = (toDeploy) => {
-    db.getUserFromRepoId(toDeploy.repoId).then(function (userId_rows) {
-        console.log("----------------------------------")
-        console.log(userId_rows);
-        console.log(toDeploy.port);
-        console.log("----------------------------------")
-        var userId = userId_rows[0].gitHubId
-        //console.log(toDeploy)
-        utils.deployNoLog(userId, toDeploy.repoId, toDeploy.port).then(port => {
-            console.log("--------------SOMETHING--------------------")
-            console.log(port);
-            console.log("----------------------------------")
-        })
-        .catch(err => console.log(err))            
-    })
-    .catch(err => console.log(err))
-}
-
-
-
+// var prom = (toDeploy) => {
+//     db.getUserFromRepoId(toDeploy.repoId).then(function (userId_rows) {
+//         console.log("----------------------------------")
+//         console.log(userId_rows);
+//         console.log(toDeploy.port);
+//         console.log("----------------------------------")
+//         var userId = userId_rows[0].gitHubId
+//         //console.log(toDeploy)
+//         utils.deployNoLog(userId, toDeploy.repoId, toDeploy.port).then(port => {
+//             console.log("--------------SOMETHING--------------------")
+//             console.log(port);
+//             console.log("----------------------------------")
+//         })
+//         .catch(err => console.log(err))            
+//     })
+//     .catch(err => console.log(err))
+// }
 
 app.get('/authenticate/:access_code/:session_id', function (req, res) {
     //Using Access Code, get Access Token from GitHub
