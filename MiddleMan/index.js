@@ -1,13 +1,13 @@
-var express     = require('express');
-var engines     = require('consolidate');
-var githubhook  = require('githubhook');
-var github      = require('./github_com');
-var runtest     = require('./run_tests.js')
-var db          = require('../db/db.js');
-var store_user  = require('./store_user')
-var hook        = require('./webhook.js')
-var utils       = require('./utils.js');
-var run_tests   = require('./run_tests.js');
+var express = require('express');
+var engines = require('consolidate');
+var githubhook = require('githubhook');
+var github = require('./github_com');
+var runtest = require('./run_tests.js')
+var db = require('../db/db.js');
+var store_user = require('./store_user')
+var hook = require('./webhook.js')
+var utils = require('./utils.js');
+var run_tests = require('./run_tests.js');
 
 var app = express();
 
@@ -36,23 +36,55 @@ hook.webhook(app);
  *  }
  * }
  */
-app.get('/authenticate/:access_code/:session_id', function(req, res) {
+
+
+db.getAllReposDeployed().then(function (reposToDeploy) {
+    var count = 1;
+    console.log(reposToDeploy)
+    for (var i in reposToDeploy) {
+        console.log(reposToDeploy[i])
+        prom(reposToDeploy[i])
+    }
+})
+
+var prom = (toDeploy) => {
+    db.getUserFromRepoId(toDeploy.repoId).then(function (userId_rows) {
+        console.log("----------------------------------")
+        console.log(userId_rows);
+        console.log(toDeploy.port);
+        console.log("----------------------------------")
+        var userId = userId_rows[0].gitHubId
+        //console.log(toDeploy)
+        utils.deployNoLog(userId, toDeploy.repoId, toDeploy.port).then(port => {
+            console.log("--------------SOMETHING--------------------")
+            console.log(port);
+            console.log("----------------------------------")
+        })
+        .catch(err => console.log(err))            
+    })
+    .catch(err => console.log(err))
+}
+
+
+
+
+app.get('/authenticate/:access_code/:session_id', function (req, res) {
     //Using Access Code, get Access Token from GitHub
     store_user.storeUserData(req.params.access_code, req.params.session_id)
     .then((obj) => {
         var ret = {
-            status  : utils.statusCodes.ok,
-            user    : {
-                github_id  : obj.id,
-                username   : obj.login
+            status: utils.statusCodes.ok,
+            user: {
+                github_id: obj.id,
+                username: obj.login
             }
         }
         res.json(ret);
     })
     .catch((err) => {
         var ret = {
-            status  : utils.statusCodes.server_error,
-            user    : null,
+            status: utils.statusCodes.server_error,
+            user: null,
         }
         console.log(err);
         res.json(ret);
@@ -68,7 +100,7 @@ app.get('/authenticate/:access_code/:session_id', function(req, res) {
  *  repo_list : []
  * }
  */
-app.get('/repos/:session_id', function(req, res) {
+app.get('/repos/:session_id', function (req, res) {
     var ret;
     db.getRepos(req.params.session_id)
     .then((repo_rows) => {
@@ -172,7 +204,7 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
  *  status : 200,
  * }
  */
-app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
+app.get('/dont-monitor/:session_id/:repo_id', function (req, res) {
     //TODO catch error and send status code
     db.getUserAccessFromSession(req.params.session_id)
     .then((user_access_row) => {
@@ -218,7 +250,7 @@ app.get('/dont-monitor/:session_id/:repo_id', function(req, res) {
  *  test-logs : []
  * }
  */
-app.get('/repo/:session_id/:repo_id', function(req, res) {
+app.get('/repo/:session_id/:repo_id', function (req, res) {
     //need to run the first get() function to make sure the user exist
     //TODO fill ret with actual data
     db.getUserAccessFromSession(req.params.session_id)
@@ -244,15 +276,14 @@ app.get('/repo/:session_id/:repo_id', function(req, res) {
                     server_endpoints    : null,
                     test_logs           : null
                 });
-                console.log(err);
-            });
+            })
         })
         .catch(err => {
             res.json({
-                status              : utils.statusCodes.server_error,
-                repo_id             : null,
-                server_endpoints    : null,
-                test_logs           : null
+                status: utils.statusCodes.server_error,
+                repo_id: null,
+                server_endpoints: null,
+                test_logs: null
             });
             console.log(err);
         });
