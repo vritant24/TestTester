@@ -189,3 +189,27 @@ exports.getRepoDeployment = (repoId) => {
     });
   });
 }
+
+exports.getAllReposDeployed = () => {
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT * FROM RepoDeployments', function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+exports.getUserFromRepoId = (repoId) => {
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT gitHubId FROM UserRepo WHERE repoId = ?', repoId, function(error, results) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
