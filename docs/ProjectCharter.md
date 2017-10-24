@@ -8,7 +8,7 @@
 
 * Most CD solutions are either proprietary or costly. We will develop a simplified version of continuous deployment that can be utilized easily and cheaply by anyone. 
 
-* Our workflow for this is as follows: A user utilizes our client side application to enter the details of their GitHub repository to be monitored and their server credentials for automatic application deployment. This information is securely transferred to our server where we begin to monitor the github repository on a timed loop. When we detect new changes being pushed into the user specified branch, we pull the branch and compile the application source on our central server. Next, we begin to attempt to deploy their changes to alpha, beta, and prod. Each stage runs the user specified tests, and if the tests pass then the application is deployed to the correlative stage. 
+* Our workflow for this is as follows: A user utilizes our client side application to login with GitHub, and choose a  repository to be monitored. This information is securely transferred to our server where we begin to monitor the github repository on a timed loop. When we detect new changes being pushed into the user specified branch, we pull the branch and compile the application source on our central server. Next, we begin to attempt to deploy their changes to alpha, beta, and prod. Each stage runs the user specified tests, and if the tests pass then the application is deployed to the correlative stage. 
 
 * For example, in alpha deployment, all unit tests must pass. For beta deployment, all subsystem tests must pass and alpha deployment must succeed. Finally, for prod, full integration tests must pass and the 2 prior stages must succeed. 
 
@@ -25,7 +25,7 @@
 * Connect our central server to GitHub API in order to pull code from the master branch of the repository and run through its test suite whenever a new pull request is created.
 
 
-* Create a web interface that allows the user to add a repository and deployment servers as well as monitor the testing on the code being pushed to said servers.
+* Create a web interface that allows the user to add a repository as well as monitor the testing on the code being pushed to said servers.
 
 
 * Create an easy way to connect pre existing servers to our CD software in order to allow for smooth deployments of the clients code.
@@ -43,10 +43,10 @@
 * Product user group : Software Developers or Software Testers that work on continuously deployed code.
 
 ## Deliverables:
-* An intermediate server that interacts with GitHub API, runs user’s tests and generates test logs and pushes code to specified development endpoints.
+* An intermediate server that interacts with GitHub API, runs user’s tests and generates test logs and pushes code to development endpoints.
 
 
-* A RESTful API that sends the test logs from the intermediate server to the web client.
+* An API that interacts with the web client.
 
 
 * A web interface written with React.js to let user monitor the continuous deployment being done on the intermediate server.
