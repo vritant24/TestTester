@@ -201,7 +201,7 @@ export default class Repos extends Component {
                 <NavBar/>
                 <h1>Repositories</h1>
                 {this.state.error && showError}
-                <h3>for instructions on formatting your repository, go <a href="https://github.com/vritant24/TestTester/master/docs/instructions.md">here</a></h3> 
+                <h3>for instructions on formatting your repository, go <a href="https://github.com/vritant24/TestTester/blob/master/docs/instructions.md">here</a></h3> 
                 <RepoContainer>
                     {monitored_repo_list}
                 </RepoContainer>
