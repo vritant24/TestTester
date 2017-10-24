@@ -40,30 +40,30 @@ hook.webhook(app);
 
 db.getAllReposDeployed().then(function (reposToDeploy) {
     var count = 1;
-    //console.log(reposToDeploy)
-    for (var i = 0; i < reposToDeploy.length; i++) {
-        var toDeploy = reposToDeploy[i];
-        db.getUserFromRepoId(91724628).then(function (userId) {
-            //console.log(userId);
-            if (count == 1) {
-               // Promise.all([utils.deployAlpha(userId, toDeploy.repoId, report)])
-
-                count++;
-            } else if (count == 2) {
-                //Promise.all([utils.deployBeta(userId, toDeploy.repoId, report)])
-
-                count++;
-            } else {
-                //Promise.all([utils.deployProd(userId, toDeploy.repoId, report)])
-
-                count = 0;
-            }
-        })
-
+    console.log(reposToDeploy)
+    for (var i in reposToDeploy) {
+        console.log(reposToDeploy[i])
+        prom(reposToDeploy[i])
     }
-
 })
 
+var prom = (toDeploy) => {
+    db.getUserFromRepoId(toDeploy.repoId).then(function (userId_rows) {
+        console.log("----------------------------------")
+        console.log(userId_rows);
+        console.log(toDeploy.port);
+        console.log("----------------------------------")
+        var userId = userId_rows[0].gitHubId
+        //console.log(toDeploy)
+        utils.deployNoLog(userId, toDeploy.repoId, toDeploy.port).then(port => {
+            console.log("--------------SOMETHING--------------------")
+            console.log(port);
+            console.log("----------------------------------")
+        })
+        .catch(err => console.log(err))            
+    })
+    .catch(err => console.log(err))
+}
 
 
 
