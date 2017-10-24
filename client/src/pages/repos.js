@@ -92,6 +92,13 @@ export default class Repos extends Component {
                     })
                     console.log("monitored")
                 }
+                else if(res.status === status.test_run_failure) {
+                    this.setState ({ 
+                        error           : true,
+                        error_string    : "repository not formatted properly. Please follow instructions " + res.status
+                    })
+                    console.log("error : repo not formatted properly. Please follow instructions")
+                } 
                 else {
                     this.setState ({ 
                         error           : true,
@@ -194,6 +201,7 @@ export default class Repos extends Component {
                 <NavBar/>
                 <h1>Repositories</h1>
                 {this.state.error && showError}
+                <h3>for instructions on formatting your repository, go <a href="https://github.com/vritant24/TestTester/master/docs/instructions.md">here</a></h3> 
                 <RepoContainer>
                     {monitored_repo_list}
                 </RepoContainer>
