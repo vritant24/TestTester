@@ -9,7 +9,7 @@
 - When on the correct repository, go to the “Settings” tab near the top of the page.
 - Click “Webhooks”
 - Click “Add Webhook”
-- Add this “http://52.200.13.118:3000/webhooks” to the payload URL
+- Add this http://52.200.13.118:3000/webhooks to the payload URL
 - Make sure the content-type is in the form of “application/x-www-form-urlencoded”
 - Under the option of “Which events would you like to trigger this webhook?” click the “Let me select individual events” option and click “Push” and “Pull Request”. 
 - Make sure the “Active” option is clicked.
