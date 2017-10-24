@@ -135,11 +135,6 @@ exports.packageRepoData = (repo_data) => {
 
 exports.deployNoLog = (github_id, repo_id, port) => {
   return new Promise((resolve, reject) => {
-    //var deployed_ports = [];
-    console.log("------------nolog----------------------")
-    console.log(port);
-    console.log("----------------------------------")
-
     var deployAlpha = 'cd UserRepositories; cd ' + github_id + '; cd ' + repo_id + '; npm install; PORT=' + port + ' npm start';
     child = exec(deployAlpha, (error, stdout, stderr) => {
       //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
