@@ -92,6 +92,13 @@ export default class Repos extends Component {
                     })
                     console.log("monitored")
                 }
+                else if(res.status === status.test_run_failure) {
+                    this.setState ({ 
+                        error           : true,
+                        error_string    : "repository not formatted properly. Please follow instructions " + res.status
+                    })
+                    console.log("error : repo not formatted properly. Please follow instructions")
+                } 
                 else {
                     this.setState ({ 
                         error           : true,

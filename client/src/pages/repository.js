@@ -33,9 +33,23 @@ export default class Repository extends Component {
                         test_logs           : res.test_logs    
                     })
                 }
-                else if(res.status === status.unauthorised){
+                else if(res.status === status.unauthorised) {
                     window.location = '/'
                 } 
+                else if(res.status === status.test_run_failure) {
+                    this.setState ({ 
+                        error           : true,
+                        error_string    : "repository not formatted properly. Please follow instructions " + res.status
+                    })
+                    console.log("error : repo not formatted properly. Please follow instructions")
+                } 
+                else if(res.status === status.repo_error) {
+                    this.setState ({ 
+                        error           : true,
+                        error_string    : "repository not found " + res.status
+                    })
+                    console.log("error : repo not found")
+                }
                 else {
                     this.setState ({ 
                         error           : true,
@@ -105,7 +119,7 @@ export default class Repository extends Component {
         var t_logs      = this.state.test_logs
         var test_list
 
-        var ends = (s_ends) ? s_ends.map( (s_e) => <li key={s_e.port}>{s_e.port}</li> ) : null
+        var ends = (s_ends) ? s_ends.map( (s_e) => <li key={s_e.port}>{'http://52.200.13.118:' + s_e.port}</li> ) : null
         
         var alpha_tests = (t_logs) ? t_logs.alpha : null;
         var beta_tests  = (t_logs) ? t_logs.beta  : null;

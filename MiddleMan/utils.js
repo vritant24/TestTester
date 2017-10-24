@@ -147,10 +147,12 @@ exports.deployNoLog = (github_id, repo_id, port) => {
 }
 
 exports.statusCodes = {
-  ok: 200,
-  bad_request: 400,
-  unauthorised: 401,
-  forbidden: 403,
-  notFound: 404,
-  server_error: 500
+  ok                : 200,
+  bad_request       : 400,
+  unauthorised      : 401,
+  forbidden         : 403,
+  notFound          : 404,
+  server_error      : 500,
+  test_run_failure  : 700,
+  repo_error        : 701,
 }
