@@ -128,7 +128,7 @@ app.get('/repos/:session_id', function (req, res) {
  *  status : 200,
  * }
  */
-app.get('/monitor/:session_id/:repo_id', function (req, res) {
+app.get('/monitor/:session_id/:repo_id', function(req, res) {
     //TODO catch error and send status code
     db.getUserAccessFromSession(req.params.session_id)
     .then((user_access_row, resolve, reject) => {
@@ -158,20 +158,36 @@ app.get('/monitor/:session_id/:repo_id', function (req, res) {
                                     db.addRepoDeployment([repo_id, port])
                                     .catch(err => console.log(err));
                                 })
+                                res.json({status: utils.statusCodes.ok})
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                res.json({status: utils.statusCodes.server_error})
+                            })
                         })
                         .catch(err => {
                             console.log(err);
-                            res.json({ status: utils.statusCodes.server_error })
+                            res.json({status: utils.statusCodes.server_error})
                         })
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        res.json({status: utils.statusCodes.server_error})
+                    })
                 })
                 .catch(err => {
                     console.log(err);
-                    res.json({ status: utils.statusCodes.server_error })
+                    res.json({status: utils.statusCodes.server_error})
                 })
+            })
+            .catch(err => {
+                console.log(err);
+                res.json({status: utils.statusCodes.server_error})
+            })
         })
         .catch(err => {
             console.log(err);
-            res.json({ status: utils.statusCodes.server_error })
+            res.json({status: utils.statusCodes.server_error})
         })
     })
     .catch(err => {
@@ -179,7 +195,7 @@ app.get('/monitor/:session_id/:repo_id', function (req, res) {
         res.json({status: utils.statusCodes.unauthorised})
     })
     // res.json({status: utils.statusCodes.server_error})
-});
+}); 
 
 //remove monitoring on a repo
 //return object as
@@ -260,6 +276,7 @@ app.get('/repo/:session_id/:repo_id', function (req, res) {
                     server_endpoints    : null,
                     test_logs           : null
                 });
+            })
         })
         .catch(err => {
             res.json({
