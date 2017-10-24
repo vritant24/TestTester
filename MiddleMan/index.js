@@ -42,7 +42,7 @@ var prom = (toDeploy) => {
         .catch(err => console.log(err))            
     })
     .catch(err => console.log(err))
-// }
+}
 
 //authentication route.
 //return object as -
