@@ -22,19 +22,20 @@ var unzipAndStore = (USER_NAME, REPO_NAME) => {
 //PC Jonah
 
 var runTestScript = (USER_NAME, REPO_NAME) => {
-    var ra_command = ('cd UserRepositories; cd ' + USER_NAME + '; cd ' + REPO_NAME  + '; mocha "test-alpha/**/*.js" --reporter json > test-alpha.json')
-    var rb_command = ('cd UserRepositories; cd ' + USER_NAME + '; cd ' + REPO_NAME  + '; mocha "test-beta/**/*.js" --reporter json > test-beta.json')
-    var rp_command = ('cd UserRepositories; cd ' + USER_NAME + '; cd ' + REPO_NAME  + '; mocha "test-prod/**/*.js" --reporter json > test-prod.json')
+    var ra_command = ['cd UserRepositories; cd ' + USER_NAME + '; cd ' + REPO_NAME  + '; cd test-alpha; cd ..', 'npm install; mocha "test-alpha/**/*.js" --reporter json > test-alpha.json']
+    var rb_command = ['cd UserRepositories; cd ' + USER_NAME + '; cd ' + REPO_NAME  + '; cd test-beta; cd ..', 'mocha "test-beta/**/*.js" --reporter json > test-beta.json']
+    var rp_command = ['cd UserRepositories; cd ' + USER_NAME + '; cd ' + REPO_NAME  + '; cd test-prod; cd ..', 'mocha "test-prod/**/*.js" --reporter json > test-prod.json']
     
     var commandArray = [ra_command,rb_command,rp_command]
     var promises = [];
     commandArray.forEach((command) => {
         promises.push(
             new Promise((resolve, reject) => {
-                child = exec(command, function(error, stdout, stderr){
+                child = exec(command[0], function(error, stdout, stderr){
                     if(error != null){
                         reject(error)
                     } else {
+                        child = exec(command[1])
                         resolve()
                     }
                 })
