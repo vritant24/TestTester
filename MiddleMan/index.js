@@ -42,7 +42,6 @@ var prom = (toDeploy) => {
     .catch(err => console.log(err))
 }
 
-
 //authentication route.
 //return object as -
 /**
@@ -54,7 +53,6 @@ var prom = (toDeploy) => {
  *  }
  * }
  */
-
 
 app.get('/authenticate/:access_code/:session_id', function (req, res) {
     //Using Access Code, get Access Token from GitHub
@@ -160,7 +158,7 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
                     })
                     .catch(err => {
                         console.log(err);
-                        res.json({status: utils.statusCodes.server_error})
+                        res.json({status: utils.statusCodes.test_run_failure})
                     })
                 })
                 .catch(err => {
@@ -216,7 +214,12 @@ app.get('/dont-monitor/:session_id/:repo_id', function (req, res) {
             }
             res.json(ret);
         })
-        .catch((err) => reject(err));
+        .catch(err => {
+            var ret = {
+                status: utils.statusCodes.server_error,
+            }
+            res.json(ret);
+        });
     })
     .catch(err => {
         var ret = {
@@ -259,7 +262,7 @@ app.get('/repo/:session_id/:repo_id', function (req, res) {
             })
             .catch(err => {
                 res.json({
-                    status              : utils.statusCodes.server_error,
+                    status              : utils.statusCodes.test_run_failure,
                     repo_id             : null,
                     server_endpoints    : null,
                     test_logs           : null
@@ -268,7 +271,7 @@ app.get('/repo/:session_id/:repo_id', function (req, res) {
         })
         .catch(err => {
             res.json({
-                status: utils.statusCodes.server_error,
+                status: utils.statusCodes.repo_error,
                 repo_id: null,
                 server_endpoints: null,
                 test_logs: null

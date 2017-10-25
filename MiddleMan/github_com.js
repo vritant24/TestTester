@@ -3,8 +3,8 @@ var exec = require('child_process').exec;
 var child;
 
 //Dev values
-var CLIENT_ID     = '2a48dc27e13bf25eca10';
-var CLIENT_SECRET = 'a3340700567cad703e00952f4b740d065c1b297d';
+var CLIENT_ID     = '68bca50fa8ec6e0034e9';
+var CLIENT_SECRET = '527ab44c8bf49732ff5abff6999718283d12a52b';
 
 var options = {
   headers: {
