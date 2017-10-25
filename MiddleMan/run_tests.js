@@ -35,6 +35,7 @@ var runTestScript = (USER_NAME, REPO_NAME) => {
                     if(error != null){
                         reject(error)
                     } else {
+                        console.log("here")
                         child = exec(command[1])
                         resolve()
                     }

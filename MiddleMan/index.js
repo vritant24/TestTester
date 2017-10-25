@@ -25,6 +25,24 @@ hook.webhook(app);
 
 //=========== Routes for API ============
 
+
+db.getAllReposDeployed().then(function (reposToDeploy) {
+    var count = 1;
+    for (var i in reposToDeploy) {
+        prom(reposToDeploy[i])
+    }
+})
+
+var prom = (toDeploy) => {
+    db.getUserFromRepoId(toDeploy.repoId).then(function (userId_rows) {
+        var userId = userId_rows[0].gitHubId
+        utils.deployNoLog(userId, toDeploy.repoId, toDeploy.port)
+        .catch(err => console.log(err))            
+    })
+    .catch(err => console.log(err))
+}
+
+
 //authentication route.
 //return object as -
 /**
@@ -36,25 +54,6 @@ hook.webhook(app);
  *  }
  * }
  */
-
-
-// db.getAllReposDeployed().then(function (reposToDeploy) {
-//     var count = 1;
-//     for (var i in reposToDeploy) {
-//         prom(reposToDeploy[i])
-//     }
-// })
-
-// var prom = (toDeploy) => {
-//     db.getUserFromRepoId(toDeploy.repoId).then(function (userId_rows) {
-//         var userId = userId_rows[0].gitHubId
-//         utils.deployNoLog(userId, toDeploy.repoId, toDeploy.port)
-//         .catch(err => console.log(err))            
-//     })
-//     .catch(err => console.log(err))
-// }
-
-
 
 
 app.get('/authenticate/:access_code/:session_id', function (req, res) {
