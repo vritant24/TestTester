@@ -165,7 +165,7 @@ export default class Repos extends Component {
         
         var monitored_repo_list = [];
         for(idx in repos) {
-            repo = repos[idx];
+            repo = repos[idx+1];
             if(repo.isMonitored === 1) {
                 monitored_repo_list.push(
                     <Repository 
@@ -182,7 +182,7 @@ export default class Repos extends Component {
             repo = repos[idx];
             if(repo.isMonitored === 0) {
                 unmonitored_repo_list.push(
-                    <option key={repo.repoId} value={idx+1}>
+                    <option key={repo.repoId} value={idx}>
                         {repo.repoName}
                     </option>
                 )
