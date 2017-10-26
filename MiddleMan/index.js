@@ -26,21 +26,21 @@ hook.webhook(app);
 //=========== Routes for API ============
 
 
-db.getAllReposDeployed().then(function (reposToDeploy) {
-    var count = 1;
-    for (var i in reposToDeploy) {
-        prom(reposToDeploy[i])
-    }
-})
+// db.getAllReposDeployed().then(function (reposToDeploy) {
+//     var count = 1;
+//     for (var i in reposToDeploy) {
+//         prom(reposToDeploy[i])
+//     }
+// })
 
-var prom = (toDeploy) => {
-    db.getUserFromRepoId(toDeploy.repoId).then(function (userId_rows) {
-        var userId = userId_rows[0].gitHubId
-        utils.deployNoLog(userId, toDeploy.repoId, toDeploy.port)
-        .catch(err => console.log(err))            
-    })
-    .catch(err => console.log(err))
-}
+// var prom = (toDeploy) => {
+//     db.getUserFromRepoId(toDeploy.repoId).then(function (userId_rows) {
+//         var userId = userId_rows[0].gitHubId
+//         utils.deployNoLog(userId, toDeploy.repoId, toDeploy.port)
+//         .catch(err => console.log(err))            
+//     })
+//     .catch(err => console.log(err))
+// }
 
 //authentication route.
 //return object as -
@@ -55,6 +55,7 @@ var prom = (toDeploy) => {
  */
 
 app.get('/authenticate/:access_code/:session_id', function (req, res) {
+    console.log("here")
     //Using Access Code, get Access Token from GitHub
     store_user.storeUserData(req.params.access_code, req.params.session_id)
     .then((obj) => {

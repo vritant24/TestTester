@@ -27,10 +27,11 @@ export default Router.extend({
     },
 
     login () {
+        console.log("1--1")
         const state = uuid();
         window.localStorage.state = state;
         window.location = 'http://github.com/login/oauth/authorize?' + qs.stringify({
-            client_id       : '68bca50fa8ec6e0034e9',
+            client_id       : '2a48dc27e13bf25eca10',
             redirect_uri    : window.location.origin + '/auth/callback',
             scope           : 'user:email,repo,write:repo_hook',
             state           : state,  
@@ -47,6 +48,7 @@ export default Router.extend({
     },
 
     authCallback (query) {
+        console.log("2--2")
         //get code and state from query 
         query = qs.parse(query)
 
