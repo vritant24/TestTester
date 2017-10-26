@@ -165,7 +165,7 @@ export default class Repos extends Component {
         
         var monitored_repo_list = [];
         for(idx in repos) {
-            repo = repos[idx+1];
+            repo = repos[idx];
             if(repo.isMonitored === 1) {
                 monitored_repo_list.push(
                     <Repository 
