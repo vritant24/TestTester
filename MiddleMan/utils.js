@@ -41,6 +41,7 @@ exports.removeDownloadedRepo = (github_id, repo_id) => {
   });
 }
 
+//Remove the check for !failures
 exports.deployAlpha = (github_id, repo_id, report) => {
   return new Promise((resolve, reject) => {
     var deployed_ports = [];

@@ -48,6 +48,7 @@ var runTestScript = (USER_NAME, REPO_NAME) => {
     })
 }
 
+//Don't handle !json
 var parseScripts = (USER_NAME, REPO_NAME) => {
     var fileNameArray = ["test-alpha.json","test-beta.json","test-prod.json"]
     paths = fileNameArray.map((file) => "./UserRepositories/" + USER_NAME + "/" + REPO_NAME + "/" + file)

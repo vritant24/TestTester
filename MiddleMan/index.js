@@ -116,6 +116,8 @@ app.get('/repos/:session_id', function (req, res) {
  *  status : 200,
  * }
  */
+
+ //Remove promises
 app.get('/monitor/:session_id/:repo_id', function(req, res) {
     //TODO catch error and send status code
     db.getUserAccessFromSession(req.params.session_id)
