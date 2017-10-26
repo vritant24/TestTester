@@ -122,17 +122,17 @@ export default class Repository extends Component {
         var ends = (s_ends) ? s_ends.map( (s_e) => <li key={s_e.port}>{'http://52.200.13.118:' + s_e.port}</li> ) : null
         
         var alpha_tests = (t_logs) ? t_logs.alpha : null;
-        var beta_tests  = (t_logs) ? t_logs.beta  : null;
+        //var beta_tests  = (t_logs) ? t_logs.beta  : null;
         var prod_tests  = (t_logs) ? t_logs.prod  : null;
 
         if(alpha_tests && beta_tests && prod_tests) {
-            test_list = this.formatTests(alpha_tests, beta_tests, prod_tests);
+            test_list = this.formatTests(alpha_tests, prod_tests);
         }
        
         return (
             <div>
                 <NavBar/>
-                <h2>{this.state.repo_name}</h2>
+                <h2>RepositoryName</h2>
                 {this.state.error && this.state.error_string}
                 <br/>
                 <h3>Server Endpoints</h3>

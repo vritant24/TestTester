@@ -182,7 +182,7 @@ export default class Repos extends Component {
             repo = repos[idx];
             if(repo.isMonitored === 0) {
                 unmonitored_repo_list.push(
-                    <option key={repo.repoId} value={idx}>
+                    <option key={repo.repoId} value={idx+1}>
                         {repo.repoName}
                     </option>
                 )

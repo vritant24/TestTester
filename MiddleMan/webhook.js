@@ -13,34 +13,32 @@ var webhook = function(app) {
     var path = jsonObj.ref;
     var masterPath = "refs/heads/master";
     var comp = path.localeCompare(masterPath);
-    if (comp == 0) {
-        db.getUserAccessFromUserId(jsonObj.sender.id)
-        .then(function(user_access_row) {
-        var user_access = user_access_row[0];
-        db.getRepoURL(jsonObj.repository.id)
-            .then(function(repo_rows) {
-                    var repo = repo_rows[0];
-                    github.getRepoDownload(user_access.gitHubId, repo.repoURL, jsonObj.repository.id, user_access.accessToken)
+    db.getUserAccessFromUserId(jsonObj.sender.id)
+    .then(function(user_access_row) {
+    var user_access = user_access_row[0];
+    db.getRepoURL(jsonObj.repository.id)
+        .then(function(repo_rows) {
+                var repo = repo_rows[0];
+                github.getRepoDownload(user_access.gitHubId, repo.repoURL, jsonObj.repository.id, user_access.accessToken)
+                .then(function() {
+                    run_tests.unzipAndStore(user_access.gitHubId, jsonObj.repository.id)
                     .then(function() {
-                        run_tests.unzipAndStore(user_access.gitHubId, jsonObj.repository.id)
+                        run_tests.runTestScript(user_access.gitHubId, jsonObj.repository.id)
                         .then(function() {
-                            run_tests.runTestScript(user_access.gitHubId, jsonObj.repository.id)
-                            .then(function() {
-                                run_tests.parseScripts(user_access.gitHubId, jsonObj.repository.id);
-                            })
-                            .catch(err => console.log(err))
+                            run_tests.parseScripts(user_access.gitHubId, jsonObj.repository.id);
                         })
                         .catch(err => console.log(err))
                     })
                     .catch(err => console.log(err))
-            })
-            .catch(err => console.log(err))
+                })
+                .catch(err => console.log(err))
         })
         .catch(err => console.log(err))
-    }
+    })
+    .catch(err => console.log(err))
   });
 
-  webhookHandler.on('pull request', function(repo, data) {
+  /*webhookHandler.on('pull request', function(repo, data) {
       //pull request
       var jsonObj = JSON.parse(data.payload);
       var path = jsonObj.ref;
@@ -75,7 +73,7 @@ var webhook = function(app) {
         })
         .catch(err => console.log(err))
     }
-});
+});*/
 }
 
 /*function brandonFunction(data) {

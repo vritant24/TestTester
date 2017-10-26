@@ -200,7 +200,7 @@ app.get('/dont-monitor/:session_id/:repo_id', function (req, res) {
         var id = user_access.gitHubId;
         var repo_id = req.params.repo_id;
         db.unmonitorUserRepo(repo_id)
-        .then((resolve, reject) => {
+        /*.then((resolve, reject) => {
             db.getRepoDeployment(repo_id)
             .then((deploymentData) => {
                 db.releaseRepoDeployment(repo_id);
@@ -209,7 +209,7 @@ app.get('/dont-monitor/:session_id/:repo_id', function (req, res) {
                 });
             });
             utils.removeDownloadedRepo(id, repo_id);
-        })
+        })*/
         .then(() => {
             var ret = {
                 status: utils.statusCodes.ok,
