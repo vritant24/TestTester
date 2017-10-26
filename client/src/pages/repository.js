@@ -125,7 +125,7 @@ export default class Repository extends Component {
         //var beta_tests  = (t_logs) ? t_logs.beta  : null;
         var prod_tests  = (t_logs) ? t_logs.prod  : null;
 
-        if(alpha_tests && beta_tests && prod_tests) {
+        if(alpha_tests && prod_tests) {
             test_list = this.formatTests(alpha_tests, prod_tests);
         }
        
