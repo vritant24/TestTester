@@ -26,13 +26,13 @@ hook.webhook(app);
 //=========== Routes for API ============
 
 
-db.getAllReposDeployed().then(function (reposToDeploy) {
+/*db.getAllReposDeployed().then(function (reposToDeploy) {
     var count = 1;
     for (var i in reposToDeploy) {
         console.log(reposToDeploy[i])
         prom(reposToDeploy[i])
     }
-})
+})*/
 
 var prom = (toDeploy) => {
     db.getUserFromRepoId(toDeploy.repoId).then(function (userId_rows) {
