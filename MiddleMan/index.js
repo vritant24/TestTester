@@ -64,7 +64,7 @@ app.get('/authenticate/:access_code/:session_id', function (req, res) {
             status: utils.statusCodes.ok,
             user: {
                 github_id: obj.id,
-                username: obj.login
+                username: "gitHubUsername"
             }
         }
         res.json(ret);
