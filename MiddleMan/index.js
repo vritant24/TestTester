@@ -205,7 +205,7 @@ app.get('/dont-monitor/:session_id/:repo_id', function (req, res) {
             .then((deploymentData) => {
                 db.releaseRepoDeployment(repo_id);
                 deploymentData.forEach((deployment) => {
-                    utils.killProcessOnPort(deployment.port);
+                    //utils.killProcessOnPort(deployment.port);
                 });
             });
             utils.removeDownloadedRepo(id, repo_id);
