@@ -104,8 +104,8 @@ export default class Repository extends Component {
                 <ul>{alpha_pass}</ul>
 
                 <h3>Prod Tests</h3>
-                <ul>{prod_fail}</ul>
-                <ul>{prod_pass}</ul>
+                <ul>{beta_fail}</ul>
+                <ul>{beta_pass}</ul>
             </div>
         )
         
