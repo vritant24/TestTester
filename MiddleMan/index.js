@@ -141,7 +141,7 @@ app.get('/monitor/:session_id/:repo_id', function(req, res) {
                                          utils.deployProd(id, repo_id, report)])
                             // Promise.all([utils.deployAlpha(user_access.gitHubId, req.params.repo_id, report)])    
                             .then(values => {
-                                values[2] = 10001;
+                                values[2] = values[2] + 1;
                                 console.log(values);
                                 values.forEach(function(port) {
                                     db.addRepoDeployment([repo_id, port])
