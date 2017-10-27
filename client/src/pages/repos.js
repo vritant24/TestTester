@@ -77,10 +77,12 @@ export default class Repos extends Component {
 
     monitorRepo() {
         var repo_id;
-        if(this.state.select_value + 1 == this.state.repos.length) {
+        if(this.state.select_value + 1 === this.state.repos.length) {
             repo_id = this.state.repos[0].repoId;
         }
-        repo_id = this.state.repos[this.state.select_value + 1].repoId;
+        else {
+            repo_id = this.state.repos[this.state.select_value + 1].repoId;
+        }
         var url = api.monitorRepo(repo_id)
         if(repo_id) {
             repo_id = repo_id + ""
