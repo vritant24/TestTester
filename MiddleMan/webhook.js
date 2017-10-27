@@ -40,7 +40,7 @@ var webhook = function(app) {
     //}
   });
 
-  webhookHandler.on('pull request', function(repo, data) {
+  /*webhookHandler.on('pull request', function(repo, data) {
       //pull request
       var jsonObj = JSON.parse(data.payload);
       var path = jsonObj.ref;
@@ -75,7 +75,7 @@ var webhook = function(app) {
         })
         .catch(err => console.log(err))
     }
-});
+});*/
 }
 
 /*function brandonFunction(data) {
