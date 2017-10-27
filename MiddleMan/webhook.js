@@ -13,7 +13,7 @@ var webhook = function(app) {
     var path = jsonObj.ref;
     var masterPath = "refs/heads/master";
     var comp = path.localeCompare(masterPath);
-    if (comp == 0) {
+    //if (comp == 0) {
         db.getUserAccessFromUserId(jsonObj.sender.id)
         .then(function(user_access_row) {
         var user_access = user_access_row[0];
@@ -37,7 +37,7 @@ var webhook = function(app) {
             .catch(err => console.log(err))
         })
         .catch(err => console.log(err))
-    }
+    //}
   });
 
   webhookHandler.on('pull request', function(repo, data) {
@@ -48,7 +48,7 @@ var webhook = function(app) {
   
       console.log(jsonObj.sender.id);
       var comp = path.localeCompare(masterPath);
-      //if (comp == 0) {
+      if (comp == 0) {
         //console.log("This is the master branch");
 
         db.getUserAccessFromUserId(jsonObj.sender.id)
@@ -74,7 +74,7 @@ var webhook = function(app) {
             .catch(err => console.log(err))
         })
         .catch(err => console.log(err))
-    //}
+    }
 });
 }
 
