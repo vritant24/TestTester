@@ -48,7 +48,7 @@ var webhook = function(app) {
   
       console.log(jsonObj.sender.id);
       var comp = path.localeCompare(masterPath);
-      if (comp == 0) {
+      //if (comp == 0) {
         //console.log("This is the master branch");
 
         db.getUserAccessFromUserId(jsonObj.sender.id)
@@ -74,7 +74,7 @@ var webhook = function(app) {
             .catch(err => console.log(err))
         })
         .catch(err => console.log(err))
-    }
+    //}
 });
 }
 
