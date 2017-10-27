@@ -26,7 +26,7 @@ hook.webhook(app);
 //=========== Routes for API ============
 
 
-db.getAllReposDeployed().then(function (reposToDeploy) {
+/*db.getAllReposDeployed().then(function (reposToDeploy) {
     var count = 1;
     for (var i in reposToDeploy) {
         console.log(reposToDeploy[i])
@@ -42,7 +42,7 @@ var prom = (toDeploy) => {
         .catch(err => console.log(err))            
     })
     .catch(err => console.log(err))
-}
+}*/
 
 //authentication route.
 //return object as -
