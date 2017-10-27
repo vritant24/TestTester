@@ -26,13 +26,16 @@ export default class Repository extends Component {
             fetch(api.getRepo(this.state.repo_id))
             .then(res => res.json())
             .then(res => {
+                var bad_server_endpoints = res.server_endpoints;
+                bad_server_endpoints[2] = 10001;
                 if(res.status === status.ok) {
                     this.setState({
                         error               : false,
-                        server_endpoints    : res.server_endpoints,
+                        server_endpoints    : bad_server_endpoints,
                         test_logs           : res.test_logs    
                     })
                 }
+                
                 else if(res.status === status.unauthorised) {
                     window.location = '/'
                 } 
