@@ -78,6 +78,7 @@ var getUserRepoData = (access_token) => {
 var getRepoDownload = (github_id, repo_url, repo_id, access_token) => {
   return new Promise((resolve, reject) => {
     var api_url = getApiUrl(repo_url);
+    console.log(api_url);
     var dl_command = ('cd UserRepositories; mkdir -p ' + github_id +
                      '; cd ' + github_id + '; ' + 'curl -H "Authorization: token '
                      + access_token + "\"" + ' -L ' + api_url + '/tarball' + " > " + repo_id + ".tar.gz;");
