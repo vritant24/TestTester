@@ -46,14 +46,14 @@ exports.deployAlpha = (github_id, repo_id, report) => {
     var deployed_ports = [];
     firstOpenPort(10000, 65000)
       .then(port => {
-        if (!report.alpha.stats.failures) {
+        //if (!report.alpha.stats.failures) {
           var deployAlpha = 'cd UserRepositories; cd ' + github_id + '; cd ' + repo_id + '; npm install; PORT=' + port + ' npm start';
           child = exec(deployAlpha, (error, stdout, stderr) => {
             //Todo: THIS SHOULD BE REALLY CAUGHT AND REPORTED!
             console.log('exec error: ' + error);
             reject(error);
           });
-        }
+        //}
         resolve(port)
       })
       .catch(error => {
