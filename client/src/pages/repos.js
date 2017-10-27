@@ -76,7 +76,8 @@ export default class Repos extends Component {
     }
 
     monitorRepo() {
-        var repo_id = this.state.repos[this.state.select_value + 1].repoId
+        console.log(this.state.select_value);
+        var repo_id = this.state.repos[this.state.select_value].repoId
         var url = api.monitorRepo(repo_id)
         if(repo_id) {
             repo_id = repo_id + ""
