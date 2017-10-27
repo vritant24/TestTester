@@ -81,7 +81,7 @@ export default class Repos extends Component {
             repo_id = this.state.repos[0].repoId;
         }
         else {
-            var off_by_one = parseInt(this.state.select_value) + parseInt(1);
+            var off_by_one = parseInt(this.state.select_value, 10) + parseInt(1, 10);
             console.log(off_by_one);
             repo_id = this.state.repos[off_by_one].repoId;
         }
