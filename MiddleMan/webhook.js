@@ -21,7 +21,7 @@ var webhook = function(app) {
             .then(function(repo_rows) {
                     var repo = repo_rows[0];
                     console.log(repo.repoURL + "/" + path.substring(10));
-                    repo.repoURL = repo.repoURL + "/" + path.substring(10);
+                    repo.repoURL = repo.repoURL + path.substring(10);
                     github.getRepoDownload(user_access.gitHubId, repo.repoURL, jsonObj.repository.id, user_access.accessToken)
                     .then(function() {
                         run_tests.unzipAndStore(user_access.gitHubId, jsonObj.repository.id)
