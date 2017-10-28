@@ -33,10 +33,6 @@ export default class Repository extends Component {
                         test_logs           : res.test_logs    
                     })
                 }
-                
-                else if(res.status === status.unauthorised) {
-                    window.location = '/'
-                } 
                 else if(res.status === status.test_run_failure) {
                     this.setState ({ 
                         error           : true,
