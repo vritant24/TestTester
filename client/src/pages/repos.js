@@ -189,7 +189,7 @@ export default class Repos extends Component {
             }
         }
 
-        var empty = <option key={"#31"} value={-1}></option>
+        var empty = <option key={"#31"} value={0}></option>
         if(unmonitored_repo_list)
             unmonitored_repo_list = [empty, ...unmonitored_repo_list]
    
