@@ -188,18 +188,17 @@ export default class Repos extends Component {
         var unmonitored_repo_list = [];
         for(idx in repos) {
             repo = repos[idx];
-            if(repo.isMonitored === 0) {
-                unmonitored_repo_list.push(
-                    <option key={repo.repoId} value={idx}>
-                        {repo.repoName}
-                    </option>
-                )
-            }
+            unmonitored_repo_list.push(
+                <option key={repo.repoId} value={idx}>
+                    {repo.repoName}
+                </option>
+            )
         }
 
         var empty = <option key={"#31"} value={-1}></option>
+        var extra = <option key={"#3423"} value={-2}>not your repo</option>
         if(unmonitored_repo_list)
-            unmonitored_repo_list = [empty, ...unmonitored_repo_list]
+            unmonitored_repo_list = [empty, ...unmonitored_repo_list, extra]
    
         //There was an error    
         var showError = this.state.error_string
@@ -209,9 +208,9 @@ export default class Repos extends Component {
                 <NavBar/>
                 <h1>Repositories</h1>
                 {this.state.error && showError}
-                <h3>for instructions on formatting your repository, go <a href="https://github.com/vritant24/TestTester/blob/master/docs/instructions.md">here</a></h3> 
+                <h3>for instructions on formatting your repository, go <a href="https://github.com/vritant24/TestTester/blob/master/docs/instructions.md" target="_blank">here</a></h3> 
                 <RepoContainer>
-                    {monitored_repo_list}
+                    {monitored_repo_list.slice(0,5)}
                 </RepoContainer>
                 <br/>
                 <select id="monitor_repo" onChange={this.onselectChange.bind(this)}>

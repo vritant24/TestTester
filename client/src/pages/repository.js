@@ -74,8 +74,6 @@ export default class Repository extends Component {
             <FailLi>
                 <h4>{test.fullTitle}</h4>
                 <hr/>
-                <h4>{test.err.message}</h4>
-                <p>{test.err.stack}</p>
             </FailLi>
         ))
     }
@@ -93,18 +91,18 @@ export default class Repository extends Component {
         var beta_fail   = this.formatFailedTests(beta.failures)
         var prod_fail   = this.formatFailedTests(prod.failures)
 
-        var alpha_pass  = this.formatPassedTests(alpha.passes)
-        var beta_pass   = this.formatPassedTests(beta.passes)
-        var prod_pass   = this.formatPassedTests(prod.passes)
+        var alpha_pass  = this.formatPassedTests(alpha.passes).slice(0, 5)
+        var beta_pass   = this.formatPassedTests(beta.passes).slice(0, 5)
+        var prod_pass   = this.formatPassedTests(prod.passes).slice(0, 5)
 
         return (
             <div>
                 <h3>Alpha Tests</h3>
-                <ul>{alpha_fail}</ul>
+                <ul>{alpha_fail.slice(0, alpha_fail.length - 1)}</ul>
                 <ul>{alpha_pass}</ul>
 
                 <h3>Prod Tests</h3>
-                <ul>{beta_fail}</ul>
+                <ul>{beta_fail.slice(0, alpha_fail.length - 1)}</ul>
                 <ul>{beta_pass}</ul>
             </div>
         )

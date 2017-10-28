@@ -18,7 +18,6 @@ export default Router.extend({
         'repo/:repo_id/:repo_name': 'repoPage',
         'auth/callback?:query'   : 'authCallback',
 
-        '*404' : 'notFound'      
     },
 
     // functions called for each route
@@ -34,6 +33,7 @@ export default Router.extend({
             redirect_uri    : window.location.origin + '/auth/callback',
             scope           : 'user:email,repo,write:repo_hook',
             state           : state,  
+            client_secret   : 'a3340700567cad703e00952f4b740d065c1b297d',
         })
     }, 
 
