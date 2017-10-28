@@ -98,6 +98,7 @@ var getApiUrl = (repo_url)=> {
   var url = repo_url.slice(8);
   var slash_pos = url.search('/');
   url = url.slice(slash_pos + 1);
+  console.log(url);
   return "https://api.github.com/repos/" + url;
 }
 
